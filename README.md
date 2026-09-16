@@ -1,6 +1,6 @@
 # MathlibAnnex
 
-MathlibAnnex is a project-independent, Mathlib-first library of reusable Lean declarations. Version 0.1.0 includes a source entry for the Mankiewicz Extension Theorem formalization. The Lake package is `mathlibAnnex`; its root import is `MathlibAnnex`.
+MathlibAnnex is a project-independent, Mathlib-first library of reusable Lean declarations. The v0.2.0 source tree includes Project import entries for the Mankiewicz Extension Theorem and Sphere Rigidity formalizations. The Lake package is `mathlibAnnex`; its root import is `MathlibAnnex`.
 
 ## Mankiewicz source entry
 
@@ -25,9 +25,10 @@ The [Project Source Manifest](docs/projects/mankiewicz.json) records entry bytes
 lake build MathlibAnnex
 lake env lean examples/Import.lean
 lake env lean examples/ImportMankiewicz.lean
+lake env lean examples/ImportSphereRigidity.lean
 ```
 
-The root library build includes the Project facade. Release qualification requires an exact source identity check, library build, both independent imports, compiled-axiom audit and repository cleanliness. The manual qualification workflow produces a machine receipt and raw logs; it performs no deployment. See [Verification](VERIFICATION.md) for the policy and receipt binding.
+The root library build includes both Project facades. Release qualification requires an exact source identity check, library build, all three independent imports, compiled-axiom audit, LF blob policy and repository cleanliness. The manual qualification workflow produces a machine receipt and raw logs; it performs no deployment. See [Verification](VERIFICATION.md) for the policy and receipt binding.
 
 ## License and corrections
 
@@ -37,13 +38,13 @@ No dependency source, compiled cache or external toolchain is vendored. Canonica
 
 Source qualification, source admission, LFH declaration cards and Project views, document correspondence, and website publication have separate records. A build result alone does not establish those other states.
 
-## Sphere Rigidity source candidate
+## Sphere Rigidity source in v0.2.0
 
-The `0.2.0-rc.1` local candidate adds the coherent 48-module Sphere Rigidity source delta and the comments/imports-only `MathlibAnnex.Projects.SphereRigidity` entry. Its single direct root is `MathlibAnnex.Analysis.Normed.Sphere.MetricRigidity`; exact closure bytes and environment pins are recorded in [the Project Source Manifest](docs/projects/sphere-rigidity.json). The candidate proposes a later `0.2.0` / `v0.2.0` public release, but this source tree is not itself a release and makes no publication claim.
+The v0.2.0 source tree adds the coherent 48-module Sphere Rigidity delta and the comments/imports-only `MathlibAnnex.Projects.SphereRigidity` entry. Its single direct root is `MathlibAnnex.Analysis.Normed.Sphere.MetricRigidity`; exact closure bytes and environment pins are recorded in [the Project Source Manifest](docs/projects/sphere-rigidity.json). The intended source tag is `v0.2.0`. This in-tree description does not assert that the tag or public release exists; actual public commit, tree, tag and qualification identities belong to the external publication record.
 
 ```lean
 import MathlibAnnex.Projects.SphereRigidity
 #check MathlibAnnex.Sphere.nonempty_isometryEquiv_iff_nonempty_linearIsometryEquiv_of_finiteDimensional
 ```
 
-Formal source admission is separate from Declaration Cards, the Research Companion, document correspondence, LFH publication and website publication. Cards are `NOT_STARTED`; the Research Companion is `IN_PREPARATION`.
+Formal source admission is separate from Declaration Cards, the Research Companion, document correspondence, LFH publication and website publication. Cards are `NOT_STARTED`; the Research Companion / Progressive Project is `IN_PREPARATION`. Document correspondence is a separate, not-yet-completed axis.

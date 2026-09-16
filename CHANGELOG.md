@@ -1,11 +1,12 @@
 # Changelog
 
-## 0.2.0-rc.1 (local source-admission candidate)
+## 0.2.0
 
 - Add 48 reusable Sphere Rigidity modules as one coherent delta over public `v0.1.0`.
 - Add the comments/imports-only Sphere Rigidity Project entry, exact source manifest and downstream import example.
-- Normalize the 13 authority-listed Lean blobs to LF and qualify the repaired candidate with an actual root build plus root, Mankiewicz and Sphere Rigidity imports; the prior BuildResult remains pre-repair evidence only.
-- Keep Declaration Cards not started and all publication actions unperformed.
+- Normalize line endings in 13 Lean files from CRLF to LF without changing declarations or mathematical content; the pre-repair BuildResult remains prior evidence only.
+- Preserve the successful RC predecessor qualification: the root build (8,637 jobs), root, Mankiewicz and Sphere Rigidity imports, and compiled-axiom audit of 2,016 declarations under the stated allowlist passed for the exact `0.2.0-rc.1` tree. The final `0.2.0` tree requires its own exact hosted qualification before publication.
+- Keep Declaration Cards `NOT_STARTED`, the Research Companion / Progressive Project `IN_PREPARATION`, and document correspondence separate. This changelog does not claim a public tag, Release, LFH publication or website change.
 
 ## 0.1.0
 
