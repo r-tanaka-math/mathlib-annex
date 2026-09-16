@@ -28,3 +28,7 @@ The Project facade contains comments and imports only; it adds no mathematical d
 The preserved manual workflow is restricted to private-repository qualification and performs no deployment. Its receipt flags describe actions performed by that workflow: a `license_grant` value of false means the workflow performs no licensing act and does not override the repository [LICENSE](LICENSE). Owner acceptance, LFH source–exposition correspondence, LFH publication and website publication remain separately recorded acts.
 
 Independent `leanchecker` and `nanoda` execution requires a separately qualified resource profile and is outside this workflow's checks.
+
+## Sphere Rigidity candidate qualification
+
+The local `0.2.0-rc.1` candidate binds the exact 48-module delta, entry parser result, direct root and content-addressed 48-module closure. Its formal root build is the exact successful stored BuildResult because canonical source bytes, toolchain, dependency lock, provider fingerprints and build semantics are unchanged; packaging, Project entry and manifest assembly do not stale that result. The later owner-authorized private candidate must still run the final independent compiled-axiom workflow before any public `v0.2.0` act.

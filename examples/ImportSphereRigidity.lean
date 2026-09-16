@@ -1,0 +1,3 @@
+import MathlibAnnex.Projects.SphereRigidity
+
+#check MathlibAnnex.Sphere.nonempty_isometryEquiv_iff_nonempty_linearIsometryEquiv_of_finiteDimensional

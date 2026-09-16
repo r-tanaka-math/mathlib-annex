@@ -36,3 +36,14 @@ Original MathlibAnnex Lean source, Project import facades, examples, repository 
 No dependency source, compiled cache or external toolchain is vendored. Canonical library source remains in this library rather than being copied into project-owned research repositories. This is AI-assisted material selected and maintained by Ryotaro Tanaka; no novelty or first-formalization claim is made. Report corrections through the repository issue tracker, identifying an exact source revision as described in [Contributing](CONTRIBUTING.md).
 
 Source qualification, source admission, LFH declaration cards and Project views, document correspondence, and website publication have separate records. A build result alone does not establish those other states.
+
+## Sphere Rigidity source candidate
+
+The `0.2.0-rc.1` local candidate adds the coherent 48-module Sphere Rigidity source delta and the comments/imports-only `MathlibAnnex.Projects.SphereRigidity` entry. Its single direct root is `MathlibAnnex.Analysis.Normed.Sphere.MetricRigidity`; exact closure bytes and environment pins are recorded in [the Project Source Manifest](docs/projects/sphere-rigidity.json). The candidate proposes a later `0.2.0` / `v0.2.0` public release, but this source tree is not itself a release and makes no publication claim.
+
+```lean
+import MathlibAnnex.Projects.SphereRigidity
+#check MathlibAnnex.Sphere.nonempty_isometryEquiv_iff_nonempty_linearIsometryEquiv_of_finiteDimensional
+```
+
+Formal source admission is separate from Declaration Cards, the Research Companion, document correspondence, LFH publication and website publication. Cards are `NOT_STARTED`; the Research Companion is `IN_PREPARATION`.
