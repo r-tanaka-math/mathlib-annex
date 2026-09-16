@@ -4,7 +4,7 @@
 
 - Add 48 reusable Sphere Rigidity modules as one coherent delta over public `v0.1.0`.
 - Add the comments/imports-only Sphere Rigidity Project entry, exact source manifest and downstream import example.
-- Reuse the exact successful unchanged formal BuildResult and keep compiled-axiom GitHub qualification for the later owner-authorized private candidate.
+- Normalize the 13 authority-listed Lean blobs to LF and qualify the repaired candidate with an actual root build plus root, Mankiewicz and Sphere Rigidity imports; the prior BuildResult remains pre-repair evidence only.
 - Keep Declaration Cards not started and all publication actions unperformed.
 
 ## 0.1.0
