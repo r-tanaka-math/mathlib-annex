@@ -11,8 +11,9 @@ The `Manual release qualification` workflow requires all of the following checks
 3. The independent root-import example, `examples/Import.lean`.
 4. The independent Mankiewicz Project-entry example, `examples/ImportMankiewicz.lean`.
 5. The independent Sphere Rigidity Project-entry example, `examples/ImportSphereRigidity.lean`.
-6. A compiled-axiom audit rooted at `MathlibAnnex`, allowing exactly `propext`, `Classical.choice` and `Quot.sound`.
-7. The committed-blob LF policy and clean tracked files, index and working tree after qualification.
+6. The independent Rosenberg Project-entry example, `examples/ImportRosenberg.lean`.
+7. A compiled-axiom audit rooted at `MathlibAnnex`, allowing exactly `propext`, `Classical.choice` and `Quot.sound`.
+8. The committed-blob LF policy and clean tracked files, index and working tree after qualification.
 
 The pinned environment is `leanprover/lean4:v4.32.0-rc1`, Mathlib `360da6fa66c1273b76b6b2d8c5666fd5ac2e3b56`, and the committed `lake-manifest.json`. The workflow and helper preserve separate results for identity, build, root import, each Project import, compiled-axiom audit, LF blob policy and cleanliness. Missing, skipped, cancelled or failed required checks do not constitute a successful qualification.
 
@@ -35,3 +36,7 @@ Independent `leanchecker` and `nanoda` execution requires a separately qualified
 The `0.2.0-rc.1` predecessor binds the exact 48-module delta, entry parser result, direct root and content-addressed 48-module closure. Its 13 authority-listed Lean blobs are LF-normalized; the older BuildResult is pre-repair evidence only. Private GitHub run `35080624090` (attempt 1) succeeded for predecessor commit `18519611549f0aac228f03aa11dbdfd3cb0d6f06`, tree `ad93d8d6856d0ff955f92b42dcedc8e6f35a5838`: the build completed 8,637 jobs; root, Mankiewicz and Sphere Rigidity imports passed; the compiled-axiom audit passed for 2,016 declarations with the stated allowlist; LF blob policy and cleanliness passed.
 
 That run is prior exact RC evidence, **not** qualification of this final `0.2.0` source tree. Before any public `v0.2.0` act, the owner must manually qualify the final commit/tree with the unchanged private workflow. The resulting final run ID, attempt, machine receipt, artifact hash and compiled-axiom result must be observed and bound by a later external publication record. No final-tree run ID or public release identity is asserted in this file.
+
+## Rosenberg v0.3.0 private-candidate boundary
+
+The candidate reuses the exact qualified 60-module Rosenberg source and adds source-release integration, an imports-only facade, manifest, independent import example, and v3 workflow receipt. Local qualification must pass on the exact frozen candidate. Hosted qualification remains pending until the owner manually dispatches the private workflow with the exact returned commit/tree values. No public repository write, tag, Release, Card/Catalog/Project publication, or website change is performed by candidate staging.

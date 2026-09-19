@@ -6,8 +6,8 @@ P2-LF12 tests only its pure receipt policy and synthetic identity/cleanliness fi
 import hashlib, json, os, re, subprocess, sys
 from pathlib import Path
 
-SCHEMA='mathlibannex.github-release-qualification-receipt.v2'
-CHECKS=('identity','build','downstream_import','project_entry_import','sphere_rigidity_entry_import','compiled_axiom_audit','cleanliness')
+SCHEMA='mathlibannex.github-release-qualification-receipt.v3'
+CHECKS=('identity','build','downstream_import','project_entry_import','sphere_rigidity_entry_import','rosenberg_entry_import','compiled_axiom_audit','cleanliness')
 ALLOW=['propext','Classical.choice','Quot.sound']
 def digest(data):return hashlib.sha256(data).hexdigest()
 def write(path,value):path.write_text(json.dumps(value,sort_keys=True,indent=2)+'\n',encoding='utf-8')
@@ -27,7 +27,7 @@ def make_receipt(identity,results,logs,run_identity):
         'independent_checkers':{'leanchecker':'DEFERRED_P2_LB03_RESOURCE_PROFILE','nanoda':'DEFERRED_P2_LB03_RESOURCE_PROFILE'}}
 def summary(receipt):
     rows=['# MathlibAnnex release qualification','', '| Check | Result |','|---|---|']
-    labels={'identity':'Exact commit / tree / workflow / toolchain / Mathlib','build':'MathlibAnnex build','downstream_import':'Downstream root import','project_entry_import':'Mankiewicz Project-entry import','sphere_rigidity_entry_import':'Sphere Rigidity Project-entry import','compiled_axiom_audit':'Compiled-axiom audit','cleanliness':'Tracked / staged / porcelain cleanliness'}
+    labels={'identity':'Exact commit / tree / workflow / toolchain / Mathlib','build':'MathlibAnnex build','downstream_import':'Downstream root import','project_entry_import':'Mankiewicz Project-entry import','sphere_rigidity_entry_import':'Sphere Rigidity Project-entry import','rosenberg_entry_import':'Rosenberg Project-entry import','compiled_axiom_audit':'Compiled-axiom audit','cleanliness':'Tracked / staged / porcelain cleanliness'}
     rows += ['| '+labels[k]+' | '+receipt['checks'][k]+' |' for k in CHECKS]
     rows += ['| Qualification | '+receipt['qualification']+' |','| Machine receipt | qualification.json in the run artifact |','| Public deployment | NOT PERFORMED |', '',
         'A PASS covers only the listed checks on the exact identities below. Owner acceptance, source-exposition review, license grant and publication remain separate.','',
@@ -71,7 +71,7 @@ def clean(root,evidence):
 def finish(evidence,env):
     identity_value=json.loads((evidence/'identity.json').read_text()) if (evidence/'identity.json').exists() else None
     results={'identity':outcome(env.get('IDENTITY_OUTCOME','')),'build':outcome(env.get('BUILD_STATUS','')),
-        'downstream_import':outcome(env.get('IMPORT_OUTCOME','')),'project_entry_import':outcome(env.get('PROJECT_IMPORT_OUTCOME','')),'sphere_rigidity_entry_import':outcome(env.get('SPHERE_PROJECT_IMPORT_OUTCOME','')),'compiled_axiom_audit':outcome(env.get('AXIOM_STATUS','')),'cleanliness':outcome(env.get('CLEAN_OUTCOME',''))}
+        'downstream_import':outcome(env.get('IMPORT_OUTCOME','')),'project_entry_import':outcome(env.get('PROJECT_IMPORT_OUTCOME','')),'sphere_rigidity_entry_import':outcome(env.get('SPHERE_PROJECT_IMPORT_OUTCOME','')),'rosenberg_entry_import':outcome(env.get('ROSENBERG_PROJECT_IMPORT_OUTCOME','')),'compiled_axiom_audit':outcome(env.get('AXIOM_STATUS','')),'cleanliness':outcome(env.get('CLEAN_OUTCOME',''))}
     logs=[{'path':p.name,'bytes':p.stat().st_size,'sha256':digest(p.read_bytes())} for p in sorted(evidence.glob('*')) if p.is_file() and p.name not in ('qualification.json','summary.md')]
     receipt=make_receipt(identity_value,results,logs,{'repository':env.get('GITHUB_REPOSITORY',''),'id':env.get('GITHUB_RUN_ID',''),'attempt':env.get('GITHUB_RUN_ATTEMPT','')})
     write(evidence/'qualification.json',receipt);text=summary(receipt);(evidence/'summary.md').write_text(text,encoding='utf-8')
@@ -86,6 +86,8 @@ def main():
         cp=run(['lake','env','lean','examples/ImportMankiewicz.lean']);(evidence/'project-entry-import.log').write_bytes(cp.stdout);print(cp.stdout.decode(errors='replace'));return cp.returncode
     elif stage=='sphere-project-import':
         cp=run(['lake','env','lean','examples/ImportSphereRigidity.lean']);(evidence/'sphere-rigidity-entry-import.log').write_bytes(cp.stdout);print(cp.stdout.decode(errors='replace'));return cp.returncode
+    elif stage=='rosenberg-project-import':
+        cp=run(['lake','env','lean','examples/ImportRosenberg.lean']);(evidence/'rosenberg-entry-import.log').write_bytes(cp.stdout);print(cp.stdout.decode(errors='replace'));return cp.returncode
     elif stage=='clean':clean(root,evidence)
     elif stage=='summary':finish(evidence,env)
     elif stage=='require':require(json.loads((evidence/'qualification.json').read_text())['qualification']=='PASS','one or more required checks failed or did not run')

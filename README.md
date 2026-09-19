@@ -1,6 +1,6 @@
 # MathlibAnnex
 
-MathlibAnnex is a project-independent, Mathlib-first library of reusable Lean declarations. The v0.2.0 source tree includes Project import entries for the Mankiewicz Extension Theorem and Sphere Rigidity formalizations. The Lake package is `mathlibAnnex`; its root import is `MathlibAnnex`.
+MathlibAnnex is a project-independent, Mathlib-first library of reusable Lean declarations. The 0.3.0 private release candidate includes Project import entries for the Mankiewicz Extension Theorem, Sphere Rigidity, and Rosenberg formalizations. The intended source tag is `v0.3.0`; publication has not occurred. The Lake package is `mathlibAnnex`; its root import is `MathlibAnnex`.
 
 ## Mankiewicz source entry
 
@@ -15,6 +15,17 @@ The Project entry contains only comments and imports. It introduces no declarati
 
 The [Project Source Manifest](docs/projects/mankiewicz.json) records entry bytes, direct roots, the resolved MathlibAnnex source closure, dependency identities and compiled-axiom policy. It binds source content without referring to the Git commit or tree that contains the manifest. Actual immutable release identities and the exact successful qualification receipt belong to the external publication record described in [Verification](VERIFICATION.md).
 
+## Rosenberg source entry
+
+The candidate adds 60 reusable modules for the Rosenberg theorem route. The source admits genuinely non-unital complex C*-algebras and retains the exact separability, nonzero irreducibility, singleton-equivalence-class, compact-image, and compact-preimage conclusions established by the Lean declarations. The Project facade is navigation only; reusable ownership remains in the library modules.
+
+```lean
+import MathlibAnnex.Projects.Rosenberg
+#check MathlibAnnex.Analysis.CStarAlgebra.NonUnitalCStarRepresentation.isCompactOperatorModel_of_singleton
+```
+
+The [Rosenberg Project Source Manifest](docs/projects/rosenberg.json) binds the two direct roots, exact 60-module closure and import edges, entry bytes, environment pins, parser qualification contract, and external publication boundary. It does not publish Cards or a Project view.
+
 ## Reproducible environment
 
 - Lean toolchain: `leanprover/lean4:v4.32.0-rc1`.
@@ -26,9 +37,10 @@ lake build MathlibAnnex
 lake env lean examples/Import.lean
 lake env lean examples/ImportMankiewicz.lean
 lake env lean examples/ImportSphereRigidity.lean
+lake env lean examples/ImportRosenberg.lean
 ```
 
-The root library build includes both Project facades. Release qualification requires an exact source identity check, library build, all three independent imports, compiled-axiom audit, LF blob policy and repository cleanliness. The manual qualification workflow produces a machine receipt and raw logs; it performs no deployment. See [Verification](VERIFICATION.md) for the policy and receipt binding.
+The root library build includes all three Project facades. Release qualification requires an exact source identity check, library build, all four independent imports, compiled-axiom audit, LF blob policy and repository cleanliness. The manual qualification workflow produces a machine receipt and raw logs; it performs no deployment. See [Verification](VERIFICATION.md) for the policy and receipt binding.
 
 ## License and corrections
 

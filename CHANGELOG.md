@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.3.0 (private release candidate)
+
+- Add the exact 60-module project-independent Rosenberg source closure: 58 frozen modules and the two qualified KL10-compatible suppliers.
+- Add the comments/imports-only Rosenberg Project entry, its exact source manifest, and an independent downstream import example.
+- Extend private manual release qualification with a separate Rosenberg entry-import result and the non-retroactive v3 receipt schema.
+- Preserve Lean `4.32.0-rc1`, Mathlib `360da6fa66c1273b76b6b2d8c5666fd5ac2e3b56`, the dependency lock, Apache-2.0 source licensing, and third-party notices.
+- Record this as an intended `v0.3.0` source candidate. No public tag, release, Card, Catalog, Project view, or website publication is asserted.
+
 ## 0.2.0
 
 - Add 48 reusable Sphere Rigidity modules as one coherent delta over public `v0.1.0`.

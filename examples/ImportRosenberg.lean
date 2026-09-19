@@ -1,0 +1,4 @@
+import MathlibAnnex.Projects.Rosenberg
+
+#check MathlibAnnex.Analysis.CStarAlgebra.NonUnitalCStarRepresentation.isCompactOperatorModel_of_singleton
+#check MathlibAnnex.Analysis.CStarAlgebra.Representation.faithful_and_compactOperatorModel_of_singleton_amongNonUnital
