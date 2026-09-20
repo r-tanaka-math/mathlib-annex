@@ -34,9 +34,10 @@ example {A : Type u} [NonUnitalCStarAlgebra A] [PartialOrder A]
   NonUnitalCStarRepresentation.continuum_eq_aleph_one_of_singleton_of_not_isCompactOperatorModel_of_hasDensityCharacter
     pi hpi hnot hd
 
-example : #AtomicCounterexampleAlgebra = Cardinal.continuum :=
+example : #MathlibAnnex.CStarAlgebra.CAR.AtomicCounterexampleAlgebra = Cardinal.continuum :=
   cardinalMk_atomicCounterexampleAlgebra
-example : HasDensityCharacter AtomicCounterexampleAlgebra Cardinal.continuum :=
+example : HasDensityCharacter MathlibAnnex.CStarAlgebra.CAR.AtomicCounterexampleAlgebra
+    Cardinal.continuum :=
   hasDensityCharacter_atomicCounterexampleAlgebra
 example : HasDensityCharacter
     (MathlibAnnex.CStarAlgebra.PureState.SelectedAtomicHilbert completedRootPureState)
@@ -49,8 +50,9 @@ example : (Cardinal.continuum : Cardinal.{0}) = Cardinal.aleph 1 ↔
     ExistsNaimarkCounterexampleOfDensity (Cardinal.aleph 1 : Cardinal.{0}) :=
   continuum_eq_aleph_one_iff_existsNaimarkCounterexampleOfDensity
 example : AtomicCounterexampleEndpoint.{v} ∧
-    #AtomicCounterexampleAlgebra = Cardinal.continuum ∧
-    HasDensityCharacter AtomicCounterexampleAlgebra Cardinal.continuum :=
+    #MathlibAnnex.CStarAlgebra.CAR.AtomicCounterexampleAlgebra = Cardinal.continuum ∧
+    HasDensityCharacter MathlibAnnex.CStarAlgebra.CAR.AtomicCounterexampleAlgebra
+      Cardinal.continuum :=
   atomicCounterexampleEndpoint_and_cardinality_and_density
 
 #print axioms MathlibAnnex.CStarAlgebra.CAR.continuum_eq_aleph_one_iff_existsNaimarkCounterexampleOfDensity
