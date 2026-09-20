@@ -39,3 +39,12 @@ separate acts. This entry does not set a publication date.
 - Preserve the accepted Lean proof bytes, dependency lock, toolchain and pinned qualification implementation.
 
 Actual release and qualification identities are supplied by the external publication record described in [Verification](VERIFICATION.md).
+
+## 0.4.0 integrated private candidate (not released)
+
+The naming-migration checkpoint is preserved. This candidate additionally contains
+the same-algebra separable faithful representation and trace extension source.
+Its new Lean code and composed universal exclusion endpoint require incremental
+local qualification and a subsequent owner-dispatched hosted clean Annex build.
+Old release receipts do not qualify this new tree. No source/LFH/site publication
+or new owner source-exposition approval is implied.

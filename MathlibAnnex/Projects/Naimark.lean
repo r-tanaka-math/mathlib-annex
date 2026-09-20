@@ -4,3 +4,4 @@ import MathlibAnnex.Analysis.CStarAlgebra.NonUnital.CompactModel
 import MathlibAnnex.Analysis.CStarAlgebra.Representation.OrdinarySingleton
 
 /-! Naimark: imports-only candidate navigation. No source admission or publication. -/
+import MathlibAnnex.Analysis.CStarAlgebra.CAR.SeparableFaithful

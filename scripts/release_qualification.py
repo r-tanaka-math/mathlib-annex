@@ -1,6 +1,6 @@
 """Manual private release-qualification helper. Import is inert.
 
-This naming-migration candidate is unbuilt until its new exact-tree receipts exist.
+This SEP integration candidate is unbuilt until its new exact-tree receipts exist.
 The owner alone dispatches the hosted workflow; source, LFH and website publication
 remain separate acts. Prior receipts are not receipts for this candidate.
 """
@@ -20,6 +20,8 @@ def make_receipt(identity,results,logs,run_identity):
     require(set(results)==set(CHECKS),'separate required checks')
     require(all(x in ('PASS','FAIL','NOT_RUN','CANCELLED') for x in results.values()),'typed check result')
     passed=all(x=='PASS' for x in results.values())
+    if passed:
+        require(identity and identity.get('execution_mode',{}).get('mode') in ('LOCAL_INCREMENTAL','HOSTED_CLEAN_ANNEX'),'PASS requires explicit cache-mode binding')
     require(not passed or (identity and identity.get('status')=='PASS'),'success requires exact identity')
     return {'schema':SCHEMA,'qualification':'PASS' if passed else 'FAIL','checks':results,'identity':identity,
         'axiom_policy':{'root':'MathlibAnnex','allowlist':ALLOW},'run':run_identity,'logs':logs,
@@ -35,13 +37,35 @@ def summary(receipt):
         'A missing, skipped or cancelled required check is not a PASS. Download the artifact and the GitHub job logs when diagnosing a failure.','',
         '```json',json.dumps(receipt['identity'],sort_keys=True,indent=2),'```','']
     return '\n'.join(rows)
+def execution_mode(root, evidence, env):
+    """Bind cache semantics, without removing, rewriting or copying cache files."""
+    mode=env.get('QUALIFICATION_MODE','')
+    require(mode in ('LOCAL_INCREMENTAL','HOSTED_CLEAN_ANNEX'), 'explicit qualification mode required')
+    fresh=not (root/'.lake/build').exists()
+    if mode=='HOSTED_CLEAN_ANNEX':
+        require(env.get('GITHUB_ACTIONS')=='true' and env.get('RUNNER_ENVIRONMENT')=='github-hosted', 'fresh GitHub-hosted runner required')
+        require(env.get('GITHUB_EVENT_NAME')=='workflow_dispatch', 'manual event required')
+        require(fresh, 'root .lake/build already exists before hosted build')
+        require(env.get('LAKE_NO_CACHE')=='true' and env.get('LAKE_ARTIFACT_CACHE')=='false', 'no implicit Annex artifact download')
+        require(not env.get('LEAN_PATH') and not env.get('LEAN_GITHASH'), 'no imported workspace/search-path or trace-identity override')
+        wf=json.loads((root/'.github/workflows/release-qualification.yml').read_text(encoding='utf-8'))
+        action=next(s for s in wf['jobs']['qualify']['steps'] if s.get('id')=='lean')
+        require(action['with']['use-github-cache'] is False and action['with']['use-mathlib-cache'] is True, 'Annex cache off, pinned Mathlib cache on')
+    value={'schema':'mathlibannex.qualification-execution-mode.v1','mode':mode,
+        'project_build_directory_absent_before':fresh,
+        'project_cached_artifacts_permitted':mode=='LOCAL_INCREMENTAL',
+        'pinned_dependency_cache_permitted':True,'fresh_full_mathlib_build_claim':False,
+        'all_required_checks_still_required':True}
+    write(evidence/'execution-mode.json',value)
+    return value
+
 def identity(root,evidence,env):
     def git(*args):
         cp=run(['git','-C',str(root),*args]);require(cp.returncode==0,'git identity');return cp.stdout.decode().strip()
     commit=git('rev-parse','HEAD');tree=git('rev-parse','HEAD^{tree}')
     workflow=root/'.github/workflows/release-qualification.yml'
-    toolchain=(root/'lean-toolchain').read_text().strip()
-    lock=json.loads((root/'lake-manifest.json').read_text());mathlibs=[p for p in lock['packages'] if p['name']=='mathlib']
+    toolchain=(root/'lean-toolchain').read_text(encoding='utf-8').strip()
+    lock=json.loads((root/'lake-manifest.json').read_text(encoding='utf-8'));mathlibs=[p for p in lock['packages'] if p['name']=='mathlib']
     require(len(mathlibs)==1,'one pinned Mathlib');mathlib=mathlibs[0]['rev']
     require(re.fullmatch('[0-9a-f]{40}',env['EXPECTED_COMMIT']) and commit==env['EXPECTED_COMMIT']==env['GITHUB_SHA']==env['WORKFLOW_SHA'],'exact selected workflow and source commit')
     require(re.fullmatch('[0-9a-f]{40}',env['EXPECTED_TREE']) and tree==env['EXPECTED_TREE'],'exact expected tree')
@@ -50,6 +74,7 @@ def identity(root,evidence,env):
     value={'status':'PASS','commit':commit,'tree':tree,'workflow_sha256':digest(workflow.read_bytes()),'workflow_commit':env['WORKFLOW_SHA'],
         'helper_sha256':digest(Path(__file__).read_bytes()),'lean_toolchain':toolchain,'mathlib_revision':mathlib,
         'lock_sha256':digest((root/'lake-manifest.json').read_bytes()),'toolchain_sha256':digest((root/'lean-toolchain').read_bytes())}
+    value['execution_mode']=execution_mode(root,evidence,env)
     write(evidence/'identity.json',value);print(json.dumps(value,sort_keys=True));return value
 def clean(root,evidence):
     results={}
@@ -70,7 +95,7 @@ def clean(root,evidence):
     write(evidence/'cleanliness.json',results)
     require(all(r['exit_code']==0 and r['empty'] for r in results.values()),'tracked, index or porcelain dirty')
 def finish(evidence,env):
-    identity_value=json.loads((evidence/'identity.json').read_text()) if (evidence/'identity.json').exists() else None
+    identity_value=json.loads((evidence/'identity.json').read_text(encoding='utf-8')) if (evidence/'identity.json').exists() else None
     results={'identity':outcome(env.get('IDENTITY_OUTCOME','')),'build':outcome(env.get('BUILD_STATUS','')),
         'downstream_import':outcome(env.get('IMPORT_OUTCOME','')),'project_entry_import':outcome(env.get('PROJECT_IMPORT_OUTCOME','')),'sphere_rigidity_entry_import':outcome(env.get('SPHERE_PROJECT_IMPORT_OUTCOME','')),'naimark_entry_import':outcome(env.get('NAIMARK_PROJECT_IMPORT_OUTCOME','')),'pure_state_homogeneity_entry_import':outcome(env.get('PURE_STATE_HOMOGENEITY_PROJECT_IMPORT_OUTCOME','')),'rosenberg_entry_import':outcome(env.get('ROSENBERG_PROJECT_IMPORT_OUTCOME','')),'project_entry_parser':outcome(env.get('PROJECT_ENTRY_PARSER_OUTCOME','')),'compiled_axiom_audit':outcome(env.get('AXIOM_STATUS','')),'cleanliness':outcome(env.get('CLEAN_OUTCOME',''))}
     logs=[{'path':p.name,'bytes':p.stat().st_size,'sha256':digest(p.read_bytes())} for p in sorted(evidence.glob('*')) if p.is_file() and p.name not in ('qualification.json','summary.md')]
@@ -89,7 +114,20 @@ def main():
         cp=run(['lake','env','lean','examples/ImportSphereRigidity.lean']);(evidence/'sphere-rigidity-entry-import.log').write_bytes(cp.stdout);print(cp.stdout.decode(errors='replace'));return cp.returncode
     elif stage in ('naimark-project-import','pure-state-homogeneity-project-import','rosenberg-project-import'):
         filenames={'naimark-project-import':'ImportNaimark','pure-state-homogeneity-project-import':'ImportPureStateHomogeneity','rosenberg-project-import':'ImportRosenberg'}
-        cp=run(['lake','env','lean','examples/'+filenames[stage]+'.lean']);(evidence/(stage+'.log')).write_bytes(cp.stdout);print(cp.stdout.decode(errors='replace'));return cp.returncode
+        probes=['examples/'+filenames[stage]+'.lean']
+        if stage=='naimark-project-import':
+            probes+=['examples/SeparableFaithfulSmoke.lean','scripts/PrintSeparableFaithfulAxioms.lean']
+        rows=[]
+        for j,probe in enumerate(probes):
+            cp=run(['lake','env','lean',probe])
+            log=stage+('.log' if j==0 else '-'+Path(probe).stem+'.log')
+            (evidence/log).write_bytes(cp.stdout);print(cp.stdout.decode(errors='replace'))
+            rows.append({'source':probe,'source_sha256':digest((root/probe).read_bytes()),'exit_code':cp.returncode,'log':log,'log_sha256':digest(cp.stdout)})
+            if cp.returncode:
+                write(evidence/(stage+'-probes.json'),{'status':'FAIL','probes':rows})
+                return cp.returncode
+        write(evidence/(stage+'-probes.json'),{'status':'PASS','probes':rows})
+        return 0
     elif stage=='entry-parser':
         names=['Mankiewicz','SphereRigidity','Naimark','PureStateHomogeneity','Rosenberg']
         paths=['MathlibAnnex/Projects/'+n+'.lean' for n in names]
@@ -100,7 +138,7 @@ def main():
         verified=[]
         for path,slug,row in zip(paths,slugs,rows):
             require(row['file']==path and row['header_only'] is True and row['imports_comments_only'] is True and row['finished'] is True and row['diagnostics']==[],'invalid Project facade '+path)
-            manifest=json.loads((root/'docs/projects'/ (slug+'.json')).read_text())
+            manifest=json.loads((root/'docs/projects'/ (slug+'.json')).read_text(encoding='utf-8'))
             require(row['imports']==manifest['direct_project_modules'],'entry/manifest direct root mismatch '+slug)
             entry=manifest['entry_module'];require(entry['path']==path and entry['sha256']==digest((root/path).read_bytes()) and entry['bytes']==(root/path).stat().st_size,'entry bytes mismatch '+slug)
             for provider in manifest['resolved_mathlibannex_import_closure']:
@@ -110,7 +148,7 @@ def main():
         write(evidence/'project-entry-parser.json',{'status':'PASS','entries':verified,'parser_sha256':digest((root/'scripts/ProjectEntryParser.lean').read_bytes())})
     elif stage=='clean':clean(root,evidence)
     elif stage=='summary':finish(evidence,env)
-    elif stage=='require':require(json.loads((evidence/'qualification.json').read_text())['qualification']=='PASS','one or more required checks failed or did not run')
+    elif stage=='require':require(json.loads((evidence/'qualification.json').read_text(encoding='utf-8'))['qualification']=='PASS','one or more required checks failed or did not run')
     else:raise ValueError('unknown stage')
     return 0
 if __name__=='__main__':raise SystemExit(main())

@@ -366,3 +366,23 @@ import MathlibAnnex.MeasureTheory.Measure.EquivalentSeminormBall
 import MathlibAnnex.Topology.CountableBaire
 import MathlibAnnex.Topology.InfinitePath
 import MathlibAnnex.Topology.MetricSpace.DenseCauchy
+
+-- Separable faithful representations and trace extensions.
+import MathlibAnnex.Analysis.CStarAlgebra.AtomicConstruction.GeneratedExt
+import MathlibAnnex.Analysis.CStarAlgebra.CAR.FiniteTrace
+import MathlibAnnex.Analysis.CStarAlgebra.CAR.SeparableFaithful
+import MathlibAnnex.Analysis.CStarAlgebra.CAR.Trace
+import MathlibAnnex.Analysis.CStarAlgebra.CAR.TraceExtensionTracial
+import MathlibAnnex.Analysis.CStarAlgebra.CAR.TraceExtensionUnique
+import MathlibAnnex.Analysis.CStarAlgebra.CAR.TraceFlag
+import MathlibAnnex.Analysis.CStarAlgebra.CAR.TraceGNSModel
+import MathlibAnnex.Analysis.CStarAlgebra.CAR.TraceState
+import MathlibAnnex.Analysis.CStarAlgebra.CAR.TraceUnique
+import MathlibAnnex.Analysis.CStarAlgebra.CAR.TracialCyclic
+import MathlibAnnex.Analysis.CStarAlgebra.CAR.TracialRepresentation
+import MathlibAnnex.Analysis.CStarAlgebra.CAR.TracialTransport
+import MathlibAnnex.Analysis.CStarAlgebra.GNS.TracialFaithfulness
+import MathlibAnnex.Analysis.CStarAlgebra.GNS.TracialProjection
+import MathlibAnnex.Analysis.CStarAlgebra.Representation.SimpleFaithful
+import MathlibAnnex.Analysis.CStarAlgebra.State.Centralizer
+import MathlibAnnex.Analysis.CStarAlgebra.State.ExtensionOfEmbedding
