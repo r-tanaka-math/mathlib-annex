@@ -1,5 +1,7 @@
 import MathlibAnnex.Analysis.CStarAlgebra.NonUnital.CompactModel
 import MathlibAnnex.Analysis.CStarAlgebra.Representation.OrdinarySingleton
+import MathlibAnnex.Analysis.CStarAlgebra.Representation.DensityLowerBound
+import MathlibAnnex.Analysis.CStarAlgebra.NonUnital.DensityLowerBound
 
 /-!
 # Rosenberg theorem source entry

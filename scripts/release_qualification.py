@@ -1,6 +1,6 @@
 """Manual private release-qualification helper. Import is inert.
 
-This SEP integration candidate is unbuilt until its new exact-tree receipts exist.
+This density/CH integration candidate is unbuilt until its new exact-tree receipts exist.
 The owner alone dispatches the hosted workflow; source, LFH and website publication
 remain separate acts. Prior receipts are not receipts for this candidate.
 """
@@ -117,6 +117,10 @@ def main():
         probes=['examples/'+filenames[stage]+'.lean']
         if stage=='naimark-project-import':
             probes+=['examples/SeparableFaithfulSmoke.lean','scripts/PrintSeparableFaithfulAxioms.lean']
+            probes+=['examples/DensityCHSmoke.lean','scripts/PrintDensityCHAxioms.lean',
+                     'scripts/DensityCHInventory.lean','scripts/DensityCHModuleAxioms.lean']
+        if stage=='rosenberg-project-import':
+            probes+=['examples/RosenbergDensitySmoke.lean']
         rows=[]
         for j,probe in enumerate(probes):
             cp=run(['lake','env','lean',probe])

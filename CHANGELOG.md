@@ -48,3 +48,12 @@ Its new Lean code and composed universal exclusion endpoint require incremental
 local qualification and a subsequent owner-dispatched hosted clean Annex build.
 Old release receipts do not qualify this new tree. No source/LFH/site publication
 or new owner source-exposition approval is implied.
+
+## Unreleased v0.4.0 candidate: density and CH completion
+
+Adds cardinal-density versions of the unital and genuinely nonunital Rosenberg
+route, the norm-density lower-bound conclusion of Akemann--Weaver Proposition 6,
+and the faithful-separable-representation cardinal upper bound. For the same
+fixed counterexample, the candidate supplies cardinality and norm density
+continuum and a CH iff density-aleph-one existence corollary. These additions
+await exact-tree local and hosted qualification; no public release is performed.
