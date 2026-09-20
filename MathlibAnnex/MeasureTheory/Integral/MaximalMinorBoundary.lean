@@ -24,8 +24,8 @@ private def unitBall {n : ℕ} (M : SeminormBall n) : Set (Fin n → ℝ) := M.p
 @[simp] private theorem mem_unitBall {n : ℕ} (M : SeminormBall n) {x : Fin n → ℝ} :
     x ∈ M.unitBall ↔ M.p x ≤ 1 := by simp [unitBall]
 private theorem isCompact_unitBall {n : ℕ} (M : SeminormBall n) : IsCompact M.unitBall := M.isCompact_closedBall
-private theorem isClosed_unitBall {n : ℕ} (M : SeminormBall n) : IsClosed M.unitBall := M.unitBall_isCompact.isClosed
-private theorem measurableSet_unitBall {n : ℕ} (M : SeminormBall n) : MeasurableSet M.unitBall := M.unitBall_isClosed.measurableSet
+private theorem isClosed_unitBall {n : ℕ} (M : SeminormBall n) : IsClosed M.unitBall := M.isCompact_unitBall.isClosed
+private theorem measurableSet_unitBall {n : ℕ} (M : SeminormBall n) : MeasurableSet M.unitBall := M.isClosed_unitBall.measurableSet
 end SeminormBall
 private abbrev Lipschitz {α β : Type*} [PseudoMetricSpace α] [PseudoMetricSpace β] (f : α → β) :=
   ∃ C : ℝ≥0, LipschitzWith C f
@@ -238,9 +238,9 @@ private theorem topMinor_boundary_trace {m N : ℕ} (M : SeminormBall (m + 1))
     exact integral_maximalMinor_fderiv_add_sub_eq_zero_of_lipschitzWith s hGW h0 huc
 
   have houtside : dHG =ᵐ[volume.restrict (M.unitBall)ᶜ] 0 := by
-    filter_upwards [ae_restrict_mem (M.unitBall_measurable.compl)] with x hx
+    filter_upwards [ae_restrict_mem (M.measurableSet_unitBall.compl)] with x hx
     have hlocal : H =ᶠ[𝓝 x] G := by
-      have hopen : IsOpen (M.unitBall)ᶜ := M.unitBall_isClosed.isOpen_compl
+      have hopen : IsOpen (M.unitBall)ᶜ := M.isClosed_unitBall.isOpen_compl
       filter_upwards [hopen.mem_nhds hx] with y hy
       exact patchedMap_eq_of_not_mem M F G hy
     have hderiv : fderiv ℝ H x = fderiv ℝ G x := hlocal.fderiv_eq

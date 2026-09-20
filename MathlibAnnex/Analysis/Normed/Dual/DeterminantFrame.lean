@@ -145,7 +145,7 @@ theorem exists_maximizingFrame (b : Basis (Fin n) ℝ E) :
     ∃ B ∈ unitFrameSet n E,
       ∀ C ∈ unitFrameSet n E,
         |frameDeterminant b C| ≤ |frameDeterminant b B| := by
-  rcases unitFrameSet_isCompact.exists_isMaxOn unitFrameSet_nonempty
+  rcases isCompact_unitFrameSet.exists_isMaxOn unitFrameSet_nonempty
       (continuous_frameDeterminant b).abs.continuousOn with ⟨B, hB, hmax⟩
   exact ⟨B, hB, hmax⟩
 
@@ -399,7 +399,7 @@ theorem isCompact_nearMaxFrames (b : Basis (Fin n) ℝ E) (η : ℝ) :
   have hclosed : IsClosed
       {B : Frame n E | determinantMaximum b - η ≤ |frameDeterminant b B|} :=
     isClosed_le continuous_const (continuous_frameDeterminant b).abs
-  exact unitFrameSet_isCompact.inter_right hclosed
+  exact isCompact_unitFrameSet.inter_right hclosed
 
 /-- The selected maximizing frame belongs to every near-maximal set with
 nonnegative slack. -/
@@ -606,7 +606,7 @@ namespace NearMaxInverseBound
 variable {b : Basis (Fin n) ℝ E} {η : ℝ}
 
 /-- The stored common bound is nonnegative. -/
-theorem boundConstant_nonneg (H : NearMaxInverseBound b η) : 0 ≤ H.boundConstant := H.K_pos.le
+theorem boundConstant_nonneg (H : NearMaxInverseBound b η) : 0 ≤ H.boundConstant := H.boundConstant_pos.le
 
 /-- Apply the stored estimate to a coefficient difference. -/
 theorem bound_sub (H : NearMaxInverseBound b η) {B : Frame n E}

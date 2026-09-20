@@ -278,7 +278,7 @@ private theorem FiniteCoefficientNet.exists_center (C : FiniteCoefficientNet (n 
 variable {n : ℕ} {K : ℝ} {ρ : ℝ≥0}
 
 private theorem FiniteCoefficientNet.center_mem_annulus (C : FiniteCoefficientNet (n := n) K ρ)
-    {c : Coord n} (hc : c ∈ C.centers) : c ∈ coefficientAnnulus boundConstant :=
+    {c : Coord n} (hc : c ∈ C.centers) : c ∈ coefficientAnnulus K :=
   C.centers_subset hc
 
 
@@ -286,7 +286,7 @@ variable {n : ℕ} {K : ℝ} {ρ : ℝ≥0}
 
 private noncomputable instance Internal.centerFintype (C : FiniteCoefficientNet (n := n) K ρ) :
     Fintype C.centers :=
-  C.centers_finite.fintype
+  C.finite_centers.fintype
 
 
 variable {n : ℕ} {K : ℝ} {ρ : ℝ≥0}
@@ -299,14 +299,14 @@ private def Internal.satelliteRadius (ε K : ℝ) : ℝ := min ε 1 / (8 * K)
 
 
 private theorem Internal.satelliteRadius_pos {ε K : ℝ} (hε : 0 < ε) (hK : 0 < K) :
-    0 < satelliteRadius ε boundConstant := by
+    0 < satelliteRadius ε K := by
   exact div_pos (lt_min hε zero_lt_one) (mul_pos (by norm_num) hK)
 
 
 private theorem Internal.two_mul_bound_mul_satelliteRadius_lt_half {ε K : ℝ}
     (hε : 0 < ε) (hK : 0 < K) :
     2 * K * satelliteRadius ε K < ε / 2 := by
-  have hden : 0 < 8 * boundConstant := mul_pos (by norm_num) hK
+  have hden : 0 < 8 * K := mul_pos (by norm_num) hK
   have hmin : min ε 1 ≤ ε := min_le_left _ _
   unfold satelliteRadius
   calc
@@ -320,8 +320,8 @@ private theorem Internal.satelliteRadius_lt_half_inv {ε K : ℝ}
     satelliteRadius ε K < 1 / (2 * K) := by
   have hmin : min ε 1 ≤ 1 := min_le_right _ _
   unfold satelliteRadius
-  have hK2 : 0 < 2 * boundConstant := mul_pos (by norm_num) hK
-  have hK8 : 0 < 8 * boundConstant := mul_pos (by norm_num) hK
+  have hK2 : 0 < 2 * K := mul_pos (by norm_num) hK
+  have hK8 : 0 < 8 * K := mul_pos (by norm_num) hK
   calc
     min ε 1 / (8 * K) ≤ 1 / (8 * K) :=
       div_le_div_of_nonneg_right hmin hK8.le
@@ -336,7 +336,7 @@ private noncomputable def Internal.satelliteRadiusNNReal (ε K : ℝ) (hε : 0 <
 
 
 @[simp] private theorem Internal.coe_satelliteRadiusNNReal (ε K : ℝ) (hε : 0 < ε) (hK : 0 < K) :
-    (satelliteRadiusNNReal ε K hε hK : ℝ) = satelliteRadius ε boundConstant := rfl
+    (satelliteRadiusNNReal ε K hε hK : ℝ) = satelliteRadius ε K := rfl
 
 
 private theorem Internal.satelliteRadiusNNReal_ne_zero {ε K : ℝ} (hε : 0 < ε) (hK : 0 < K) :
@@ -622,7 +622,7 @@ private theorem continuous_configurationPolynomial {n : ℕ} {J : Type u} [Finty
         (show Continuous fun C : SatelliteConfiguration n J =>
           C.1 k (Pi.single j 1) by fun_prop)
   apply Continuous.add
-  · exact continuous_const.mul (frameDet_continuous.comp continuous_fst)
+  · exact continuous_const.mul (continuous_frameDet.comp continuous_fst)
   · exact continuous_finsetSum Finset.univ fun a _ =>
       continuous_finsetSum Finset.univ fun i _ =>
         continuous_const.mul (hreplacement a i)

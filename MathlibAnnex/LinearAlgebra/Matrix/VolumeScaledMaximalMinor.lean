@@ -52,6 +52,6 @@ theorem continuous_ballVolumeScaledMaximalMinors {n N : ℕ}
       ((Fin n → ℝ) →L[ℝ] (Fin N → ℝ)) → (MaximalMinorIndex n (Fin N) → ℝ)) := by
   change Continuous fun A : (Fin n → ℝ) →L[ℝ] (Fin N → ℝ) =>
     M.closedUnitBallVolume • maximalMinors (LinearMap.toMatrix' A.toLinearMap)
-  exact continuous_const.smul (maximalMinors_continuous.comp continuous_toMatrix')
+  exact continuous_const.smul (continuous_maximalMinors.comp continuous_toMatrix')
 
 end MathlibAnnex.Matrix

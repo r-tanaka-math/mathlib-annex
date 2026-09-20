@@ -310,7 +310,7 @@ private theorem volume_openBall_pos {m : ℕ} (M : EquivalentSeminorm (Fin (m + 
 
 private theorem volume_openBall_ne_top {m : ℕ} (M : EquivalentSeminorm (Fin (m + 1) → ℝ)) :
     volume (M.p.ball 0 1) ≠ ∞ := by
-  exact ne_top_of_le_ne_top M.closedUnitBall_isCompact.measure_ne_top
+  exact ne_top_of_le_ne_top M.isCompact_closedUnitBall.measure_ne_top
     (measure_mono (by
       intro x hx
       exact M.mem_closedUnitBall.mpr (le_of_lt (by simpa using hx))))

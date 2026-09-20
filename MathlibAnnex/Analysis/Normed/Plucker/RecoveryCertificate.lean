@@ -84,7 +84,7 @@ private abbrev SupCoord (n : ℕ) := Fin n → ℝ
 variable {n : ℕ} {K : ℝ} {ρ : ℝ≥0}
 private noncomputable instance centerFintype (C : FiniteCoefficientNet (n := n) K ρ) :
     Fintype C.centers :=
-  C.centers_finite.fintype
+  C.finite_centers.fintype
 
 
 
@@ -95,13 +95,13 @@ private def centerValue (C : FiniteCoefficientNet (n := n) K ρ) (c : C.centers)
 private def satelliteRadius (ε K : ℝ) : ℝ := min ε 1 / (8 * K)
 
 private theorem satelliteRadius_pos {ε K : ℝ} (hε : 0 < ε) (hK : 0 < K) :
-    0 < satelliteRadius ε boundConstant := by
+    0 < satelliteRadius ε K := by
   exact div_pos (lt_min hε zero_lt_one) (mul_pos (by norm_num) hK)
 
 private theorem two_mul_bound_mul_satelliteRadius_lt_half {ε K : ℝ}
     (hε : 0 < ε) (hK : 0 < K) :
     2 * K * satelliteRadius ε K < ε / 2 := by
-  have hden : 0 < 8 * boundConstant := mul_pos (by norm_num) hK
+  have hden : 0 < 8 * K := mul_pos (by norm_num) hK
   have hmin : min ε 1 ≤ ε := min_le_left _ _
   unfold satelliteRadius
   calc
@@ -114,8 +114,8 @@ private theorem satelliteRadius_lt_half_inv {ε K : ℝ}
     satelliteRadius ε K < 1 / (2 * K) := by
   have hmin : min ε 1 ≤ 1 := min_le_right _ _
   unfold satelliteRadius
-  have hK2 : 0 < 2 * boundConstant := mul_pos (by norm_num) hK
-  have hK8 : 0 < 8 * boundConstant := mul_pos (by norm_num) hK
+  have hK2 : 0 < 2 * K := mul_pos (by norm_num) hK
+  have hK8 : 0 < 8 * K := mul_pos (by norm_num) hK
   calc
     min ε 1 / (8 * K) ≤ 1 / (8 * K) :=
       div_le_div_of_nonneg_right hmin hK8.le
@@ -128,7 +128,7 @@ private noncomputable def satelliteRadiusNNReal (ε K : ℝ) (hε : 0 < ε) (hK 
   ⟨satelliteRadius ε K, (satelliteRadius_pos hε hK).le⟩
 
 @[simp] private theorem coe_satelliteRadiusNNReal (ε K : ℝ) (hε : 0 < ε) (hK : 0 < K) :
-    (satelliteRadiusNNReal ε K hε hK : ℝ) = satelliteRadius ε boundConstant := rfl
+    (satelliteRadiusNNReal ε K hε hK : ℝ) = satelliteRadius ε K := rfl
 
 private abbrev MinorIndex (n N : ℕ) := MathlibAnnex.Matrix.MaximalMinorIndex n (Fin N)
 private abbrev PluckerCoord (n N : ℕ) := MinorIndex n N → ℝ
@@ -235,7 +235,7 @@ private theorem targetRawSupportMaximizer_leading_ne_zero
     {z : PluckerCoord (m + 1)
       (positiveSatelliteAmbientDim m Cnet.centers)}
     (hz : z ∈ MathlibAnnex.NonemptyCompacts.maxSlice (rawPluckerCompact
-      (ambientDim := positiveSatelliteAmbientDim m Cnet.centers) M)
+      (N := positiveSatelliteAmbientDim m Cnet.centers) M)
         (orientedSatelliteSupport weight (centerValue Cnet)
           (maxSatelliteConfiguration M Cnet.centers
             weight (centerValue Cnet)))) :
@@ -283,7 +283,7 @@ private theorem targetRawSupportMaximizer_anchoredGood
     {z : PluckerCoord (m + 1)
       (positiveSatelliteAmbientDim m Cnet.centers)}
     (hz : z ∈ MathlibAnnex.NonemptyCompacts.maxSlice (rawPluckerCompact
-      (ambientDim := positiveSatelliteAmbientDim m Cnet.centers) M)
+      (N := positiveSatelliteAmbientDim m Cnet.centers) M)
         (orientedSatelliteSupport weight (centerValue Cnet)
           (maxSatelliteConfiguration M Cnet.centers
             weight (centerValue Cnet)))) :
@@ -319,9 +319,9 @@ private theorem exists_commonAnchoredRaw
   -- [R11-API-CHECK:ANC-002]
   classical
   let RX := rawPluckerCompact
-    (ambientDim := positiveSatelliteAmbientDim m Cnet.centers) MX
+    (N := positiveSatelliteAmbientDim m Cnet.centers) MX
   let RY := rawPluckerCompact
-    (ambientDim := positiveSatelliteAmbientDim m Cnet.centers) MY
+    (N := positiveSatelliteAmbientDim m Cnet.centers) MY
   let Cstar : SatelliteConfiguration (m + 1) Cnet.centers :=
     maxSatelliteConfiguration MY Cnet.centers weight (centerValue Cnet)
   let ℓ := orientedSatelliteSupport weight (centerValue Cnet) Cstar
@@ -516,7 +516,7 @@ private theorem targetMap_injective : Function.Injective P.targetMap :=
 end AnchoredAlmostIsometryMatch
 
 private abbrev matrixCLM {n N : ℕ} (A : Matrix (Fin N) (Fin n) ℝ) :
-    Coord n →L[ℝ] SupCoord ambientDim := LinearMap.toContinuousLinearMap (Matrix.toLin' A)
+    Coord n →L[ℝ] SupCoord N := LinearMap.toContinuousLinearMap (Matrix.toLin' A)
 @[simp] private theorem matrixCLM_apply {n N : ℕ} (A : Matrix (Fin N) (Fin n) ℝ) (x : Coord n) :
     matrixCLM A x = A.mulVec x := rfl
 @[simp] private theorem clmMatrix_matrixCLM {n N : ℕ} (A : Matrix (Fin N) (Fin n) ℝ) :
@@ -804,7 +804,7 @@ private theorem inducedLinearMap_strict_model_bound
   have hLx : P.inducedLinearMap x ≠ 0 := by
     intro hzero
     exact hx (P.inducedLinearMap_injective (by rw [map_zero]; exact hzero))
-  have hlower := P.targetAlmost.lower_of_ne_zero hLx
+  have hlower := P.finMapAlmostIsometric_targetMap.lower_of_ne_zero hLx
   have hfactor : P.targetMap (P.inducedLinearMap x) = P.sourceMap x := by
     simpa using congrArg (fun F : Coord (m + 1) →L[ℝ]
       SupCoord ((m + 1) + P.q) => F x) P.factorization
@@ -952,9 +952,9 @@ open Internal
 structure LinearCertificate {m : ℕ}
     (MX MY : EquivalentSeminorm (Fin (m + 1) → ℝ)) (ε : ℝ) where
   q : ℕ
-  sourceMap : (Fin (m + 1) → ℝ) →linearMap[ℝ] (Fin ((m + 1) + q) → ℝ)
-  targetMap : (Fin (m + 1) → ℝ) →linearMap[ℝ] (Fin ((m + 1) + q) → ℝ)
-  linearMap : (Fin (m + 1) → ℝ) →linearMap[ℝ] (Fin (m + 1) → ℝ)
+  sourceMap : (Fin (m + 1) → ℝ) →L[ℝ] (Fin ((m + 1) + q) → ℝ)
+  targetMap : (Fin (m + 1) → ℝ) →L[ℝ] (Fin ((m + 1) + q) → ℝ)
+  linearMap : (Fin (m + 1) → ℝ) →L[ℝ] (Fin (m + 1) → ℝ)
   factor : targetMap.comp linearMap = sourceMap
   range_sourceMap_eq_range_targetMap : Set.range sourceMap = Set.range targetMap
   injective : Function.Injective linearMap

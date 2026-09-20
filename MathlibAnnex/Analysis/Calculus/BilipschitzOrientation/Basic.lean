@@ -213,7 +213,7 @@ theorem signed_area_transfer {n : ℕ} (D : BiLipschitzOpenData n)
   have hdiff : ∀ᵐ x ∂volume, DifferentiableAt ℝ D.f x :=
     D.lipschitzWith_f.ae_differentiableAt
   have hGmeas : MeasurableSet G := by
-    exact D.source_open.measurableSet.inter
+    exact D.isOpen_source.measurableSet.inter
       (measurableSet_of_differentiableAt ℝ D.f)
   have hder : ∀ x ∈ G,
       HasFDerivWithinAt D.f (fderiv ℝ D.f x) G x := by

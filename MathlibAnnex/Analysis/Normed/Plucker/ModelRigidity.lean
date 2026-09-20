@@ -12,7 +12,7 @@ namespace PluckerRecovery.Internal
 /-- Private coordinate witness retaining bijectivity, ball image and exact norm equality. -/
 private structure CoordinateLinearIsometryCertificate {m : ℕ}
     (MX MY : EquivalentSeminorm (Fin (m + 1) → ℝ)) where
-  linearMap : (Fin (m + 1) → ℝ) →linearMap[ℝ] (Fin (m + 1) → ℝ)
+  linearMap : (Fin (m + 1) → ℝ) →L[ℝ] (Fin (m + 1) → ℝ)
   injective : Function.Injective linearMap
   surjective : Function.Surjective linearMap
   image_closedUnitBall : linearMap '' MX.closedUnitBall = MY.closedUnitBall
@@ -31,7 +31,7 @@ private theorem nonempty_coordinateLinearIsometry_of_all_body_eq {m : ℕ}
     image_closedUnitBall := hball
     seminorm_linearMap_eq := fun x => SeminormBall.map_eq MX.p MY.p
       (fun _ h => MX.eq_zero_of_apply_eq_zero h)
-      (fun _ h => MY.eq_zero_of_apply_eq_zero h) C.L.toLinearMap
+      (fun _ h => MY.eq_zero_of_apply_eq_zero h) C.linearMap.toLinearMap
       ⟨C.injective, C.surjective⟩ hball x }⟩
 end PluckerRecovery.Internal
 
@@ -43,7 +43,7 @@ theorem nonempty_linearIsometryEquiv_of_pluckerBodies_eq {m : ℕ}
     Nonempty (LinearIsometryEquiv MX MY) := by
   let C := Classical.choice (PluckerRecovery.Internal.nonempty_coordinateLinearIsometry_of_all_body_eq MX MY hBodies)
   let e : (Fin (m + 1) → ℝ) ≃ₗ[ℝ] (Fin (m + 1) → ℝ) :=
-    LinearEquiv.ofBijective C.L.toLinearMap ⟨C.injective, C.surjective⟩
+    LinearEquiv.ofBijective C.linearMap.toLinearMap ⟨C.injective, C.surjective⟩
   exact ⟨{ toLinearEquiv := e, map_p_eq := fun x => by simpa [e] using C.seminorm_linearMap_eq x }⟩
 
 /-- Sphere isometry supplies the exact B3 body equality used by recovery. -/

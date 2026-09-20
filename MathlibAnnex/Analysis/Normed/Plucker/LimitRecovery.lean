@@ -288,7 +288,7 @@ end Internal
 open Internal
 structure LimitCertificate {m : ℕ}
     (MX MY : EquivalentSeminorm (Fin (m + 1) → ℝ)) where
-  linearMap : (Fin (m + 1) → ℝ) →linearMap[ℝ] (Fin (m + 1) → ℝ)
+  linearMap : (Fin (m + 1) → ℝ) →L[ℝ] (Fin (m + 1) → ℝ)
   seminorm_linearMap_le : ∀ x, MY.p (linearMap x) ≤ MX.p x
   image_closedUnitBall_subset : linearMap '' MX.closedUnitBall ⊆ MY.closedUnitBall
   closedUnitBallVolume_mul_abs_det : MX.closedUnitBallVolume * |ContinuousLinearMap.det linearMap| = MY.closedUnitBallVolume
@@ -351,8 +351,8 @@ theorem measure_image_unitBall_eq :
     volume (C.linearMap '' MX.closedUnitBall) = volume MY.closedUnitBall := by
   -- [R11-API-CHECK:LIMVOL-004]
   apply ennreal_eq_of_toReal_eq
-  · exact (MX.closedUnitBall_isCompact.image C.L.continuous).measure_ne_top
-  · exact MY.closedUnitBall_isCompact.measure_ne_top
+  · exact (MX.isCompact_closedUnitBall.image C.linearMap.continuous).measure_ne_top
+  · exact MY.isCompact_closedUnitBall.measure_ne_top
   · simpa [linearImageBallVolume, EquivalentSeminorm.closedUnitBallVolume] using
       Internal.LimitRecoveryCertificate.linearImageBallVolume_eq_target C
 
@@ -361,7 +361,7 @@ theorem image_unitBall_eq : C.linearMap '' MX.closedUnitBall = MY.closedUnitBall
   by_contra hne
   have hlt : volume (C.linearMap '' MX.closedUnitBall) < volume MY.closedUnitBall :=
     SeminormBall.measure_lt volume MY.p MY.continuous_p
-      (MX.closedUnitBall_isCompact.image C.L.continuous) C.image_closedUnitBall_subset hne
+      (MX.isCompact_closedUnitBall.image C.linearMap.continuous) C.image_closedUnitBall_subset hne
   exact hlt.ne C.measure_image_unitBall_eq
 end LimitCertificate
 end MathlibAnnex.PluckerRecovery

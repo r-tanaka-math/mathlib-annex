@@ -50,7 +50,7 @@ theorem derivativeAverage_mem_body {n N : ℕ} (M : EquivalentSeminorm (Fin n �
     simp [EquivalentSeminorm.closedUnitBallVolume, h] at hp
   apply (convex_convexHull ℝ (PluckerBody.generators M N)).set_average_mem
     (isCompact_convexHull_pi _ (PluckerBody.isCompact_generators M)).isClosed
-    hzero M.closedUnitBall_isCompact.measure_ne_top
+    hzero M.isCompact_closedUnitBall.measure_ne_top
   · filter_upwards [hcontract] with x hx
     exact subset_convexHull ℝ _ (derivativeGenerator_mem_raw M f hx)
   · exact hint
@@ -77,7 +77,7 @@ theorem integrableOn_derivativeGenerator_of_seminormLipschitz {n N : ℕ}
         hC (derivativeGenerator_mem_raw M f hx)
     exact hfxC.trans (le_max_left _ _)
   exact IntegrableOn.of_bound
-    (lt_top_iff_ne_top.mpr M.closedUnitBall_isCompact.measure_ne_top)
+    (lt_top_iff_ne_top.mpr M.isCompact_closedUnitBall.measure_ne_top)
     hmeas.aestronglyMeasurable (max C 0) hnorm
 
 /-- An ordinary Lipschitz map has integrable derivative generators on every

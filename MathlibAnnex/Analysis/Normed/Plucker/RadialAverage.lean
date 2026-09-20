@@ -343,7 +343,7 @@ theorem derivativeAverage_comp_linear_radial {m N : ℕ}
     change 0 < volume (MY.p.ball 0 1)
     exact volume_pos_of_isOpen_of_nonempty (isOpen_openBall MY) ⟨0, by simp⟩
   have hfinite : volume D.target ≠ ∞ :=
-    ne_top_of_le_ne_top MY.closedUnitBall_isCompact.measure_ne_top
+    ne_top_of_le_ne_top MY.isCompact_closedUnitBall.measure_ne_top
       (measure_mono (by
         intro x hx
         exact MY.mem_closedUnitBall.mpr (le_of_lt (by simpa [D, radialOpenData] using hx))))

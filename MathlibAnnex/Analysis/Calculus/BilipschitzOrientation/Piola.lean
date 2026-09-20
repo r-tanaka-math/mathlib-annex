@@ -128,7 +128,7 @@ private theorem compactField_exists_fderiv_bound {n : ℕ}
     ∃ C : ℝ≥0, ∀ y, ‖fderiv ℝ W y‖₊ ≤ C := by
   have hcont : Continuous (fun y => ‖fderiv ℝ W y‖₊) :=
     (W.contDiff.continuous_fderiv (by norm_num)).nnnorm
-  obtain ⟨C, hC⟩ := W.carrier_compact.bddAbove_image hcont.continuousOn
+  obtain ⟨C, hC⟩ := W.isCompact_carrier.bddAbove_image hcont.continuousOn
   refine ⟨C, fun y => ?_⟩
   by_cases hy : y ∈ W.carrier
   · exact hC ⟨y, hy, rfl⟩
@@ -161,7 +161,7 @@ private theorem isCompact_preimage_carrier {n : ℕ}
     (hW : W.carrier ⊆ D.target) :
     IsCompact (D.f ⁻¹' W.carrier) := by
   rw [preimage_eq_g_image D hW]
-  exact W.carrier_compact.image D.lipschitzWith_g.continuous
+  exact W.isCompact_carrier.image D.lipschitzWith_g.continuous
 
 private theorem exists_lipschitzWith_coordinatePerturbation {n : ℕ}
     (D : BiLipschitzOpenData n)
@@ -364,10 +364,10 @@ private theorem coordinate_weak_piola {m : ℕ}
     exact hNL
   have houtside : ∀ᵐ x ∂volume.restrict D.sourceᶜ,
       coordinatePiolaTerm D W i x = 0 := by
-    filter_upwards [ae_restrict_mem D.source_open.measurableSet.compl] with x hx
+    filter_upwards [ae_restrict_mem D.isOpen_source.measurableSet.compl] with x hx
     exact coordinatePiolaTerm_eq_zero_of_not_mem_source D W hW i hx
   have hint := integrable_coordinatePiolaTerm D W hW i
-  have hsplit := integral_add_compl D.source_open.measurableSet hint
+  have hsplit := integral_add_compl D.isOpen_source.measurableSet hint
   have hcompl : ∫ x in D.sourceᶜ, coordinatePiolaTerm D W i x = 0 :=
     MeasureTheory.integral_eq_zero_of_ae houtside
   linarith [hglobal, hsplit, hcompl]
@@ -413,7 +413,7 @@ private theorem integrable_divergence {n : ℕ}
   have hcarrier : IntegrableOn (divergence W) W.carrier :=
     ContinuousOn.integrableOn_compact W.isCompact_carrier hdiv_cont.continuousOn
   have hind : Integrable (W.carrier.indicator (divergence W)) :=
-    hcarrier.integrable_indicator W.carrier_compact.measurableSet
+    hcarrier.integrable_indicator W.isCompact_carrier.measurableSet
   have heq : W.carrier.indicator (divergence W) = divergence W := by
     funext y
     by_cases hy : y ∈ W.carrier

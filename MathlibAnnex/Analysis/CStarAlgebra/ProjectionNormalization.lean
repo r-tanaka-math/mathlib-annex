@@ -539,7 +539,7 @@ theorem invSqrtClamp_conjugate (d : B) (hd : 0 ≤ d) :
   have hmul : cfc (fun t : ℝ => invSqrtClamp t * t * invSqrtClamp t) d =
       cfc invSqrtClamp d * d * cfc invSqrtClamp d := by
     have hf : ContinuousOn invSqrtClamp (spectrum ℝ d) :=
-      invSqrtClamp_continuous.continuousOn
+      continuous_invSqrtClamp.continuousOn
     have hft : ContinuousOn (fun t : ℝ => invSqrtClamp t * t) (spectrum ℝ d) :=
       hf.mul continuousOn_id
     calc
@@ -564,7 +564,7 @@ theorem norm_invSqrtClamp_cfc_sub_one_le [Nontrivial B]
     ‖cfc invSqrtClamp d - 1‖ =
         ‖cfc (fun t : ℝ => invSqrtClamp t - 1) d‖ := by
           rw [cfc_sub invSqrtClamp (fun _ : ℝ => (1 : ℝ)) d
-            (hf := invSqrtClamp_continuous.continuousOn)
+            (hf := continuous_invSqrtClamp.continuousOn)
             (hg := continuousOn_const),
             cfc_const_one (R := ℝ) (ha := IsSelfAdjoint.of_nonneg hd)]
     _ ≤ r := by
@@ -704,7 +704,7 @@ theorem map_normalized_conjugate_eq_on_projection
     exact hdP.trans (hJP.eq.trans hleft.symm)
   have hmap : pi (cfc positiveClip d) = cfc positiveClip (pi d) :=
     StarAlgHomClass.map_cfc pi positiveClip d
-      (hf := positiveClip_continuous.continuousOn)
+      (hf := continuous_positiveClip.continuousOn)
       (hφ := by fun_prop)
       (ha := IsSelfAdjoint.of_nonneg hd)
       (hφa := IsSelfAdjoint.of_nonneg hdpi)

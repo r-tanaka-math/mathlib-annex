@@ -33,7 +33,7 @@ theorem not_isIrreducible_of_separable
   let pi : Representation AtomicCounterexampleAlgebra H := rho.toUnital hrho
   have hpi : Representation.IsIrreducible pi :=
     NonUnitalRepresentation.isIrreducible_toUnital rho hrho
-  have hambient_pi : mainInclusion.UnitaryEquivalent pi := by
+  have hambient_pi : atomicCounterexampleRepresentation.UnitaryEquivalent pi := by
     obtain ⟨U, hU⟩ := (atomicCounterexampleEndpoint.{v}).captures_nonunital H rho hrho
     refine ⟨U, ?_⟩
     intro a x
@@ -43,7 +43,7 @@ theorem not_isIrreducible_of_separable
     refine ⟨hpi, ?_⟩
     intro K _ _ _ sigma hsigma
     have hambient_sigma :
-        mainInclusion.UnitaryEquivalent (sigma.toUnital hsigma) := by
+        atomicCounterexampleRepresentation.UnitaryEquivalent (sigma.toUnital hsigma) := by
       obtain ⟨U, hU⟩ := (atomicCounterexampleEndpoint.{0}).captures_nonunital K sigma hsigma
       refine ⟨U, ?_⟩
       intro a x

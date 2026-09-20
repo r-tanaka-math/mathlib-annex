@@ -24,7 +24,7 @@ theorem closedUnitBallVolume_pos : 0 < M.closedUnitBallVolume := by
   have hpos : volume M.closedUnitBall ≠ 0 :=
     (MeasureTheory.Measure.measure_pos_of_nonempty_interior volume
       ⟨0, M.zero_mem_interior_closedUnitBall⟩).ne'
-  have htop : volume M.closedUnitBall ≠ ⊤ := M.closedUnitBall_isCompact.measure_ne_top
+  have htop : volume M.closedUnitBall ≠ ⊤ := M.isCompact_closedUnitBall.measure_ne_top
   exact ENNReal.toReal_pos hpos htop
 
 end MathlibAnnex.EquivalentSeminorm

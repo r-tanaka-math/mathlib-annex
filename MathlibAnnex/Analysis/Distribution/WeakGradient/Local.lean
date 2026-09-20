@@ -139,7 +139,7 @@ theorem locallyIntegrable_compactLocalization {U : Set E}
 theorem compactLocalization_eq_ae_inner {U : Set E}
     {u : E → ℝ} {x : E} (D : LocalBallData U x) :
     compactLocalization D.carrier u =ᵐ[μ.restrict D.inner] u := by
-  filter_upwards [ae_restrict_mem (D.inner_isOpen.measurableSet)] with y hy
+  filter_upwards [ae_restrict_mem (D.isOpen_inner.measurableSet)] with y hy
   exact compactLocalization_of_mem (D.inner_subset_carrier hy)
 
 
@@ -410,7 +410,7 @@ theorem exists_localMollification_constant
       localMollification (μ := μ) D.radius D.radius_pos
         (compactLocalization D.carrier u) k y = c := by
   have hsmooth := contDiff_localMollification hu D k
-  exact D.inner_isOpen.exists_is_const_of_fderiv_eq_zero
+  exact D.isOpen_inner.exists_is_const_of_fderiv_eq_zero
     (convex_ball x D.radius |>.isPreconnected)
     (hsmooth.differentiable (by simp)).differentiableOn
     (localMollification_fderiv_eq_zero hU hu hweak D k)
@@ -419,7 +419,7 @@ theorem exists_localMollification_constant
 /-- Inner balls have positive Haar measure. -/
 theorem localBall_inner_measure_pos {U : Set E}
     {x : E} (D : LocalBallData U x) : 0 < μ D.inner := by
-  exact D.inner_isOpen.measure_pos μ D.inner_nonempty
+  exact D.isOpen_inner.measure_pos μ D.inner_nonempty
 
 /-- There is a convergence point of the mollifier sequence inside the inner
 ball. -/
@@ -440,7 +440,7 @@ theorem exists_inner_convergencePoint {U : Set E}
         atTop (𝓝 (compactLocalization D.carrier u y)) :=
     ae_restrict_of_ae hconv
   have hmem : ∀ᵐ y ∂μ.restrict D.inner, y ∈ D.inner :=
-    ae_restrict_mem D.inner_isOpen.measurableSet
+    ae_restrict_mem D.isOpen_inner.measurableSet
   have hpos := localBall_inner_measure_pos (μ := μ) D
   haveI : (ae (μ.restrict D.inner)).NeBot :=
     MeasureTheory.ae_restrict_neBot.mpr hpos.ne'
@@ -485,7 +485,7 @@ theorem compactLocalization_aeConstant_inner
         atTop (𝓝 (compactLocalization D.carrier u y)) :=
     ae_restrict_of_ae hconv
   filter_upwards [hconvInner,
-    ae_restrict_mem D.inner_isOpen.measurableSet] with y hconvy hy
+    ae_restrict_mem D.isOpen_inner.measurableSet] with y hconvy hy
   have heq :
       (fun k : ℕ => localMollification (μ := μ) D.radius D.radius_pos
         (compactLocalization D.carrier u) k y) =
