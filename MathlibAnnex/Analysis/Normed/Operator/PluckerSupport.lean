@@ -63,8 +63,8 @@ private theorem toModelFrame_near {n : ℕ} (M : NormModel n) {η : ℝ} {B : Du
     (fun i => toModelRow M (B i)) ∈ DeterminantFrame.nearMaxFrames (modelBasis M) η :=
   ⟨toModelFrame_mem M h.1, h.2⟩
 
-private theorem inverseBound {n : ℕ} (M : NormModel n) {η : ℝ} (H : NearMaxInverseBound M η) {B : DualFrame n}
-    (h : B ∈ nearMaxFrames M η) (c : Coord n) : M.p (framePreimage B c) ≤ H.K * ‖c‖ := by
+private theorem seminorm_framePreimage_le {n : ℕ} (M : NormModel n) {η : ℝ} (H : NearMaxInverseBound M η) {B : DualFrame n}
+    (h : B ∈ nearMaxFrames M η) (c : Coord n) : M.p (framePreimage B c) ≤ H.boundConstant * ‖c‖ := by
   exact H.bound (toModelFrame_near M h) c
 
 private theorem detMax_pos {n : ℕ} (M : NormModel n) : 0 < detMax M :=
@@ -107,16 +107,16 @@ private theorem maxFrame_mem {n : ℕ} (M : NormModel n) : maxFrame M ∈ dualFr
 
 private abbrev replaceFrameRow {n : ℕ} := @DeterminantFrame.replaceRow n (Coord n) _ _
 private abbrev functionalRow {n : ℕ} := DeterminantFrame.functionalCoordinates (Pi.basisFun ℝ (Fin n))
-private theorem frameDet_continuous {n : ℕ} : Continuous (frameDet : DualFrame n → ℝ) :=
-  DeterminantFrame.frameDeterminant_continuous (Pi.basisFun ℝ (Fin n))
+private theorem continuous_frameDet {n : ℕ} : Continuous (frameDet : DualFrame n → ℝ) :=
+  DeterminantFrame.continuous_frameDeterminant (Pi.basisFun ℝ (Fin n))
 private theorem dualFrameMatrix_replaceFrameRow {n : ℕ} (B : DualFrame n) (i : Fin n) (r : Coord n →L[ℝ] ℝ) :
     dualFrameMatrix (replaceFrameRow B i r) = (dualFrameMatrix B).updateRow i (functionalRow r) :=
   DeterminantFrame.frameMatrix_replaceRow (Pi.basisFun ℝ (Fin n)) B i r
-private theorem cramerReplacement {n : ℕ} (B : DualFrame n) (hB : frameDet B ≠ 0) (r : Coord n →L[ℝ] ℝ) (c : Coord n) :
+private theorem sum_mul_replacementDet {n : ℕ} (B : DualFrame n) (hB : frameDet B ≠ 0) (r : Coord n →L[ℝ] ℝ) (c : Coord n) :
     (∑ i : Fin n, c i * replacementDet B i r) = frameDet B * r (framePreimage B c) :=
-  DeterminantFrame.cramerReplacement (Pi.basisFun ℝ (Fin n)) B hB r c
+  DeterminantFrame.sum_mul_replacementDeterminant (Pi.basisFun ℝ (Fin n)) B hB r c
 
-private theorem dualRowSet_isCompact {n : ℕ} (M : NormModel n) : IsCompact (dualRowSet M) := by
+private theorem isCompact_dualRowSet {n : ℕ} (M : NormModel n) : IsCompact (dualRowSet M) := by
   have hc : IsClosed (dualRowSet M) := by
     have heq : dualRowSet M = (⋂ x : Coord n, {r : Coord n →L[ℝ] ℝ | |r x| ≤ M.p x}) := by ext r; simp [dualRowSet, IsDualContraction]
     rw [heq]
@@ -131,10 +131,10 @@ private theorem dualRowSet_isCompact {n : ℕ} (M : NormModel n) : IsCompact (du
     exact (hr x).trans (M.le_upper x)
   exact Metric.isCompact_of_isClosed_isBounded hc hb
 
-private theorem dualFrameSet_isCompact {n : ℕ} (M : NormModel n) : IsCompact (dualFrameSet M) := by
+private theorem isCompact_dualFrameSet {n : ℕ} (M : NormModel n) : IsCompact (dualFrameSet M) := by
   have heq : dualFrameSet M = Set.univ.pi (fun _ : Fin n => dualRowSet M) := by ext B; simp [dualFrameSet, dualRowSet]
   rw [heq]
-  exact isCompact_univ_pi fun _ => dualRowSet_isCompact M
+  exact isCompact_univ_pi fun _ => isCompact_dualRowSet M
 
 
 private abbrev SupCoord (n : ℕ) := Fin n → ℝ

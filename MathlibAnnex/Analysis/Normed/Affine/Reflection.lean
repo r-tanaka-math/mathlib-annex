@@ -35,7 +35,7 @@ private def restrictedPointReflection (s : Set P) (c : P)
       dist (x : P) (y : P)
     exact (pointReflection ℝ c).isometry.dist_eq _ _
 
-private theorem fix_center_of_bounded_pointReflection_invariant
+private theorem apply_center_eq_of_isBounded_of_mapsTo_pointReflection
     {s : Set P} {c : P} (hc : c ∈ s) (hs : IsBounded s)
     (hreflect : MapsTo (pointReflection ℝ c) s s) (e : s ≃ᵢ s) :
     e ⟨c, hc⟩ = ⟨c, hc⟩ := by
@@ -73,7 +73,7 @@ private theorem fix_center_of_bounded_pointReflection_invariant
 
 /-- An isometry equivalence between point-reflection-invariant subsets sends
 the center of a bounded source subset to the center of the target subset. -/
-theorem map_center_of_reflectionInvariant
+theorem map_center_of_mapsTo_pointReflection
     {s : Set P} {t : Set Q} {c : P} {d : Q} (f : s ≃ᵢ t)
     (hc : c ∈ s) (hd : d ∈ t) (hs : IsBounded s)
     (hsreflect : MapsTo (pointReflection ℝ c) s s)
@@ -81,7 +81,7 @@ theorem map_center_of_reflectionInvariant
     f ⟨c, hc⟩ = ⟨d, hd⟩ := by
   let R : t ≃ᵢ t := restrictedPointReflection t d htreflect
   let g : s ≃ᵢ s := (f.trans R).trans f.symm
-  have hg := fix_center_of_bounded_pointReflection_invariant hc hs hsreflect g
+  have hg := apply_center_eq_of_isBounded_of_mapsTo_pointReflection hc hs hsreflect g
   have hRf : R (f ⟨c, hc⟩) = f ⟨c, hc⟩ := by
     simpa [g] using congrArg f hg
   apply Subtype.ext

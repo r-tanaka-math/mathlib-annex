@@ -89,7 +89,7 @@ theorem exists_irreducibleGNS_annihilating [Nontrivial A]
   letI : Nontrivial f.GNS := nontrivial_of_ne xi 0 hxi_ne
   have hirr : Representation.IsIrreducible f.gnsStarAlgHom :=
     (Representation.isIrreducible_iff_starAlgHom f.gnsStarAlgHom).2
-      (pureState_gnsStarAlgHom_isIrreducible phi hphi hpure)
+      (isIrreducible_pureState_gnsStarAlgHom phi hphi hpure)
   exact ⟨phi, hphi, hpure, hirr, fun x hx =>
     gnsStarAlgHom_eq_zero_of_mem phi hphi I hann hx⟩
 

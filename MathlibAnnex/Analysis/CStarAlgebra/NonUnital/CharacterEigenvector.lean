@@ -131,7 +131,7 @@ theorem exists_unit_eigenvector_of_character_ne_infinity [Nontrivial A]
     nontrivial_of_ne f.gnsCyclicVector 0 hxi_ne
   have hirrU : rhoU.IsIrreducible :=
     (Representation.isIrreducible_iff_starAlgHom rhoU).2
-      (pureState_gnsStarAlgHom_isIrreducible phi hphi hpure)
+      (isIrreducible_pureState_gnsStarAlgHom phi hphi hpure)
   have hirr : rho.IsIrreducible :=
     isIrreducible_restriction_of_isIrreducible_unitization rhoU hirrU
       hrho_nonzero

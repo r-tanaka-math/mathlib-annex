@@ -1,3 +1,20 @@
+# Naming-migration qualification status
+
+This v0.4.0 candidate has **not yet passed a Lean build or hosted qualification**.
+All prior results described below qualify only their explicitly identified old
+source trees. They do not qualify this renamed tree.
+The required new workflow checks are listed in
+`docs/projects/MATHLIBANNEX_PROJECT_SOURCE_MANIFESTS.json`; they include root and
+all five Project-entry consumers, the pinned Lean parser, compiled-axiom audit,
+exact identities and cleanliness. Local semantic name/type/data/attribute/instance
+comparison and complete import/declaration accounting are additional Workbench gates.
+Only the owner may manually dispatch the private workflow. Publication is separate.
+
+The sections below are preserved historical contract/evidence context.
+They must not be read as current qualification of this candidate.
+
+---
+
 # MathlibAnnex verification
 
 ## Exact qualification contract

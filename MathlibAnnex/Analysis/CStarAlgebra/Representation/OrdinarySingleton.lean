@@ -47,7 +47,7 @@ def IsSingletonIrreducibleModelAmongNonUnital
 
 /-- Quantifying over possibly nonunital competitors implies the corresponding
 raw singleton statement for unital representations. -/
-theorem IsSingletonIrreducibleModelAmongNonUnital.toUnitalSingleton
+theorem IsSingletonIrreducibleModelAmongNonUnital.isSingletonIrreducibleModel
     {pi : Representation A H}
     (hpi : IsSingletonIrreducibleModelAmongNonUnital.{u, v, w} pi) :
     IsSingletonIrreducibleModel.{u, v, w} pi := by
@@ -64,7 +64,7 @@ theorem IsSingletonIrreducibleModelAmongNonUnital.toUnitalSingleton
 
 /-- Conversely, a raw singleton statement for unital representations covers
 all nonzero irreducible possibly nonunital competitors. -/
-theorem IsSingletonIrreducibleModel.amongNonUnital
+theorem IsSingletonIrreducibleModel.isSingletonIrreducibleModelAmongNonUnital
     {pi : Representation A H}
     (hpi : IsSingletonIrreducibleModel.{u, v, w} pi) :
     IsSingletonIrreducibleModelAmongNonUnital.{u, v, w} pi := by
@@ -82,7 +82,7 @@ theorem faithful_and_compactOperatorModel_of_singleton_amongNonUnital
     Function.Injective pi ∧
       IsCompactOperatorModel pi.toNonUnitalStarAlgHom :=
   faithful_and_compactOperatorModel_of_singleton pi
-    hsingle.toUnitalSingleton
+    hsingle.isSingletonIrreducibleModel
 
 /-- The representation space is finite-dimensional under the ordinary
 possibly nonunital singleton quantifier. -/
@@ -91,7 +91,7 @@ theorem finiteDimensional_space_of_singleton_amongNonUnital
     (pi : Representation A H)
     (hsingle : IsSingletonIrreducibleModelAmongNonUnital.{u, v, u} pi) :
     FiniteDimensional ℂ H :=
-  finiteDimensional_space_of_singleton pi hsingle.toUnitalSingleton
+  finiteDimensional_space_of_singleton pi hsingle.isSingletonIrreducibleModel
 
 /-- The unital algebra is finite-dimensional under the ordinary possibly
 nonunital singleton quantifier. -/
@@ -100,7 +100,7 @@ theorem finiteDimensional_algebra_of_singleton_amongNonUnital
     (pi : Representation A H)
     (hsingle : IsSingletonIrreducibleModelAmongNonUnital.{u, v, u} pi) :
     FiniteDimensional ℂ A :=
-  finiteDimensional_algebra_of_singleton pi hsingle.toUnitalSingleton
+  finiteDimensional_algebra_of_singleton pi hsingle.isSingletonIrreducibleModel
 
 /-- A nonzero infinite-dimensional unital C-star algebra cannot have a
 separable nonzero irreducible representation representing its only ordinary

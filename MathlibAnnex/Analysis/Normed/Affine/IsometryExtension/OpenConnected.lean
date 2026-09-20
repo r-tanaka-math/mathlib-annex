@@ -33,7 +33,7 @@ private theorem affineIsometryEquiv_map_lineMap
   rw [LinearMap.map_smul, A.toAffineEquiv.toAffineMap.linearMap_vsub]
   rfl
 
-private theorem affineIsometryEquiv_eq_of_eqOn_open
+private theorem affineIsometryEquiv_eq_of_isOpen_of_eqOn
     {u : Set E} (hu : IsOpen u) (hne : u.Nonempty)
     (A B : E ≃ᵃⁱ[ℝ] F) (h : u.EqOn A B) : A = B := by
   rcases hne with ⟨c, hc⟩
@@ -71,7 +71,7 @@ private theorem affineIsometryEquiv_eq_of_eqOn_open
     exact add_right_cancel hline
   exact sub_left_injective hv
 
-private theorem glue_local_affine_isometry
+private theorem existsUnique_affineIsometryEquiv_of_local
     {s : Set E} (hs : IsOpen s) (hsc : IsConnected s) (f : s → F)
     (hlocal : ∀ x : s, ∃ A : E ≃ᵃⁱ[ℝ] F, ∃ r > 0,
       ∀ y : s, dist (y : E) (x : E) < r → A (y : E) = f y) :
@@ -100,7 +100,7 @@ private theorem glue_local_affine_isometry
         chart y z = f zs := hyq zs (by simpa only [zs, mem_ball] using hz.2)
         _ = chart x z :=
           (hxr zs (by simpa only [zs, mem_ball] using hz.1.2)).symm
-    exact affineIsometryEquiv_eq_of_eqOn_open hu hune (chart y) (chart x) heq
+    exact affineIsometryEquiv_eq_of_isOpen_of_eqOn hu hune (chart y) (chart x) heq
   let x₀ : s := ⟨Classical.choose hsc.nonempty, Classical.choose_spec hsc.nonempty⟩
   have hconst (x y : s) : chart x = chart y := by
     letI : PreconnectedSpace s := Subtype.preconnectedSpace hsc.isPreconnected
@@ -111,7 +111,7 @@ private theorem glue_local_affine_isometry
     exact hxr x (by simpa using hr)
   refine ⟨chart x₀, hagree, ?_⟩
   intro A hA
-  apply affineIsometryEquiv_eq_of_eqOn_open hs hsc.nonempty A (chart x₀)
+  apply affineIsometryEquiv_eq_of_isOpen_of_eqOn hs hsc.nonempty A (chart x₀)
   intro z hz
   calc
     A z = f ⟨z, hz⟩ := hA ⟨z, hz⟩
@@ -143,7 +143,7 @@ theorem existsUnique_affineExtension
     refine ⟨A, R / 8, by positivity, ?_⟩
     intro y hy
     exact hA y (by simpa only [mem_ball] using hy)
-  exact glue_local_affine_isometry hs hsc
+  exact existsUnique_affineIsometryEquiv_of_local hs hsc
     (fun x ↦ ((f x : t) : F)) hlocal
 
 end IsometryEquiv

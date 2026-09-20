@@ -55,7 +55,7 @@ def projectionResidual
     (R P : H →L[ℂ] H) : H →L[ℂ] H :=
   R * P + P * R - P * R * P
 
-theorem projectionResidual_isSelfAdjoint
+theorem isSelfAdjoint_projectionResidual
     {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
     [CompleteSpace H] {R P : H →L[ℂ] H}
     (hR : IsSelfAdjoint R) (hP : IsSelfAdjoint P) :
@@ -200,7 +200,7 @@ private theorem exists_nextState
   let B : H →L[ℂ] H := projectionResidual R P
   have hP : IsSelfAdjoint P := isSelfAdjoint_starProjection E
   have hR : IsSelfAdjoint R := hT.sub (s.isSelfAdjoint.map pi)
-  have hB : IsSelfAdjoint B := projectionResidual_isSelfAdjoint hR hP
+  have hB : IsSelfAdjoint B := isSelfAdjoint_projectionResidual hR hP
   have hBP : B * P = R * P := by
     exact projectionResidual_mul E.isIdempotentElem_starProjection
   have hBnorm : ‖B‖ < ‖T‖ / 2 / 2 ^ n := by
@@ -263,7 +263,7 @@ private noncomputable def nextState
     (n : ℕ) (s : InterpolationState pi E T n) : InterpolationState pi E T (n + 1) :=
   Classical.choose (exists_nextState pi hpi E T hT hTnorm n s)
 
-private theorem nextState_sub_selfAdjoint
+private theorem isSelfAdjoint_nextState_sub
     {A H : Type*} [CStarAlgebra A]
     [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
     [Nontrivial H] (pi : A →⋆ₐ[ℂ] (H →L[ℂ] H))
@@ -314,7 +314,7 @@ theorem exists_selfAdjoint_norm_le_two_mul_and_sub_mul_starProjection_eq_zero
     simpa [s, s0] using initialState_norm_le pi hpi E T hT hTnorm
   have hcself (n : ℕ) : IsSelfAdjoint (c n) := by
     simpa [c, s] using
-      nextState_sub_selfAdjoint pi hpi E T hT hTnorm n (s n)
+      isSelfAdjoint_nextState_sub pi hpi E T hT hTnorm n (s n)
   have hcnorm (n : ℕ) : ‖c n‖ ≤ ‖T‖ / 2 / 2 ^ n := by
     simpa [c, s] using
       nextState_sub_norm_le pi hpi E T hT hTnorm n (s n)
@@ -428,7 +428,7 @@ noncomputable def finiteReduction
     (E : Submodule ℂ H) (T : H →L[ℂ] H) : Submodule ℂ H :=
   E ⊔ E.map T.toLinearMap
 
-noncomputable instance finiteReduction_finiteDimensional
+noncomputable instance instFiniteDimensionalFiniteReduction
     {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
     (E : Submodule ℂ H) [FiniteDimensional ℂ E] (T : H →L[ℂ] H) :
     FiniteDimensional ℂ (finiteReduction E T) := by
@@ -444,7 +444,7 @@ noncomputable def finiteCompression
   let F := finiteReduction E T
   F.starProjection * T * F.starProjection
 
-theorem finiteCompression_isSelfAdjoint
+theorem isSelfAdjoint_finiteCompression
     {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
     [CompleteSpace H] (E : Submodule ℂ H) [FiniteDimensional ℂ E]
     (T : H →L[ℂ] H) (hT : IsSelfAdjoint T) :
@@ -545,7 +545,7 @@ theorem exists_selfAdjoint_finiteReduction_norm_le_two_mul
       ∀ x : H, x ∈ E → pi a x = T x := by
   let F := finiteReduction E T
   let S := finiteCompression E T
-  have hSself : IsSelfAdjoint S := finiteCompression_isSelfAdjoint E T hT
+  have hSself : IsSelfAdjoint S := isSelfAdjoint_finiteCompression E T hT
   obtain ⟨a, haself, hanormS, hexact⟩ :=
     exists_selfAdjoint_norm_le_two_mul_and_sub_mul_starProjection_eq_zero
       pi hpi F S hSself
@@ -695,7 +695,7 @@ theorem exists_selfAdjoint_norm_le_and_eq_on
   let q : H →L[ℂ] H := F.starProjection
   obtain ⟨a, ha, -, hright, hleft, -⟩ :=
     exists_selfAdjoint_finiteReduction_norm_le_two_mul pi hpi E T hT
-  have hSself : IsSelfAdjoint S := finiteCompression_isSelfAdjoint E T hT
+  have hSself : IsSelfAdjoint S := isSelfAdjoint_finiteCompression E T hT
   have hSnorm : ‖S‖ ≤ ‖T‖ := norm_finiteCompression_le E T
   have hSsupport := finiteCompression_supported E T
   have hinterval : -‖T‖ ≤ ‖T‖ :=
@@ -772,7 +772,7 @@ theorem exists_nonneg_norm_le_and_eq_on
   let S := finiteCompression E T
   let q : H →L[ℂ] H := F.starProjection
   have hTself : IsSelfAdjoint T := IsSelfAdjoint.of_nonneg hT
-  have hSself : IsSelfAdjoint S := finiteCompression_isSelfAdjoint E T hTself
+  have hSself : IsSelfAdjoint S := isSelfAdjoint_finiteCompression E T hTself
   have hSnonneg : 0 ≤ S := finiteCompression_nonneg E T hT
   have hSnorm : ‖S‖ ≤ ‖T‖ := norm_finiteCompression_le E T
   have hSsupport := finiteCompression_supported E T

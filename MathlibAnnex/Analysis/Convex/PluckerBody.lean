@@ -29,7 +29,7 @@ def body {n : ℕ} (M : EquivalentSeminorm (Fin n → ℝ)) (N : ℕ) :
 
 theorem generators_nonempty {n N : ℕ} (M : EquivalentSeminorm (Fin n → ℝ)) :
     (generators M N).Nonempty := by
-  exact ⟨Matrix.ballVolumeScaledMaximalMinors M 0, 0, M.zero_isContraction, Or.inl rfl⟩
+  exact ⟨Matrix.ballVolumeScaledMaximalMinors M 0, 0, M.isContraction_zero, Or.inl rfl⟩
 
 theorem generators_neg {n N : ℕ} (M : EquivalentSeminorm (Fin n → ℝ))
     {z : Matrix.MaximalMinorIndex n (Fin N) → ℝ} (hz : z ∈ generators M N) :
@@ -64,7 +64,7 @@ theorem generators_eq_image_union {n N : ℕ} (M : EquivalentSeminorm (Fin n →
     · exact ⟨A, hA, Or.inr rfl⟩
 
 /-- The generator set is compact at every pair of finite dimensions. -/
-theorem generators_isCompact {n N : ℕ} (M : EquivalentSeminorm (Fin n → ℝ)) :
+theorem isCompact_generators {n N : ℕ} (M : EquivalentSeminorm (Fin n → ℝ)) :
     IsCompact (generators M N) := by
   rw [generators_eq_image_union]
   have hclosed : IsClosed (M.contractionSet (Fin N → ℝ)) := by
@@ -86,7 +86,7 @@ theorem generators_isCompact {n N : ℕ} (M : EquivalentSeminorm (Fin n → ℝ)
     simpa [Metric.mem_closedBall, dist_eq_norm] using hnorm
   have hC : IsCompact (M.contractionSet (Fin N → ℝ)) :=
     Metric.isCompact_of_isClosed_isBounded hclosed hbounded
-  have hpos := hC.image (Matrix.ballVolumeScaledMaximalMinors_continuous M)
+  have hpos := hC.image (Matrix.continuous_ballVolumeScaledMaximalMinors M)
   exact hpos.union (hpos.image continuous_neg)
 
 end MathlibAnnex.PluckerBody

@@ -32,7 +32,7 @@ private def fixedConvexImage {ι : Type*} [Fintype ι]
     (s : Set (ι → ℝ)) (k : ℕ) : Set (ι → ℝ) :=
   fixedConvexEval '' fixedConvexCarrier s k
 
-private theorem fixedConvexCarrier_isCompact {ι : Type*} [Fintype ι]
+private theorem isCompact_fixedConvexCarrier {ι : Type*} [Fintype ι]
     {s : Set (ι → ℝ)} (hs : IsCompact s) (k : ℕ) :
     IsCompact (fixedConvexCarrier s k) := by
   have hw : IsCompact (stdSimplex ℝ (Fin k)) :=
@@ -41,16 +41,16 @@ private theorem fixedConvexCarrier_isCompact {ι : Type*} [Fintype ι]
     exact isCompact_univ_pi (fun _ => hs)
   exact hw.prod hz
 
-private theorem fixedConvexEval_continuous {ι : Type*} [Fintype ι] {k : ℕ} :
+private theorem continuous_fixedConvexEval {ι : Type*} [Fintype ι] {k : ℕ} :
     Continuous (fixedConvexEval :
       ((Fin k → ℝ) × (Fin k → ι → ℝ)) → (ι → ℝ)) := by
   unfold fixedConvexEval
   fun_prop
 
-private theorem fixedConvexImage_isCompact {ι : Type*} [Fintype ι]
+private theorem isCompact_fixedConvexImage {ι : Type*} [Fintype ι]
     {s : Set (ι → ℝ)} (hs : IsCompact s) (k : ℕ) :
     IsCompact (fixedConvexImage s k) := by
-  exact (fixedConvexCarrier_isCompact hs k).image fixedConvexEval_continuous
+  exact (isCompact_fixedConvexCarrier hs k).image continuous_fixedConvexEval
 
 private theorem affineIndependent_card_le_pi_succ {ι κ : Type*}
     [Fintype ι] [Fintype κ] {z : κ → ι → ℝ}
@@ -139,6 +139,6 @@ theorem isCompact_convexHull_pi {ι : Type*} [Fintype ι]
     (s : Set (ι → ℝ)) (hs : IsCompact s) :
     IsCompact (convexHull ℝ s) := by
   rw [convexHull_eq_iUnion_fixedConvexImage]
-  exact isCompact_iUnion fun k => fixedConvexImage_isCompact hs k.1
+  exact isCompact_iUnion fun k => isCompact_fixedConvexImage hs k.1
 
 end MathlibAnnex

@@ -70,7 +70,7 @@ theorem maxSlice_nonempty
   ⟨maximizer K ℓ, maximizer_mem_maxSlice K ℓ⟩
 
 /-- A maximum slice is compact. -/
-theorem maxSlice_isCompact
+theorem isCompact_maxSlice
     (K : TopologicalSpace.NonemptyCompacts E) (ℓ : E →L[ℝ] ℝ) :
     IsCompact (maxSlice K ℓ) := by
   have hclosed : IsClosed {x : E | ℓ x = maxValue K ℓ} :=
@@ -82,7 +82,7 @@ noncomputable def refine
     (K : TopologicalSpace.NonemptyCompacts E) (ℓ : E →L[ℝ] ℝ) :
     TopologicalSpace.NonemptyCompacts E where
   carrier := maxSlice K ℓ
-  isCompact' := maxSlice_isCompact K ℓ
+  isCompact' := isCompact_maxSlice K ℓ
   nonempty' := maxSlice_nonempty K ℓ
 
 @[simp] theorem mem_refine
@@ -232,7 +232,7 @@ theorem lexicographicRefine_subset
       exact ((mem_refine K ℓ).1 hxRefine).1
 
 /-- Survivors of the listed refinements agree under every listed functional. -/
-theorem lexicographicRefine_agreesOn
+theorem apply_eq_of_mem_lexicographicRefine
     (ls : List (E →L[ℝ] ℝ)) (K : TopologicalSpace.NonemptyCompacts E)
     {x y : E}
     (hx : x ∈ (lexicographicRefine ls K : Set E))
@@ -265,7 +265,7 @@ theorem lexicographicRefine_subsingleton
     (K : TopologicalSpace.NonemptyCompacts E) :
     (lexicographicRefine ls K : Set E).Subsingleton := by
   intro x hx y hy
-  exact hsep x y (lexicographicRefine_agreesOn ls K hx hy)
+  exact hsep x y (apply_eq_of_mem_lexicographicRefine ls K hx hy)
 
 /-- Repeated lexicographic refinement preserves equality of convex hulls. -/
 theorem lexicographicRefine_convexHull_eq [FiniteDimensional ℝ E]

@@ -32,7 +32,7 @@ theorem existsUnique_affineExtension_ball
   exact MathlibAnnex.IsometryEquiv.existsUnique_affineExtension
     f isOpen_ball (isConnected_ball hr) isOpen_ball
 
-private theorem pointReflection_mapsTo_closedBall (c : E) (r : ℝ) :
+private theorem mapsTo_pointReflection_closedBall (c : E) (r : ℝ) :
     MapsTo (pointReflection ℝ c) (closedBall c r) (closedBall c r) := by
   intro x hx
   rw [mem_closedBall, dist_pointReflection_fixed]
@@ -49,10 +49,10 @@ theorem existsUnique_affineExtension_closedBall
   let cc : closedBall c r := ⟨c, mem_closedBall_self hr.le⟩
   let dd : closedBall d r := ⟨d, mem_closedBall_self hr.le⟩
   have hcenter : f cc = dd :=
-    MathlibAnnex.IsometryEquiv.map_center_of_reflectionInvariant
+    MathlibAnnex.IsometryEquiv.map_center_of_mapsTo_pointReflection
       f cc.property dd.property isBounded_closedBall
-      (pointReflection_mapsTo_closedBall c r)
-      (pointReflection_mapsTo_closedBall d r)
+      (mapsTo_pointReflection_closedBall c r)
+      (mapsTo_pointReflection_closedBall d r)
   have hcenter_val : ((f cc : closedBall d r) : F) = d :=
     congrArg Subtype.val hcenter
   have hfi : ∀ x : closedBall c r,

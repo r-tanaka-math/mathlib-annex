@@ -37,7 +37,7 @@ theorem pairing_ballVolumeScaledMaximalMinors {n N : ℕ}
   intro i hi
   ring
 
-private theorem toMatrixContinuous {n N : ℕ} :
+private theorem continuous_toMatrix' {n N : ℕ} :
     Continuous (fun A : (Fin n → ℝ) →L[ℝ] (Fin N → ℝ) =>
       LinearMap.toMatrix' A.toLinearMap) := by
   apply continuous_matrix
@@ -46,12 +46,12 @@ private theorem toMatrixContinuous {n N : ℕ} :
   fun_prop
 
 /-- Continuity of the volume-scaled maximal-minor vector. -/
-theorem ballVolumeScaledMaximalMinors_continuous {n N : ℕ}
+theorem continuous_ballVolumeScaledMaximalMinors {n N : ℕ}
     (M : EquivalentSeminorm (Fin n → ℝ)) :
     Continuous (ballVolumeScaledMaximalMinors M :
       ((Fin n → ℝ) →L[ℝ] (Fin N → ℝ)) → (MaximalMinorIndex n (Fin N) → ℝ)) := by
   change Continuous fun A : (Fin n → ℝ) →L[ℝ] (Fin N → ℝ) =>
     M.closedUnitBallVolume • maximalMinors (LinearMap.toMatrix' A.toLinearMap)
-  exact continuous_const.smul (maximalMinors_continuous.comp toMatrixContinuous)
+  exact continuous_const.smul (maximalMinors_continuous.comp continuous_toMatrix')
 
 end MathlibAnnex.Matrix

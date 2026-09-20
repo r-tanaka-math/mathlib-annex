@@ -114,7 +114,7 @@ theorem frameCoordinates_eq_mulVec (b : Basis (Fin n) ℝ E)
       simp [mul_comm]
 
 /-- Continuity of the frame determinant. -/
-theorem frameDeterminant_continuous (b : Basis (Fin n) ℝ E) :
+theorem continuous_frameDeterminant (b : Basis (Fin n) ℝ E) :
     Continuous (frameDeterminant b : Frame n E → ℝ) := by
   apply Continuous.matrix_det
   apply continuous_matrix
@@ -123,17 +123,17 @@ theorem frameDeterminant_continuous (b : Basis (Fin n) ℝ E) :
   fun_prop
 
 /-- The dual unit ball is compact in finite dimension. -/
-theorem unitRowSet_isCompact : IsCompact (unitRowSet E) := by
+theorem isCompact_unitRowSet : IsCompact (unitRowSet E) := by
   letI : ProperSpace (E →L[ℝ] ℝ) := FiniteDimensional.proper ℝ (E →L[ℝ] ℝ)
   exact isCompact_closedBall 0 1
 
 /-- The frame set is a compact finite product. -/
-theorem unitFrameSet_isCompact : IsCompact (unitFrameSet n E) := by
+theorem isCompact_unitFrameSet : IsCompact (unitFrameSet n E) := by
   have heq : unitFrameSet n E = Set.univ.pi (fun _ : Fin n => unitRowSet E) := by
     ext B
     simp [unitFrameSet]
   rw [heq]
-  exact isCompact_univ_pi fun _ => unitRowSet_isCompact
+  exact isCompact_univ_pi fun _ => isCompact_unitRowSet
 
 /-- The zero frame witnesses nonemptiness. -/
 theorem unitFrameSet_nonempty : (unitFrameSet n E).Nonempty := by
@@ -146,7 +146,7 @@ theorem exists_maximizingFrame (b : Basis (Fin n) ℝ E) :
       ∀ C ∈ unitFrameSet n E,
         |frameDeterminant b C| ≤ |frameDeterminant b B| := by
   rcases unitFrameSet_isCompact.exists_isMaxOn unitFrameSet_nonempty
-      (frameDeterminant_continuous b).abs.continuousOn with ⟨B, hB, hmax⟩
+      (continuous_frameDeterminant b).abs.continuousOn with ⟨B, hB, hmax⟩
   exact ⟨B, hB, hmax⟩
 
 /-- A selected maximizing frame. -/
@@ -326,7 +326,7 @@ private theorem sum_mul_vecMul_eq_functional_inv_mulVec
           ((coordinateEquiv b).symm (Matrix.mulVec A c))).symm
 
 /-- Exact row-replacement Cramer identity in an arbitrary displayed basis. -/
-theorem cramerReplacement (b : Basis (Fin n) ℝ E) (B : Frame n E)
+theorem sum_mul_replacementDeterminant (b : Basis (Fin n) ℝ E) (B : Frame n E)
     (hB : frameDeterminant b B ≠ 0) (r : E →L[ℝ] ℝ) (c : Fin n → ℝ) :
     (∑ i : Fin n, c i * replacementDeterminant b B i r) =
       frameDeterminant b B *
@@ -394,11 +394,11 @@ def nearMaxFrames (b : Basis (Fin n) ℝ E) (η : ℝ) : Set (Frame n E) :=
     determinantMaximum b - η ≤ |frameDeterminant b B|}
 
 /-- Near-maximal frames form a compact subset of the compact frame set. -/
-theorem nearMaxFrames_isCompact (b : Basis (Fin n) ℝ E) (η : ℝ) :
+theorem isCompact_nearMaxFrames (b : Basis (Fin n) ℝ E) (η : ℝ) :
     IsCompact (nearMaxFrames b η) := by
   have hclosed : IsClosed
       {B : Frame n E | determinantMaximum b - η ≤ |frameDeterminant b B|} :=
-    isClosed_le continuous_const (frameDeterminant_continuous b).abs
+    isClosed_le continuous_const (continuous_frameDeterminant b).abs
   exact unitFrameSet_isCompact.inter_right hclosed
 
 /-- The selected maximizing frame belongs to every near-maximal set with
@@ -425,7 +425,7 @@ theorem nearMaxFrame_det_ne_zero (b : Basis (Fin n) ℝ E) {η : ℝ}
   exact abs_pos.mp habs
 
 /-- The determinant of a near-maximal coordinate matrix is a unit. -/
-theorem nearMaxFrame_det_isUnit (b : Basis (Fin n) ℝ E) {η : ℝ}
+theorem isUnit_nearMaxFrame_det (b : Basis (Fin n) ℝ E) {η : ℝ}
     (hη : η < determinantMaximum b) {B : Frame n E}
     (hB : B ∈ nearMaxFrames b η) : IsUnit (frameMatrix b B).det := by
   exact isUnit_iff_ne_zero.mpr (by
@@ -438,7 +438,7 @@ theorem inverse_mulVec_frameCoordinates (b : Basis (Fin n) ℝ E) {η : ℝ}
     (coordinateEquiv b).symm
         ((frameMatrix b B)⁻¹.mulVec (frameCoordinates B x)) = x := by
   rw [frameCoordinates_eq_mulVec, Matrix.mulVec_mulVec]
-  rw [Matrix.nonsing_inv_mul _ (nearMaxFrame_det_isUnit b hη hB)]
+  rw [Matrix.nonsing_inv_mul _ (isUnit_nearMaxFrame_det b hη hB)]
   rw [Matrix.one_mulVec]
   exact (coordinateEquiv b).symm_apply_apply x
 
@@ -498,7 +498,7 @@ theorem abs_inverse_mulVec_apply_le (b : Basis (Fin n) ℝ E)
     mul_pos (coordinateScale_pos b) hgap
   have hr : r ∈ unitRowSet E := by
     simpa [r, coordinateFrame] using coordinateFrame_mem b j
-  have hcramer := cramerReplacement b B
+  have hcramer := sum_mul_replacementDeterminant b B
     (nearMaxFrame_det_ne_zero b hηD hB) r c
   have hnum := abs_cramerNumerator_le b hB.1 c hr
   have heq :
@@ -594,32 +594,32 @@ theorem inverseBoundConstant_bound (b : Basis (Fin n) ℝ E)
 /-- Packaged common inverse estimate on the near-maximal frame set. -/
 structure NearMaxInverseBound (b : Basis (Fin n) ℝ E) (η : ℝ) where
   /-- Common bound for every near-maximal inverse frame. -/
-  K : ℝ
+  boundConstant : ℝ
   /-- Strict positivity, including dimension zero. -/
-  K_pos : 0 < K
+  boundConstant_pos : 0 < boundConstant
   /-- Uniform estimate from the coordinate sup norm to the ambient norm. -/
   bound : ∀ {B : Frame n E}, B ∈ nearMaxFrames b η → ∀ c : Fin n → ℝ,
-    ‖(coordinateEquiv b).symm ((frameMatrix b B)⁻¹.mulVec c)‖ ≤ K * ‖c‖
+    ‖(coordinateEquiv b).symm ((frameMatrix b B)⁻¹.mulVec c)‖ ≤ boundConstant * ‖c‖
 
 namespace NearMaxInverseBound
 
 variable {b : Basis (Fin n) ℝ E} {η : ℝ}
 
 /-- The stored common bound is nonnegative. -/
-theorem K_nonneg (H : NearMaxInverseBound b η) : 0 ≤ H.K := H.K_pos.le
+theorem boundConstant_nonneg (H : NearMaxInverseBound b η) : 0 ≤ H.boundConstant := H.K_pos.le
 
 /-- Apply the stored estimate to a coefficient difference. -/
 theorem bound_sub (H : NearMaxInverseBound b η) {B : Frame n E}
     (hB : B ∈ nearMaxFrames b η) (c d : Fin n → ℝ) :
     ‖(coordinateEquiv b).symm ((frameMatrix b B)⁻¹.mulVec (c - d))‖ ≤
-      H.K * ‖c - d‖ :=
+      H.boundConstant * ‖c - d‖ :=
   H.bound hB (c - d)
 
 end NearMaxInverseBound
 
 /-- A common inverse bound exists for every nonnegative slack strictly below the
 basis-dependent determinant maximum. -/
-theorem exists_nearMaxInverseBound (b : Basis (Fin n) ℝ E) {η : ℝ}
+theorem nonempty_nearMaxInverseBound (b : Basis (Fin n) ℝ E) {η : ℝ}
     (_hη0 : 0 ≤ η) (hηD : η < determinantMaximum b) :
     Nonempty (NearMaxInverseBound b η) := by
   refine ⟨⟨inverseBoundConstant b η, inverseBoundConstant_pos b hηD, ?_⟩⟩

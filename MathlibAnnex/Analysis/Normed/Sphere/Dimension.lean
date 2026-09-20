@@ -58,7 +58,7 @@ private theorem dimH_univ_le
     [FiniteDimensional ℝ X] [FiniteDimensional ℝ Y]
     (e : Metric.sphere (0 : X) 1 ≃ᵢ Metric.sphere (0 : Y) 1) :
     _root_.dimH (Set.univ : Set Y) ≤ _root_.dimH (Set.univ : Set X) := by
-  have h := (radialExtension_lipschitz e).dimH_range_le
+  have h := (lipschitzWith_radialExtension e).dimH_range_le
   rw [Set.range_eq_univ.mpr (radialExtension_surjective e)] at h
   exact h
 

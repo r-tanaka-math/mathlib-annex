@@ -24,7 +24,7 @@ private def modelBoundaryAmbient {n N : ℕ} (M : EquivalentSeminorm (Fin n → 
     (g : M.unitSphere → (Fin N → ℝ)) : Space M → (Fin N → ℝ) :=
   fun x => if hx : M.p (show Fin n → ℝ from x) = 1 then g ⟨_, hx⟩ else 0
 
-private theorem modelBoundaryAmbient_lipschitzOn {n N : ℕ}
+private theorem lipschitzOnWith_modelBoundaryAmbient {n N : ℕ}
     (M : EquivalentSeminorm (Fin n → ℝ)) (g : M.unitSphere → (Fin N → ℝ))
     (hg : ∀ u v, ‖g u - g v‖ ≤ M.p ((u : Fin n → ℝ) - (v : Fin n → ℝ))) :
     LipschitzOnWith 1 (modelBoundaryAmbient M g) (Metric.sphere (0 : Space M) 1) := by
@@ -45,7 +45,7 @@ private def modelMcShaneToCoord {n N : ℕ} (M : EquivalentSeminorm (Fin n → �
     (g : M.unitSphere → (Fin N → ℝ))
     (hg : ∀ u v, ‖g u - g v‖ ≤ M.p ((u : Fin n → ℝ) - (v : Fin n → ℝ))) :
     (Fin n → ℝ) → (Fin N → ℝ) :=
-  fun x => Classical.choose ((modelBoundaryAmbient_lipschitzOn M g hg).extend_pi)
+  fun x => Classical.choose ((lipschitzOnWith_modelBoundaryAmbient M g hg).extend_pi)
     (show Space M from x)
 
 private theorem modelMcShaneToCoord_spec {n N : ℕ}
@@ -53,7 +53,7 @@ private theorem modelMcShaneToCoord_spec {n N : ℕ}
     (hg : ∀ u v, ‖g u - g v‖ ≤ M.p ((u : Fin n → ℝ) - (v : Fin n → ℝ))) :
     (∀ x y, ‖modelMcShaneToCoord M g hg x - modelMcShaneToCoord M g hg y‖ ≤
       M.p (x - y)) ∧ (∀ u : M.unitSphere, modelMcShaneToCoord M g hg u = g u) := by
-  have hs := Classical.choose_spec ((modelBoundaryAmbient_lipschitzOn M g hg).extend_pi)
+  have hs := Classical.choose_spec ((lipschitzOnWith_modelBoundaryAmbient M g hg).extend_pi)
   constructor
   · intro x y
     have h := hs.1.dist_le_mul (show Space M from x) (show Space M from y)
@@ -69,11 +69,11 @@ private theorem modelMcShaneToCoord_spec {n N : ℕ}
 private structure BoundaryExtensionData {n N : ℕ}
     (M : EquivalentSeminorm (Fin n → ℝ)) (g : M.unitSphere → (Fin N → ℝ)) where
   toFun : (Fin n → ℝ) → (Fin N → ℝ)
-  modelLipschitz : ∀ x y, ‖toFun x - toFun y‖ ≤ M.p (x - y)
-  onSphere : ∀ u : M.unitSphere, toFun (u : Fin n → ℝ) = g u
-  derivative_contraction_ae :
+  norm_sub_le_seminorm_sub : ∀ x y, ‖toFun x - toFun y‖ ≤ M.p (x - y)
+  apply_coe_unitSphere : ∀ u : M.unitSphere, toFun (u : Fin n → ℝ) = g u
+  ae_isContraction_fderiv :
     ∀ᵐ x ∂volume.restrict M.closedUnitBall, M.IsContraction (fderiv ℝ toFun x)
-  derivativePlucker_integrable :
+  integrableOn_derivativeGenerator :
     IntegrableOn (derivativeGenerator M toFun) M.closedUnitBall volume
   average_mem : derivativeAverage M toFun ∈ PluckerBody.body M N
 
@@ -86,7 +86,7 @@ private def concreteBoundaryExtensionData {n N : ℕ}
       M.IsContraction (fderiv ℝ (modelMcShaneToCoord M g hg) x) :=
     FDeriv.ae_norm_apply_le_seminorm_of_lipschitz M.p
       ⟨M.upper, M.upper_pos.le⟩ M.le_upper h.1 M.closedUnitBall
-  have hi := derivativeGenerator_integrable_of_seminormLipschitz M h.1
+  have hi := integrableOn_derivativeGenerator_of_seminormLipschitz M h.1
   exact ⟨modelMcShaneToCoord M g hg, h.1, h.2, hc, hi,
     derivativeAverage_mem_body M hc hi⟩
 
@@ -105,8 +105,8 @@ theorem exists_extension_with_derivativeAverage_mem {n N : ℕ}
       IntegrableOn (derivativeGenerator M f) M.closedUnitBall volume ∧
       derivativeAverage M f ∈ PluckerBody.body M N := by
   let d := Internal.concreteBoundaryExtensionData M g hg
-  exact ⟨d.toFun, d.modelLipschitz, d.onSphere, d.derivative_contraction_ae,
-    d.derivativePlucker_integrable, d.average_mem⟩
+  exact ⟨d.toFun, d.norm_sub_le_seminorm_sub, d.apply_coe_unitSphere, d.ae_isContraction_fderiv,
+    d.integrableOn_derivativeGenerator, d.average_mem⟩
 
 namespace Internal
 
@@ -117,7 +117,7 @@ private def coordinateBoundaryData {m N : ℕ}
   fun u => A (show Fin (m + 1) → ℝ from
     (Δ ⟨(show Space MX from u.val), mem_sphere_zero_iff_norm.mpr u.property⟩).val)
 
-private theorem coordinateBoundaryData_modelLipschitz {m N : ℕ}
+private theorem norm_coordinateBoundaryData_sub_le_seminorm_sub {m N : ℕ}
     {MX MY : EquivalentSeminorm (Fin (m + 1) → ℝ)}
     (Δ : Metric.sphere (0 : Space MX) 1 ≃ᵢ Metric.sphere (0 : Space MY) 1)
     (A : (Fin (m + 1) → ℝ) →L[ℝ] (Fin N → ℝ)) (hA : MY.IsContraction A) :
@@ -146,7 +146,7 @@ private def boundaryExtensionData {m N : ℕ}
     (A : (Fin (m + 1) → ℝ) →L[ℝ] (Fin N → ℝ)) (hA : MY.IsContraction A) :
     BoundaryExtensionData MX (coordinateBoundaryData Δ A) :=
   concreteBoundaryExtensionData MX (coordinateBoundaryData Δ A)
-    (coordinateBoundaryData_modelLipschitz Δ A hA)
+    (norm_coordinateBoundaryData_sub_le_seminorm_sub Δ A hA)
 
 end Internal
 end MathlibAnnex.Plucker

@@ -240,7 +240,7 @@ private theorem radialExtension_dist_le_three
     simpa [norm_sub_rev] using h
 
 /-- The forward radial extension is globally `3`-Lipschitz. -/
-theorem radialExtension_lipschitz
+theorem lipschitzWith_radialExtension
     (e : Metric.sphere (0 : X) 1 ≃ᵢ Metric.sphere (0 : Y) 1) :
     LipschitzWith 3 (radialExtension e) := by
   refine LipschitzWith.of_dist_le_mul ?_
@@ -249,10 +249,10 @@ theorem radialExtension_lipschitz
 
 /-- The radial extension associated with the inverse sphere isometry is also
 `3`-Lipschitz. -/
-theorem radialExtension_symm_lipschitz
+theorem lipschitzWith_radialExtension_symm
     (e : Metric.sphere (0 : X) 1 ≃ᵢ Metric.sphere (0 : Y) 1) :
     LipschitzWith 3 (radialExtension e.symm) :=
-  radialExtension_lipschitz e.symm
+  lipschitzWith_radialExtension e.symm
 
 /-- The radial extension and the extension of the inverse sphere isometry form
 an equivalence of the ambient spaces. -/
@@ -273,8 +273,8 @@ not asserted to be linear or an ambient isometry. -/
 noncomputable def radialExtensionHomeomorph
     (e : Metric.sphere (0 : X) 1 ≃ᵢ Metric.sphere (0 : Y) 1) : X ≃ₜ Y where
   toEquiv := radialExtensionEquiv e
-  continuous_toFun := (radialExtension_lipschitz e).continuous
-  continuous_invFun := (radialExtension_symm_lipschitz e).continuous
+  continuous_toFun := (lipschitzWith_radialExtension e).continuous
+  continuous_invFun := (lipschitzWith_radialExtension_symm e).continuous
 
 end Sphere
 end MathlibAnnex

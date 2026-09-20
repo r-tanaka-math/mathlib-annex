@@ -693,7 +693,7 @@ theorem support_componentFlux_subset {n : ℕ}
   apply hx
   simp [componentFlux, hφ]
 
-theorem componentFlux_hasCompactSupport {n : ℕ}
+theorem hasCompactSupport_componentFlux {n : ℕ}
     {g : (Fin n → ℝ) → (Fin n → ℝ)} {φ : (Fin n → ℝ) → ℝ} {i : Fin n}
     (hφc : HasCompactSupport φ) :
     HasCompactSupport (componentFlux g φ i) :=
@@ -791,7 +791,7 @@ theorem integral_det_singleOutputPerturb_sub_eq_zero
       LinearMap.det ((fderiv ℝ g x).toLinearMap)) = 0 :=
  by
   have hfluxc : HasCompactSupport (componentFlux g φ i) :=
-    componentFlux_hasCompactSupport hφc
+    hasCompactSupport_componentFlux hφc
   have hfluxsmooth : ContDiff ℝ 1 (componentFlux g φ i) := by
 
     have hdg : ContDiff ℝ 1 (fderiv ℝ g) :=

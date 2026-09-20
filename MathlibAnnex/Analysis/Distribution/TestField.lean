@@ -23,7 +23,7 @@ instance : CoeFun (CompactC1VectorField E) (fun _ => E → E) :=
 /-- The chosen compact carrier; it need not equal topological support. -/
 def carrier (W : CompactC1VectorField E) : Set E := W.1
 
-theorem carrier_compact (W : CompactC1VectorField E) : IsCompact W.carrier :=
+theorem isCompact_carrier (W : CompactC1VectorField E) : IsCompact W.carrier :=
   W.1.isCompact
 
 theorem support_subset (W : CompactC1VectorField E) : Function.support W ⊆ W.carrier :=

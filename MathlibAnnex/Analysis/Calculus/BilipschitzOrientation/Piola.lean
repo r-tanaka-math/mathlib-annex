@@ -135,7 +135,7 @@ private theorem compactField_exists_fderiv_bound {n : ℕ}
   · rw [W.fderiv_eq_zero_of_not_mem_carrier hy]
     simp
 
-private theorem compactField_lipschitz {n : ℕ}
+private theorem exists_lipschitzWith_compactField {n : ℕ}
     (W : CompactC1VectorField (Fin n → ℝ)) : ∃ K : ℝ≥0, LipschitzWith K W := by
   obtain ⟨C, hC⟩ := compactField_exists_fderiv_bound W
   exact ⟨C, lipschitzWith_of_nnnorm_fderiv_le
@@ -155,7 +155,7 @@ private theorem preimage_eq_g_image {n : ℕ} (D : BiLipschitzOpenData n)
   · rintro ⟨y, hyK, rfl⟩
     simpa [D.right_inv (hK hyK)] using hyK
 
-private theorem preimage_carrier_isCompact {n : ℕ}
+private theorem isCompact_preimage_carrier {n : ℕ}
     (D : BiLipschitzOpenData n)
     (W : CompactC1VectorField (Fin n → ℝ))
     (hW : W.carrier ⊆ D.target) :
@@ -163,11 +163,11 @@ private theorem preimage_carrier_isCompact {n : ℕ}
   rw [preimage_eq_g_image D hW]
   exact W.carrier_compact.image D.lipschitzWith_g.continuous
 
-private theorem coordinatePerturbation_lipschitz {n : ℕ}
+private theorem exists_lipschitzWith_coordinatePerturbation {n : ℕ}
     (D : BiLipschitzOpenData n)
     (W : CompactC1VectorField (Fin n → ℝ)) (i : Fin n) :
     ∃ K : ℝ≥0, LipschitzWith K (coordinatePerturbation D W i) := by
-  obtain ⟨KW, hKW⟩ := compactField_lipschitz W
+  obtain ⟨KW, hKW⟩ := exists_lipschitzWith_compactField W
   exact ⟨‖coordinateProjector i‖₊ * (KW * D.fConstant), by
     change LipschitzWith (‖coordinateProjector i‖₊ * (KW * D.fConstant))
       (fun x => coordinateProjector i (W (D.f x)))
@@ -185,15 +185,15 @@ private theorem coordinatePerturbation_support_subset_preimage {n : ℕ}
     exact hnot (W.support_subset hnz)
   exact hx (by simp [coordinatePerturbation, hzero])
 
-private theorem coordinatePerturbation_hasCompactSupport {n : ℕ}
+private theorem hasCompactSupport_coordinatePerturbation {n : ℕ}
     (D : BiLipschitzOpenData n)
     (W : CompactC1VectorField (Fin n → ℝ))
     (hW : W.carrier ⊆ D.target) (i : Fin n) :
     HasCompactSupport (coordinatePerturbation D W i) := by
-  exact (preimage_carrier_isCompact D W hW).of_isClosed_subset
+  exact (isCompact_preimage_carrier D W hW).of_isClosed_subset
     (isClosed_tsupport _)
     (closure_minimal (coordinatePerturbation_support_subset_preimage D W i)
-      (preimage_carrier_isCompact D W hW).isClosed)
+      (isCompact_preimage_carrier D W hW).isClosed)
 
 private theorem coordinatePiolaTerm_eq_zero_of_image_not_mem_carrier {n : ℕ}
     (D : BiLipschitzOpenData n)
@@ -305,7 +305,7 @@ private theorem integral_coordDet_add_sub_eq_zero_of_lipschitzWith
     (NullLagrangian.integral_maximalMinor_fderiv_add_sub_eq_zero_of_lipschitzWith
       (identityMinorIndex (m + 1)) hg hu huc)
 
-private theorem coordDet_difference_integrable_of_lipschitzWith
+private theorem integrable_coordDet_difference_of_lipschitzWith
     {m : ℕ} {g u : (Fin (m + 1) → ℝ) → (Fin (m + 1) → ℝ)}
     {Cg Cu : ℝ≥0} (hg : LipschitzWith Cg g) (hu : LipschitzWith Cu u)
     (huc : HasCompactSupport u) :
@@ -336,15 +336,15 @@ private theorem coordDet_difference_integrable_of_lipschitzWith
   rw [heq] at hind
   simpa only [q, s, maximalMinorIntegrand_identity] using hind
 
-private theorem coordinatePiolaTerm_integrable {m : ℕ}
+private theorem integrable_coordinatePiolaTerm {m : ℕ}
     (D : BiLipschitzOpenData (m + 1))
     (W : CompactC1VectorField (Fin (m + 1) → ℝ))
     (hW : W.carrier ⊆ D.target) (i : Fin (m + 1)) :
     Integrable (coordinatePiolaTerm D W i) := by
   let u := coordinatePerturbation D W i
-  obtain ⟨Cu, hu⟩ := coordinatePerturbation_lipschitz D W i
-  have huc : HasCompactSupport u := coordinatePerturbation_hasCompactSupport D W hW i
-  have hdiff := coordDet_difference_integrable_of_lipschitzWith
+  obtain ⟨Cu, hu⟩ := exists_lipschitzWith_coordinatePerturbation D W i
+  have huc : HasCompactSupport u := hasCompactSupport_coordinatePerturbation D W hW i
+  have hdiff := integrable_coordDet_difference_of_lipschitzWith
     D.lipschitzWith_f hu huc
   exact hdiff.congr (coordDet_difference_eq_coordinatePiolaTerm_ae D W i)
 
@@ -354,8 +354,8 @@ private theorem coordinate_weak_piola {m : ℕ}
     (hW : W.carrier ⊆ D.target) (i : Fin (m + 1)) :
     ∫ x in D.source, coordinatePiolaTerm D W i x ∂volume = 0 := by
   let u := coordinatePerturbation D W i
-  obtain ⟨Cu, hu⟩ := coordinatePerturbation_lipschitz D W i
-  have huc : HasCompactSupport u := coordinatePerturbation_hasCompactSupport D W hW i
+  obtain ⟨Cu, hu⟩ := exists_lipschitzWith_coordinatePerturbation D W i
+  have huc : HasCompactSupport u := hasCompactSupport_coordinatePerturbation D W hW i
   have hNL := integral_coordDet_add_sub_eq_zero_of_lipschitzWith
     D.lipschitzWith_f hu huc
   have hglobal : ∫ x, coordinatePiolaTerm D W i x = 0 := by
@@ -366,7 +366,7 @@ private theorem coordinate_weak_piola {m : ℕ}
       coordinatePiolaTerm D W i x = 0 := by
     filter_upwards [ae_restrict_mem D.source_open.measurableSet.compl] with x hx
     exact coordinatePiolaTerm_eq_zero_of_not_mem_source D W hW i hx
-  have hint := coordinatePiolaTerm_integrable D W hW i
+  have hint := integrable_coordinatePiolaTerm D W hW i
   have hsplit := integral_add_compl D.source_open.measurableSet hint
   have hcompl : ∫ x in D.sourceᶜ, coordinatePiolaTerm D W i x = 0 :=
     MeasureTheory.integral_eq_zero_of_ae houtside
@@ -385,7 +385,7 @@ theorem weak_piola {n : ℕ} (D : BiLipschitzOpenData n)
       have hint : ∀ i : Fin (m + 1),
           IntegrableOn (coordinatePiolaTerm D W i) D.source := by
         intro i
-        exact (coordinatePiolaTerm_integrable D W hW i).integrableOn
+        exact (integrable_coordinatePiolaTerm D W hW i).integrableOn
       rw [show (fun x => divergence W (D.f x) * (fderiv ℝ D.f x).det) =
         (fun x => ∑ i : Fin (m + 1), coordinatePiolaTerm D W i x) by
           funext x
@@ -394,7 +394,7 @@ theorem weak_piola {n : ℕ} (D : BiLipschitzOpenData n)
       rw [MeasureTheory.integral_finsetSum _ (fun i _ => hint i)]
       exact Finset.sum_eq_zero fun i _ => coordinate_weak_piola D W hW i
 
-private theorem divergence_integrable {n : ℕ}
+private theorem integrable_divergence {n : ℕ}
     (W : CompactC1VectorField (Fin n → ℝ)) : Integrable (divergence W) := by
   have hdiv_cont : Continuous (divergence W) := by
     have hfd_cont : Continuous (fun y => fderiv ℝ W y) :=
@@ -411,7 +411,7 @@ private theorem divergence_integrable {n : ℕ}
         (A (Pi.single i 1)) i) := by fun_prop
     exact heval.comp hfd_cont
   have hcarrier : IntegrableOn (divergence W) W.carrier :=
-    ContinuousOn.integrableOn_compact W.carrier_compact hdiv_cont.continuousOn
+    ContinuousOn.integrableOn_compact W.isCompact_carrier hdiv_cont.continuousOn
   have hind : Integrable (W.carrier.indicator (divergence W)) :=
     hcarrier.integrable_indicator W.carrier_compact.measurableSet
   have heq : W.carrier.indicator (divergence W) = divergence W := by
@@ -428,13 +428,13 @@ private theorem divergence_integrable {n : ℕ}
 
 /-- Weak Piola plus signed transfer gives zero weak divergence for the target
 Jacobian sign. -/
-theorem targetJacobianSign_weakDivergenceZero {n : ℕ}
+theorem weakDivergenceZero_targetJacobianSign {n : ℕ}
     (D : BiLipschitzOpenData n) :
     WeakDivergenceZero volume D.target (targetJacobianSign D) := by
   intro W hW
   have hp := weak_piola D W hW
   have ht := signed_area_transfer D
-    (φ := divergence W) (divergence_integrable W).integrableOn
+    (φ := divergence W) (integrable_divergence W).integrableOn
   calc
     (∫ y in D.target, targetJacobianSign D y * divergence W y ∂volume) =
         ∫ y in D.target, divergence W y * targetJacobianSign D y ∂volume := by

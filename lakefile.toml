@@ -1,5 +1,5 @@
 name = "mathlibAnnex"
-version = "0.3.0"
+version = "0.4.0"
 defaultTargets = ["MathlibAnnex"]
 
 [[require]]
@@ -11,4 +11,4 @@ rev = "360da6fa66c1273b76b6b2d8c5666fd5ac2e3b56"
 name = "MathlibAnnex"
 
 # Include each Project facade in the root library build.
-roots = ["MathlibAnnex", "MathlibAnnex.Projects.Mankiewicz", "MathlibAnnex.Projects.SphereRigidity", "MathlibAnnex.Projects.Rosenberg"]
+roots = ["MathlibAnnex", "MathlibAnnex.Projects.Mankiewicz", "MathlibAnnex.Projects.SphereRigidity", "MathlibAnnex.Projects.Naimark", "MathlibAnnex.Projects.PureStateHomogeneity", "MathlibAnnex.Projects.Rosenberg"]

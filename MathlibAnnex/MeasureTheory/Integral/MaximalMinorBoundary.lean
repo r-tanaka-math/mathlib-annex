@@ -17,15 +17,15 @@ namespace NullLagrangian
 private structure SeminormBall (n : ℕ) where
   p : Seminorm ℝ (Fin n → ℝ)
   continuous_p : Continuous p
-  compact_ball : IsCompact (p.closedBall 0 1)
+  isCompact_closedBall : IsCompact (p.closedBall 0 1)
 
 namespace SeminormBall
 private def unitBall {n : ℕ} (M : SeminormBall n) : Set (Fin n → ℝ) := M.p.closedBall 0 1
 @[simp] private theorem mem_unitBall {n : ℕ} (M : SeminormBall n) {x : Fin n → ℝ} :
     x ∈ M.unitBall ↔ M.p x ≤ 1 := by simp [unitBall]
-private theorem unitBall_isCompact {n : ℕ} (M : SeminormBall n) : IsCompact M.unitBall := M.compact_ball
-private theorem unitBall_isClosed {n : ℕ} (M : SeminormBall n) : IsClosed M.unitBall := M.unitBall_isCompact.isClosed
-private theorem unitBall_measurable {n : ℕ} (M : SeminormBall n) : MeasurableSet M.unitBall := M.unitBall_isClosed.measurableSet
+private theorem isCompact_unitBall {n : ℕ} (M : SeminormBall n) : IsCompact M.unitBall := M.isCompact_closedBall
+private theorem isClosed_unitBall {n : ℕ} (M : SeminormBall n) : IsClosed M.unitBall := M.unitBall_isCompact.isClosed
+private theorem measurableSet_unitBall {n : ℕ} (M : SeminormBall n) : MeasurableSet M.unitBall := M.unitBall_isClosed.measurableSet
 end SeminormBall
 private abbrev Lipschitz {α β : Type*} [PseudoMetricSpace α] [PseudoMetricSpace β] (f : α → β) :=
   ∃ C : ℝ≥0, LipschitzWith C f
@@ -92,7 +92,7 @@ private def zeroExtension {n N : ℕ} (M : SeminormBall n)
   classical
   simp [zeroExtension, hx]
 
-private theorem zeroExtension_lipschitz {n N : ℕ} (M : SeminormBall n)
+private theorem lipschitz_zeroExtension {n N : ℕ} (M : SeminormBall n)
     {u : (Fin n → ℝ) → (Fin N → ℝ)} (hu : Lipschitz u)
     (hbdry : ∀ x, M.p x = 1 → u x = 0) :
     Lipschitz (zeroExtension M u) := by
@@ -131,11 +131,11 @@ private theorem support_zeroExtension_subset {n N : ℕ} (M : SeminormBall n)
   by_contra hnot
   exact hx (zeroExtension_of_not_mem M u hnot)
 
-private theorem zeroExtension_hasCompactSupport {n N : ℕ} (M : SeminormBall n)
+private theorem hasCompactSupport_zeroExtension {n N : ℕ} (M : SeminormBall n)
     (u : (Fin n → ℝ) → (Fin N → ℝ)) :
     HasCompactSupport (zeroExtension M u) := by
 
-  exact HasCompactSupport.intro M.unitBall_isCompact fun x hx =>
+  exact HasCompactSupport.intro M.isCompact_unitBall fun x hx =>
     zeroExtension_of_not_mem M u hx
 
 private def boundaryDifference {n N : ℕ}
@@ -175,7 +175,7 @@ private theorem modelSphereSet_null {m : ℕ} (M : SeminormBall (m + 1)) :
       (M.p.ball_mem_nhds M.continuous_p zero_lt_one)
   rw [hsphere]
   exact (M.p.convex_ball (0 : (Fin (m + 1) → ℝ)) (1 : ℝ)).addHaar_frontier volume
-private theorem lipschitz_compactPerturb_topMinor_difference_integrable_early
+private theorem integrable_lipschitz_compactPerturb_topMinor_difference_early
     {m N : ℕ} (s : Matrix.MaximalMinorIndex (m + 1) (Fin N))
     {g u : (Fin (m + 1) → ℝ) → (Fin N → ℝ)}
     (hg : Lipschitz g) (hu : Lipschitz u) (huc : HasCompactSupport u) :
@@ -229,8 +229,8 @@ private theorem topMinor_boundary_trace {m N : ℕ} (M : SeminormBall (m + 1))
   have hub : ∀ x, M.p x = 1 → u x = 0 := by
     intro x hx
     simpa only [u] using boundaryDifference_eq_zero M htrace hx
-  have hu0 : Lipschitz u0 := zeroExtension_lipschitz M hu hub
-  have huc : HasCompactSupport u0 := zeroExtension_hasCompactSupport M u
+  have hu0 : Lipschitz u0 := lipschitz_zeroExtension M hu hub
+  have huc : HasCompactSupport u0 := hasCompactSupport_zeroExtension M u
   have hglobal : ∫ x, dHG x = 0 := by
     change (∫ x, maximalMinorIntegrand s (fun y => G y + u0 y) x -
       maximalMinorIntegrand s G x) = 0
@@ -254,7 +254,7 @@ private theorem topMinor_boundary_trace {m N : ℕ} (M : SeminormBall (m + 1))
     exact modelSphereSet_null M
 
   have hinside : dHG =ᵐ[volume.restrict M.unitBall] dFG := by
-    filter_upwards [ae_restrict_mem M.unitBall_measurable, hsphere_ae]
+    filter_upwards [ae_restrict_mem M.measurableSet_unitBall, hsphere_ae]
       with x hx hxsphere
     have hxle : M.p x ≤ 1 := M.mem_unitBall.mp hx
     have hxne : M.p x ≠ 1 := by
@@ -273,7 +273,7 @@ private theorem topMinor_boundary_trace {m N : ℕ} (M : SeminormBall (m + 1))
     change Integrable (fun x =>
       maximalMinorIntegrand s (fun y => G y + u0 y) x -
         maximalMinorIntegrand s G x)
-    exact lipschitz_compactPerturb_topMinor_difference_integrable_early s hGL hu0 huc
+    exact integrable_lipschitz_compactPerturb_topMinor_difference_early s hGL hu0 huc
   have houtside_integral : ∫ x in (M.unitBall)ᶜ, dHG x = 0 := by
     exact MeasureTheory.integral_eq_zero_of_ae houtside
   have hball_integral : ∫ x in M.unitBall, dHG x = 0 := by
@@ -281,13 +281,13 @@ private theorem topMinor_boundary_trace {m N : ℕ} (M : SeminormBall (m + 1))
         (∫ x, dHG x) =
           (∫ x in M.unitBall, dHG x) +
             ∫ x in (M.unitBall)ᶜ, dHG x := by
-      exact (integral_add_compl M.unitBall_measurable hdiff_integrable).symm
+      exact (integral_add_compl M.measurableSet_unitBall hdiff_integrable).symm
     linarith [hglobal, hsplit, houtside_integral]
   have hFGzero : ∫ x in M.unitBall, dFG x = 0 := by
     rw [← integral_congr_ae hinside]
     exact hball_integral
-  have hFi := integrableOn_maximalMinor_fderiv_of_lipschitzWith s hFW M.unitBall_isCompact
-  have hGi := integrableOn_maximalMinor_fderiv_of_lipschitzWith s hGW M.unitBall_isCompact
+  have hFi := integrableOn_maximalMinor_fderiv_of_lipschitzWith s hFW M.isCompact_unitBall
+  have hGi := integrableOn_maximalMinor_fderiv_of_lipschitzWith s hGW M.isCompact_unitBall
   have hsub :
       (∫ x in M.unitBall, maximalMinorIntegrand s F x) -
         ∫ x in M.unitBall, maximalMinorIntegrand s G x = 0 := by

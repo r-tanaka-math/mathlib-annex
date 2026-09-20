@@ -34,8 +34,8 @@ Connectivity is deliberately not stored here. -/
 structure BiLipschitzOpenData (n : ℕ) where
   source : Set (Fin n → ℝ)
   target : Set (Fin n → ℝ)
-  source_open : IsOpen source
-  target_open : IsOpen target
+  isOpen_source : IsOpen source
+  isOpen_target : IsOpen target
   f : (Fin n → ℝ) → (Fin n → ℝ)
   g : (Fin n → ℝ) → (Fin n → ℝ)
   mapsTo_f : MapsTo f source target

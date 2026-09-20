@@ -38,12 +38,12 @@ noncomputable def mollify {n N : ℕ} (ε : ℝ)
   standardMollifier ε ⋆[ContinuousLinearMap.lsmul ℝ ℝ, volume] f
 open scoped Pointwise
 
-theorem standardMollifier_hasCompactSupport {n : ℕ} (ε : ℝ) :
+theorem hasCompactSupport_standardMollifier {n : ℕ} (ε : ℝ) :
     HasCompactSupport (standardMollifier (n := n) ε) := by
   unfold standardMollifier
   split_ifs <;> exact ContDiffBump.hasCompactSupport_normed _
 
-theorem standardMollifier_continuous {n : ℕ} (ε : ℝ) :
+theorem continuous_standardMollifier {n : ℕ} (ε : ℝ) :
     Continuous (standardMollifier (n := n) ε) := by
   unfold standardMollifier
   split_ifs <;>
@@ -56,8 +56,8 @@ theorem mollify_add {n N : ℕ} (ε : ℝ)
       fun x => mollify ε f x + mollify ε g x := by
 
   funext x
-  have hcf := standardMollifier_hasCompactSupport (n := n) ε
-  have hcont := standardMollifier_continuous (n := n) ε
+  have hcf := hasCompactSupport_standardMollifier (n := n) ε
+  have hcont := continuous_standardMollifier (n := n) ε
   have hif := hcf.convolutionExists_left
     (ContinuousLinearMap.lsmul ℝ ℝ) hcont hf
   have hig := hcf.convolutionExists_left
@@ -66,7 +66,7 @@ theorem mollify_add {n N : ℕ} (ε : ℝ)
     smul_add]
   exact MeasureTheory.integral_add (hif x).integrable (hig x).integrable
 
-theorem mollify_contDiff {n N : ℕ} {ε : ℝ} (hε : 0 < ε)
+theorem contDiff_mollify {n N : ℕ} {ε : ℝ} (hε : 0 < ε)
     {f : (Fin n → ℝ) → (Fin N → ℝ)} (hf : LocallyIntegrable f volume) :
     ContDiff ℝ (↑(⊤ : ℕ∞)) (mollify ε f) := by
 
@@ -132,7 +132,7 @@ theorem eventually_mollify_fderiv_memLpOn_compact
   filter_upwards [self_mem_nhdsWithin] with ε hε
   have hεpos : 0 < ε := hε
   have hLip := hf
-  have hsmooth := mollify_contDiff hεpos hLip.continuous.locallyIntegrable
+  have hsmooth := contDiff_mollify hεpos hLip.continuous.locallyIntegrable
   have hDcont : Continuous (fun x => fderiv ℝ (mollify ε f) x) :=
     hsmooth.continuous_fderiv (by simp)
   have hnormcont : Continuous (fun x => ‖fderiv ℝ (mollify ε f) x‖) :=
@@ -727,7 +727,7 @@ theorem tendsto_eLpNorm_fderiv_mollify_sub
               (fun x => entry i j
                 (fderiv ℝ (mollify ε f) x - fderiv ℝ f x))
               ((m + 1 : ℕ) : ℝ≥0∞) (volume.restrict K) := by
-      have hsmooth := mollify_contDiff hε hLip.continuous.locallyIntegrable
+      have hsmooth := contDiff_mollify hε hLip.continuous.locallyIntegrable
       have hDmeas : StronglyMeasurable
           (fun x => fderiv ℝ (mollify ε f) x - fderiv ℝ f x) :=
         ((hsmooth.continuous_fderiv (by simp)).measurable.sub

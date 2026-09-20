@@ -56,7 +56,7 @@ theorem eq_zero_of_apply_eq_zero {x : E} (hx : M.p x = 0) : x = 0 := by
 /-- A continuous linear map bounded pointwise by the model seminorm. -/
 def IsContraction (A : E →L[ℝ] F) : Prop := ∀ x, ‖A x‖ ≤ M.p x
 
-@[simp] theorem zero_isContraction : M.IsContraction (0 : E →L[ℝ] F) := by
+@[simp] theorem isContraction_zero : M.IsContraction (0 : E →L[ℝ] F) := by
   intro x
   simp
 

@@ -44,7 +44,7 @@ private noncomputable def recoveryCertificateSequence {m : ℕ}
     (hBodies : ∀ N : ℕ, PluckerBody.body MX N = PluckerBody.body MY N)
     (k : ℕ) : LinearCertificate MX MY (recoveryEpsilon k) :=
   Classical.choice
-    (exists_linearCertificate_of_pluckerBodies_eq MX MY
+    (nonempty_linearCertificate_of_pluckerBodies_eq MX MY
       (recoveryEpsilon_pos k) hBodies)
 
 /-- The square map in the `k`-th recovery certificate. -/
@@ -52,7 +52,7 @@ private noncomputable def recoveryMapSequence {m : ℕ}
     (MX MY : EquivalentSeminorm (Fin (m + 1) → ℝ))
     (hBodies : ∀ N : ℕ, PluckerBody.body MX N = PluckerBody.body MY N)
     (k : ℕ) : (Fin (m + 1) → ℝ) →L[ℝ] (Fin (m + 1) → ℝ) :=
-  (recoveryCertificateSequence MX MY hBodies k).L
+  (recoveryCertificateSequence MX MY hBodies k).linearMap
 
 /-- Uniform reference-norm bound for the whole recovery sequence. -/
 private theorem recoveryMapSequence_referenceNorm_le {m : ℕ}
@@ -66,7 +66,7 @@ private theorem recoveryMapSequence_referenceNorm_le {m : ℕ}
     (recoveryEpsilon_le_half k) x
 
 /-- Exact top-volume identity for every map in the sequence. -/
-private theorem recoveryMapSequence_exactTopVolume {m : ℕ}
+private theorem closedUnitBallVolume_mul_abs_det_recoveryMapSequence {m : ℕ}
     (MX MY : EquivalentSeminorm (Fin (m + 1) → ℝ))
     (hBodies : ∀ N : ℕ, PluckerBody.body MX N = PluckerBody.body MY N)
     (k : ℕ) :
@@ -75,18 +75,18 @@ private theorem recoveryMapSequence_exactTopVolume {m : ℕ}
       MY.closedUnitBallVolume := by
   -- [R11-API-CHECK:LIM-005]
   let C := recoveryCertificateSequence MX MY hBodies k
-  have h := C.exactTopVolume
+  have h := C.closedUnitBallVolume_mul_abs_det
   rw [C.det_eq] at h
   simpa [recoveryMapSequence, C] using h
 
 /-- Vanishing-distortion model estimate for every sequence term. -/
-private theorem recoveryMapSequence_modelBound {m : ℕ}
+private theorem one_sub_mul_seminorm_recoveryMapSequence_le {m : ℕ}
     (MX MY : EquivalentSeminorm (Fin (m + 1) → ℝ))
     (hBodies : ∀ N : ℕ, PluckerBody.body MX N = PluckerBody.body MY N)
     (k : ℕ) (x : (Fin (m + 1) → ℝ)) :
     (1 - recoveryEpsilon k) *
         MY.p (recoveryMapSequence MX MY hBodies k x) ≤ MX.p x := by
-  exact (recoveryCertificateSequence MX MY hBodies k).modelBound x
+  exact (recoveryCertificateSequence MX MY hBodies k).one_sub_mul_seminorm_linearMap_le x
 private def recoveryOperatorRadius {m : ℕ}
     (MX MY : EquivalentSeminorm (Fin (m + 1) → ℝ)) : ℝ :=
   2 * MX.upper / MY.lower
@@ -125,7 +125,7 @@ private theorem recoveryMapSequence_mem_carrier {m : ℕ}
     recoveryOperatorRadius] using hop
 
 /-- The common operator carrier is compact. -/
-private theorem recoveryOperatorCarrier_isCompact {m : ℕ}
+private theorem isCompact_recoveryOperatorCarrier {m : ℕ}
     (MX MY : EquivalentSeminorm (Fin (m + 1) → ℝ)) :
     IsCompact (recoveryOperatorCarrier MX MY) := by
   -- [R11-API-CHECK:LIM-102]
@@ -145,12 +145,12 @@ private structure RecoverySubsequence {m : ℕ}
   limit_mem : limit ∈ recoveryOperatorCarrier MX MY
 
 /-- Compactness supplies a convergent subsequence. -/
-private theorem exists_recoverySubsequence {m : ℕ}
+private theorem nonempty_recoverySubsequence {m : ℕ}
     (MX MY : EquivalentSeminorm (Fin (m + 1) → ℝ))
     (hBodies : ∀ N : ℕ, PluckerBody.body MX N = PluckerBody.body MY N) :
     Nonempty (RecoverySubsequence MX MY hBodies) := by
   -- [R11-API-CHECK:LIM-103]
-  rcases (recoveryOperatorCarrier_isCompact MX MY).tendsto_subseq
+  rcases (isCompact_recoveryOperatorCarrier MX MY).tendsto_subseq
       (fun k => recoveryMapSequence_mem_carrier MX MY hBodies k) with
     ⟨L, hL, φ, hφ, hconv⟩
   exact ⟨{
@@ -175,28 +175,28 @@ variable {m : ℕ} {MX MY : EquivalentSeminorm (Fin (m + 1) → ℝ)}
     (S : RecoverySubsequence MX MY hBodies)
 
 /-- The distortions along the strict subsequence still tend to zero. -/
-private theorem epsilon_tendsto_zero :
+private theorem tendsto_epsilon_zero :
     Tendsto (fun j => recoveryEpsilon (S.index j)) atTop (nhds 0) := by
   -- [R11-API-CHECK:LIM-202]
   exact tendsto_recoveryEpsilon_zero.comp S.strictMono.tendsto_atTop
 
 /-- The selected maps converge pointwise. -/
-private theorem apply_tendsto (x : (Fin (m + 1) → ℝ)) :
+private theorem tendsto_apply (x : (Fin (m + 1) → ℝ)) :
     Tendsto
       (fun j => recoveryMapSequence MX MY hBodies (S.index j) x)
       atTop (nhds (S.limit x)) :=
   tendsto_clm_apply S.tendsto x
 
 /-- Exact model contraction inequality for the limit map. -/
-private theorem limit_modelBound (x : (Fin (m + 1) → ℝ)) :
+private theorem seminorm_limit_le (x : (Fin (m + 1) → ℝ)) :
     MY.p (S.limit x) ≤ MX.p x := by
   -- [R11-API-CHECK:LIM-203]
-  have hε := S.epsilon_tendsto_zero
+  have hε := S.tendsto_epsilon_zero
   have hpx : Tendsto
       (fun j => MY.p
         (recoveryMapSequence MX MY hBodies (S.index j) x))
       atTop (nhds (MY.p (S.limit x))) :=
-    MY.continuous_p.continuousAt.tendsto.comp (S.apply_tendsto x)
+    MY.continuous_p.continuousAt.tendsto.comp (S.tendsto_apply x)
   have hleft : Tendsto
       (fun j => (1 - recoveryEpsilon (S.index j)) *
         MY.p (recoveryMapSequence MX MY hBodies (S.index j) x))
@@ -207,7 +207,7 @@ private theorem limit_modelBound (x : (Fin (m + 1) → ℝ)) :
         MY.p (recoveryMapSequence MX MY hBodies (S.index j) x) ≤
       MX.p x :=
     Filter.Eventually.of_forall fun j =>
-      recoveryMapSequence_modelBound MX MY hBodies (S.index j) x
+      one_sub_mul_seminorm_recoveryMapSequence_le MX MY hBodies (S.index j) x
   exact le_of_tendsto hleft hev
 
 /-- The limit sends the source model unit ball into the target model unit ball. -/
@@ -216,7 +216,7 @@ private theorem limit_image_unitBall_subset :
   intro y hy
   rcases hy with ⟨x, hx, rfl⟩
   exact MY.mem_closedUnitBall.mpr
-    ((S.limit_modelBound x).trans (MX.mem_closedUnitBall.mp hx))
+    ((S.seminorm_limit_le x).trans (MX.mem_closedUnitBall.mp hx))
 
 end RecoverySubsequence
 namespace RecoverySubsequence
@@ -226,7 +226,7 @@ variable {m : ℕ} {MX MY : EquivalentSeminorm (Fin (m + 1) → ℝ)}
     (S : RecoverySubsequence MX MY hBodies)
 
 /-- Determinants of the selected maps converge to the determinant of the limit. -/
-private theorem coordDet_tendsto :
+private theorem tendsto_coordDet :
     Tendsto
       (fun j => ContinuousLinearMap.det
         (recoveryMapSequence MX MY hBodies (S.index j)))
@@ -234,7 +234,7 @@ private theorem coordDet_tendsto :
   exact ContinuousLinearMap.continuous_det.continuousAt.tendsto.comp S.tendsto
 
 /-- The exact top-volume identity passes to the limit. -/
-private theorem limit_exactTopVolume :
+private theorem closedUnitBallVolume_mul_abs_det_limit :
     MX.closedUnitBallVolume * |ContinuousLinearMap.det S.limit| = MY.closedUnitBallVolume := by
   -- [R11-API-CHECK:LIM-301]
   have hcont : Continuous
@@ -252,7 +252,7 @@ private theorem limit_exactTopVolume :
       MY.closedUnitBallVolume := by
     intro j
     simpa [ContinuousLinearMap.det] using
-      recoveryMapSequence_exactTopVolume MX MY hBodies (S.index j)
+      closedUnitBallVolume_mul_abs_det_recoveryMapSequence MX MY hBodies (S.index j)
   have hfun :
       (fun j => MX.closedUnitBallVolume *
         |ContinuousLinearMap.det (recoveryMapSequence MX MY hBodies (S.index j))|) =
@@ -268,7 +268,7 @@ private theorem limit_exactTopVolume :
 /-- The limit determinant cannot vanish. -/
 private theorem limit_coordDet_ne_zero : ContinuousLinearMap.det S.limit ≠ 0 := by
   intro hzero
-  have hvol := S.limit_exactTopVolume
+  have hvol := S.closedUnitBallVolume_mul_abs_det_limit
   rw [hzero, abs_zero, mul_zero] at hvol
   exact MY.closedUnitBallVolume_pos.ne' hvol.symm
 
@@ -288,25 +288,25 @@ end Internal
 open Internal
 structure LimitCertificate {m : ℕ}
     (MX MY : EquivalentSeminorm (Fin (m + 1) → ℝ)) where
-  L : (Fin (m + 1) → ℝ) →L[ℝ] (Fin (m + 1) → ℝ)
-  modelBound : ∀ x, MY.p (L x) ≤ MX.p x
-  imageUnitBall_subset : L '' MX.closedUnitBall ⊆ MY.closedUnitBall
-  exactTopVolume : MX.closedUnitBallVolume * |ContinuousLinearMap.det L| = MY.closedUnitBallVolume
-  det_ne_zero : ContinuousLinearMap.det L ≠ 0
-  injective : Function.Injective L
-  surjective : Function.Surjective L
+  linearMap : (Fin (m + 1) → ℝ) →linearMap[ℝ] (Fin (m + 1) → ℝ)
+  seminorm_linearMap_le : ∀ x, MY.p (linearMap x) ≤ MX.p x
+  image_closedUnitBall_subset : linearMap '' MX.closedUnitBall ⊆ MY.closedUnitBall
+  closedUnitBallVolume_mul_abs_det : MX.closedUnitBallVolume * |ContinuousLinearMap.det linearMap| = MY.closedUnitBallVolume
+  det_ne_zero : ContinuousLinearMap.det linearMap ≠ 0
+  injective : Function.Injective linearMap
+  surjective : Function.Surjective linearMap
 
 /-- Equality of all finite Plücker bodies yields a limit recovery certificate. -/
-theorem exists_limitCertificate_of_pluckerBodies_eq {m : ℕ}
+theorem nonempty_limitCertificate_of_pluckerBodies_eq {m : ℕ}
     (MX MY : EquivalentSeminorm (Fin (m + 1) → ℝ))
     (hBodies : ∀ N : ℕ, PluckerBody.body MX N = PluckerBody.body MY N) :
     Nonempty (LimitCertificate MX MY) := by
-  let S := Classical.choice (exists_recoverySubsequence MX MY hBodies)
+  let S := Classical.choice (nonempty_recoverySubsequence MX MY hBodies)
   exact ⟨{
-    L := S.limit
-    modelBound := S.limit_modelBound
-    imageUnitBall_subset := S.limit_image_unitBall_subset
-    exactTopVolume := S.limit_exactTopVolume
+    linearMap := S.limit
+    seminorm_linearMap_le := S.seminorm_limit_le
+    image_closedUnitBall_subset := S.limit_image_unitBall_subset
+    closedUnitBallVolume_mul_abs_det := S.closedUnitBallVolume_mul_abs_det_limit
     det_ne_zero := S.limit_coordDet_ne_zero
     injective := S.limit_injective
     surjective := S.limit_surjective
@@ -338,9 +338,9 @@ private theorem ennreal_eq_of_toReal_eq {a b : ℝ≥0∞}
 namespace LimitRecoveryCertificate
 variable {m : ℕ} {MX MY : EquivalentSeminorm (Fin (m + 1) → ℝ)} (C : LimitCertificate MX MY)
 private theorem linearImageBallVolume_eq_target :
-    linearImageBallVolume MX C.L = MY.closedUnitBallVolume := by
+    linearImageBallVolume MX C.linearMap = MY.closedUnitBallVolume := by
   rw [linearImageBallVolume_eq]
-  simpa [mul_comm] using C.exactTopVolume
+  simpa [mul_comm] using C.closedUnitBallVolume_mul_abs_det
 
 end LimitRecoveryCertificate
 end Internal
@@ -348,7 +348,7 @@ end Internal
 namespace LimitCertificate
 variable {m : ℕ} {MX MY : EquivalentSeminorm (Fin (m + 1) → ℝ)} (C : LimitCertificate MX MY)
 theorem measure_image_unitBall_eq :
-    volume (C.L '' MX.closedUnitBall) = volume MY.closedUnitBall := by
+    volume (C.linearMap '' MX.closedUnitBall) = volume MY.closedUnitBall := by
   -- [R11-API-CHECK:LIMVOL-004]
   apply ennreal_eq_of_toReal_eq
   · exact (MX.closedUnitBall_isCompact.image C.L.continuous).measure_ne_top
@@ -357,11 +357,11 @@ theorem measure_image_unitBall_eq :
       Internal.LimitRecoveryCertificate.linearImageBallVolume_eq_target C
 
 /-- Inclusion and exact measure force equality: strict containment loses measure. -/
-theorem image_unitBall_eq : C.L '' MX.closedUnitBall = MY.closedUnitBall := by
+theorem image_unitBall_eq : C.linearMap '' MX.closedUnitBall = MY.closedUnitBall := by
   by_contra hne
-  have hlt : volume (C.L '' MX.closedUnitBall) < volume MY.closedUnitBall :=
+  have hlt : volume (C.linearMap '' MX.closedUnitBall) < volume MY.closedUnitBall :=
     SeminormBall.measure_lt volume MY.p MY.continuous_p
-      (MX.closedUnitBall_isCompact.image C.L.continuous) C.imageUnitBall_subset hne
+      (MX.closedUnitBall_isCompact.image C.L.continuous) C.image_closedUnitBall_subset hne
   exact hlt.ne C.measure_image_unitBall_eq
 end LimitCertificate
 end MathlibAnnex.PluckerRecovery

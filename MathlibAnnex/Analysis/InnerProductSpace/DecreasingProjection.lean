@@ -27,7 +27,7 @@ private theorem closure_iSup_orthogonal (U : ι → Submodule 𝕜 E)
 
 /-- Orthogonal projections onto an antitone family of complete subspaces
 converge strongly to the projection onto their intersection. -/
-theorem starProjection_tendsto_iInf (U : ι → Submodule 𝕜 E)
+theorem tendsto_starProjection_iInf (U : ι → Submodule 𝕜 E)
     [∀ i, (U i).HasOrthogonalProjection]
     [(⨅ i, U i).HasOrthogonalProjection] (hU : Antitone U) (x : E) :
     Tendsto (fun i ↦ (U i).starProjection x) atTop
@@ -45,13 +45,13 @@ theorem starProjection_tendsto_iInf (U : ι → Submodule 𝕜 E)
     exact tendsto_const_nhds.sub hlim'
   simpa [V, starProjection_orthogonal] using hcomp
 
-/-- Operator-valued formulation of `starProjection_tendsto_iInf`. -/
+/-- Operator-valued formulation of `tendsto_starProjection_iInf`. -/
 theorem stronglyConverges_starProjection_iInf (U : ι → Submodule 𝕜 E)
     [∀ i, (U i).HasOrthogonalProjection]
     [(⨅ i, U i).HasOrthogonalProjection] (hU : Antitone U) :
     ContinuousLinearMap.StronglyConverges (fun i ↦ (U i).starProjection) atTop
       (⨅ i, U i).starProjection :=
-  fun x ↦ starProjection_tendsto_iInf U hU x
+  fun x ↦ tendsto_starProjection_iInf U hU x
 
 /-- The infimum of the ranges is exactly the common fixed-point subspace. -/
 theorem mem_iInf_iff_starProjection_eq_self (U : ι → Submodule 𝕜 E)

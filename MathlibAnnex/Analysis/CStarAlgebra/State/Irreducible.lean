@@ -20,7 +20,7 @@ variable {H : Type v}
 variable [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
 
 /-- A cyclic representation whose unit-vector state is pure is irreducible. -/
-theorem starAlgHom_isIrreducible_of_isPureState
+theorem isIrreducible_starAlgHom_of_isPureState
     (pi : A →⋆ₐ[ℂ] (H →L[ℂ] H)) (xi : H) (hxi : ‖xi‖ = 1)
     (hcyclic : DenseRange (StarAlgHom.orbitMap pi xi))
     (hpure : IsPureState A (Representation.vectorFunctional pi xi)) :
@@ -125,11 +125,11 @@ theorem starAlgHom_isIrreducible_of_isPureState
     simpa [hP]
 
 /-- The canonical GNS representation of a pure state is irreducible. -/
-theorem pureState_gnsStarAlgHom_isIrreducible
+theorem isIrreducible_pureState_gnsStarAlgHom
     (phi : A →L[ℂ] ℂ) (hphi : phi ∈ stateSpace A) (hpure : IsPureState A phi) :
     StarAlgHom.IsIrreducible
       (positiveLinearMapOfMemStateSpace phi hphi).gnsStarAlgHom := by
-  apply starAlgHom_isIrreducible_of_isPureState
+  apply isIrreducible_starAlgHom_of_isPureState
     (positiveLinearMapOfMemStateSpace phi hphi).gnsStarAlgHom
     (stateGNSVector phi hphi) (norm_stateGNSVector phi hphi)
     (denseRange_gnsStarAlgHom_stateGNSVector phi hphi)

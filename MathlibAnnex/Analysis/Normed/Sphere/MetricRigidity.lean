@@ -22,7 +22,7 @@ private noncomputable def coordinateEquivOfFinrankEq
         (Module.finrank_fin_fun ℝ :
           Module.finrank ℝ (Fin n → ℝ) = n)
       _ = Module.finrank ℝ X := h)
-private theorem finiteDimensional_sphereMetricRigidity_equiv
+private theorem nonempty_linearIsometryEquiv_of_sphereIsometryEquiv
     {X : Type u} {Y : Type v}
     [NormedAddCommGroup X] [NormedSpace ℝ X]
     [NormedAddCommGroup Y] [NormedSpace ℝ Y]
@@ -42,7 +42,7 @@ private theorem finiteDimensional_sphereMetricRigidity_equiv
     coordinateEquivOfFinrankEq X hmX
   let eY : (Fin (m + 1) → ℝ) ≃L[ℝ] Y :=
     coordinateEquivOfFinrankEq Y hmY
-  exact linearIsometryEquiv_of_coordinate_model Δ eX eY
+  exact nonempty_linearIsometryEquiv_of_coordinate_model Δ eX eY
 
 end Internal
 open Internal
@@ -53,7 +53,7 @@ private noncomputable def sphereIsoOfIsometrySurjective
     (hf : Isometry f) (hsurj : Function.Surjective f) : (Metric.sphere (0 : X) 1 ≃ᵢ Metric.sphere (0 : Y) 1) where
   toEquiv := Equiv.ofBijective f ⟨hf.injective, hsurj⟩
   isometry_toFun := hf
-noncomputable def isometryEquiv_of_linearIsometryEquiv
+noncomputable def isometryEquivOfLinearIsometryEquiv
     {X : Type u} {Y : Type v}
     [NormedAddCommGroup X] [NormedSpace ℝ X]
     [NormedAddCommGroup Y] [NormedSpace ℝ Y]
@@ -88,7 +88,7 @@ noncomputable def isometryEquiv_of_linearIsometryEquiv
       _ = dist u v :=
         (isometry_subtype_coe :
           Isometry ((↑) : (Metric.sphere (0 : X) 1) → X)).dist_eq u v
-theorem linearIsometryEquiv_of_isometryEquiv_finiteDimensional
+theorem nonempty_linearIsometryEquiv_of_isometryEquiv_finiteDimensional
     {X : Type u} {Y : Type v}
     [NormedAddCommGroup X] [NormedSpace ℝ X]
     [NormedAddCommGroup Y] [NormedSpace ℝ Y]
@@ -117,10 +117,10 @@ theorem linearIsometryEquiv_of_isometryEquiv_finiteDimensional
       Module.nontrivial_of_finrank_pos (R := ℝ) hposX
     letI : Nontrivial Y :=
       Module.nontrivial_of_finrank_pos (R := ℝ) hposY
-    exact finiteDimensional_sphereMetricRigidity_equiv Δ
+    exact nonempty_linearIsometryEquiv_of_sphereIsometryEquiv Δ
 
 /-- Function-form sphere-metric rigidity for all finite dimensions. -/
-theorem linearIsometryEquiv_of_isometry_surjective_finiteDimensional
+theorem nonempty_linearIsometryEquiv_of_isometry_surjective_finiteDimensional
     {X : Type u} {Y : Type v}
     [NormedAddCommGroup X] [NormedSpace ℝ X]
     [NormedAddCommGroup Y] [NormedSpace ℝ Y]
@@ -128,7 +128,7 @@ theorem linearIsometryEquiv_of_isometry_surjective_finiteDimensional
     (f : (Metric.sphere (0 : X) 1) → (Metric.sphere (0 : Y) 1))
     (hf : Isometry f) (hsurj : Function.Surjective f) :
     Nonempty (X ≃ₗᵢ[ℝ] Y) :=
-  linearIsometryEquiv_of_isometryEquiv_finiteDimensional
+  nonempty_linearIsometryEquiv_of_isometryEquiv_finiteDimensional
     (sphereIsoOfIsometrySurjective f hf hsurj)
 
 /-- The unit-sphere chord metric is a complete invariant in every finite dimension. -/
@@ -140,30 +140,30 @@ theorem nonempty_isometryEquiv_iff_nonempty_linearIsometryEquiv_finiteDimensiona
     Nonempty ((Metric.sphere (0 : X) 1 ≃ᵢ Metric.sphere (0 : Y) 1)) ↔ Nonempty (X ≃ₗᵢ[ℝ] Y) := by
   constructor
   · rintro ⟨Δ⟩
-    exact linearIsometryEquiv_of_isometryEquiv_finiteDimensional Δ
+    exact nonempty_linearIsometryEquiv_of_isometryEquiv_finiteDimensional Δ
   · rintro ⟨A⟩
-    exact ⟨isometryEquiv_of_linearIsometryEquiv A⟩
-theorem linearIsometryEquiv_of_isometryEquiv_finiteDimensional_domain
+    exact ⟨isometryEquivOfLinearIsometryEquiv A⟩
+theorem nonempty_linearIsometryEquiv_of_isometryEquiv_finiteDimensional_domain
     {X : Type u} {Y : Type v}
     [NormedAddCommGroup X] [NormedSpace ℝ X]
     [NormedAddCommGroup Y] [NormedSpace ℝ Y]
     [FiniteDimensional ℝ X]
     (Δ : (Metric.sphere (0 : X) 1 ≃ᵢ Metric.sphere (0 : Y) 1)) : Nonempty (X ≃ₗᵢ[ℝ] Y) := by
   letI : FiniteDimensional ℝ Y := finiteDimensional_codomain Δ
-  exact linearIsometryEquiv_of_isometryEquiv_finiteDimensional Δ
+  exact nonempty_linearIsometryEquiv_of_isometryEquiv_finiteDimensional Δ
 
 /-- Sphere-metric rigidity when the target ambient space is finite-dimensional. -/
-theorem linearIsometryEquiv_of_isometryEquiv_finiteDimensional_codomain
+theorem nonempty_linearIsometryEquiv_of_isometryEquiv_finiteDimensional_codomain
     {X : Type u} {Y : Type v}
     [NormedAddCommGroup X] [NormedSpace ℝ X]
     [NormedAddCommGroup Y] [NormedSpace ℝ Y]
     [FiniteDimensional ℝ Y]
     (Δ : (Metric.sphere (0 : X) 1 ≃ᵢ Metric.sphere (0 : Y) 1)) : Nonempty (X ≃ₗᵢ[ℝ] Y) := by
   letI : FiniteDimensional ℝ X := finiteDimensional_domain Δ
-  exact linearIsometryEquiv_of_isometryEquiv_finiteDimensional Δ
+  exact nonempty_linearIsometryEquiv_of_isometryEquiv_finiteDimensional Δ
 
 /-- Sphere-metric rigidity assuming that at least one ambient space is finite-dimensional. -/
-theorem linearIsometryEquiv_of_isometryEquiv_of_finiteDimensional
+theorem nonempty_linearIsometryEquiv_of_isometryEquiv_of_finiteDimensional
     {X : Type u} {Y : Type v}
     [NormedAddCommGroup X] [NormedSpace ℝ X]
     [NormedAddCommGroup Y] [NormedSpace ℝ Y]
@@ -171,12 +171,12 @@ theorem linearIsometryEquiv_of_isometryEquiv_of_finiteDimensional
     (Δ : (Metric.sphere (0 : X) 1 ≃ᵢ Metric.sphere (0 : Y) 1)) : Nonempty (X ≃ₗᵢ[ℝ] Y) := by
   rcases hfin with hX | hY
   · letI : FiniteDimensional ℝ X := hX
-    exact linearIsometryEquiv_of_isometryEquiv_finiteDimensional_domain Δ
+    exact nonempty_linearIsometryEquiv_of_isometryEquiv_finiteDimensional_domain Δ
   · letI : FiniteDimensional ℝ Y := hY
-    exact linearIsometryEquiv_of_isometryEquiv_finiteDimensional_codomain Δ
+    exact nonempty_linearIsometryEquiv_of_isometryEquiv_finiteDimensional_codomain Δ
 
 /-- Function form of sphere-metric rigidity when one ambient space is finite-dimensional. -/
-theorem linearIsometryEquiv_of_isometry_surjective_of_finiteDimensional
+theorem nonempty_linearIsometryEquiv_of_isometry_surjective_of_finiteDimensional
     {X : Type u} {Y : Type v}
     [NormedAddCommGroup X] [NormedSpace ℝ X]
     [NormedAddCommGroup Y] [NormedSpace ℝ Y]
@@ -184,7 +184,7 @@ theorem linearIsometryEquiv_of_isometry_surjective_of_finiteDimensional
     (f : (Metric.sphere (0 : X) 1) → (Metric.sphere (0 : Y) 1))
     (hf : Isometry f) (hsurj : Function.Surjective f) :
     Nonempty (X ≃ₗᵢ[ℝ] Y) :=
-  linearIsometryEquiv_of_isometryEquiv_of_finiteDimensional hfin
+  nonempty_linearIsometryEquiv_of_isometryEquiv_of_finiteDimensional hfin
     (sphereIsoOfIsometrySurjective f hf hsurj)
 
 /-- If one ambient space is finite-dimensional, the unit-sphere chord metric
@@ -197,8 +197,8 @@ theorem nonempty_isometryEquiv_iff_nonempty_linearIsometryEquiv_of_finiteDimensi
     Nonempty ((Metric.sphere (0 : X) 1 ≃ᵢ Metric.sphere (0 : Y) 1)) ↔ Nonempty (X ≃ₗᵢ[ℝ] Y) := by
   constructor
   · rintro ⟨Δ⟩
-    exact linearIsometryEquiv_of_isometryEquiv_of_finiteDimensional hfin Δ
+    exact nonempty_linearIsometryEquiv_of_isometryEquiv_of_finiteDimensional hfin Δ
   · rintro ⟨A⟩
-    exact ⟨isometryEquiv_of_linearIsometryEquiv A⟩
+    exact ⟨isometryEquivOfLinearIsometryEquiv A⟩
 
 end MathlibAnnex.Sphere

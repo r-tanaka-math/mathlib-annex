@@ -37,7 +37,7 @@ private theorem midpoint_mem_symmetricLens {x y : E} {r : ℝ}
   · simpa [symmetricLens, dist_midpoint_left, Real.norm_two] using h
   · simpa [symmetricLens, dist_midpoint_right, Real.norm_two] using h
 
-private theorem symmetricLens_reflectionInvariant (x y : E) (r : ℝ) :
+private theorem mapsTo_pointReflection_symmetricLens (x y : E) (r : ℝ) :
     MapsTo (pointReflection ℝ (midpoint ℝ x y))
       (symmetricLens x y r) (symmetricLens x y r) := by
   rintro z ⟨hzx, hzy⟩
@@ -73,10 +73,10 @@ theorem map_midpoint_of_symmetricLens
         symmetricLens x' y' r) : F) = midpoint ℝ x' y' := by
   have hs : IsBounded (symmetricLens x y r) :=
     isBounded_closedBall.subset inter_subset_left
-  have h := MathlibAnnex.IsometryEquiv.map_center_of_reflectionInvariant
+  have h := MathlibAnnex.IsometryEquiv.map_center_of_mapsTo_pointReflection
     f (midpoint_mem_symmetricLens hxy) (midpoint_mem_symmetricLens hxy') hs
-    (symmetricLens_reflectionInvariant x y r)
-    (symmetricLens_reflectionInvariant x' y' r)
+    (mapsTo_pointReflection_symmetricLens x y r)
+    (mapsTo_pointReflection_symmetricLens x' y' r)
   exact congrArg Subtype.val h
 
 private def restrictToSymmetricLens
@@ -555,7 +555,7 @@ private def midpointAddMonoidHom (T : E → F) (h0 : T 0 = 0)
 @[simp] private theorem coe_midpointAddMonoidHom (T : E → F) (h0) (hm) :
     ⇑(midpointAddMonoidHom T h0 hm) = T := rfl
 
-private theorem midpointAddMonoidHom_isometry (T : E → F) (h0 : T 0 = 0)
+private theorem isometry_midpointAddMonoidHom (T : E → F) (h0 : T 0 = 0)
     (hm : ∀ x y, T (midpoint ℝ x y) = midpoint ℝ (T x) (T y))
     (hnorm : ∀ x, ‖T x‖ = ‖x‖) : Isometry T := by
   rw [isometry_iff_dist_eq]
@@ -569,7 +569,7 @@ private noncomputable def midpointLinearIsometry (T : E → F) (h0 : T 0 = 0)
     (hm : ∀ x y, T (midpoint ℝ x y) = midpoint ℝ (T x) (T y))
     (hnorm : ∀ x, ‖T x‖ = ‖x‖) : E →ₗᵢ[ℝ] F :=
   { (midpointAddMonoidHom T h0 hm).toRealLinearMap
-      (midpointAddMonoidHom_isometry T h0 hm hnorm).continuous with
+      (isometry_midpointAddMonoidHom T h0 hm hnorm).continuous with
     norm_map' := hnorm }
 
 @[simp] private theorem coe_midpointLinearIsometry (T : E → F) (h0) (hm) (hnorm) :

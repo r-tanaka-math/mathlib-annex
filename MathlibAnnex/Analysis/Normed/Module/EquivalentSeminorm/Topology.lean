@@ -12,7 +12,7 @@ variable {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
   [NormedAddCommGroup F] [NormedSpace ℝ F] (M : EquivalentSeminorm E)
 
 /-- The model unit ball is bounded for the reference norm. -/
-theorem closedUnitBall_isBounded : Bornology.IsBounded M.closedUnitBall := by
+theorem isBounded_closedUnitBall : Bornology.IsBounded M.closedUnitBall := by
   rw [Metric.isBounded_iff_subset_closedBall (0 : E)]
   refine ⟨1 / M.lower, ?_⟩
   intro x hx
@@ -24,9 +24,9 @@ theorem closedUnitBall_isBounded : Bornology.IsBounded M.closedUnitBall := by
   simpa [Metric.mem_closedBall, dist_eq_norm] using hnorm
 
 /-- Finite dimensional model unit balls are compact, including dimension zero. -/
-theorem closedUnitBall_isCompact [FiniteDimensional ℝ E] :
+theorem isCompact_closedUnitBall [FiniteDimensional ℝ E] :
     IsCompact M.closedUnitBall := by
-  apply Metric.isCompact_of_isClosed_isBounded _ M.closedUnitBall_isBounded
+  apply Metric.isCompact_of_isClosed_isBounded _ M.isBounded_closedUnitBall
   change IsClosed (M.p.closedBall 0 1)
   have h : M.p.closedBall 0 1 = {x : E | M.p x ≤ 1} := by ext x; simp
   rw [h]

@@ -54,18 +54,18 @@ variable (μ : Measure X)
 /-- A local equality with explicit open-neighborhood and constant witnesses. -/
 structure LocalAEConstantAt (U : Set X) (u : X → Y) (x : X) where
   neighborhood : Set X
-  neighborhood_open : IsOpen neighborhood
+  isOpen_neighborhood : IsOpen neighborhood
   mem_neighborhood : x ∈ neighborhood
   neighborhood_subset : neighborhood ⊆ U
   constant : Y
   ae_eq : AEConstantOn μ u neighborhood constant
 
 /-- Points admitting a neighborhood with a specified a.e. constant. -/
-def ConstantRegion (U : Set X) (u : X → Y) (c : Y) : Set X :=
+def constantRegion (U : Set X) (u : X → Y) (c : Y) : Set X :=
   {x | x ∈ U ∧ ∃ V, IsOpen V ∧ x ∈ V ∧ V ⊆ U ∧ AEConstantOn μ u V c}
 
-theorem constantRegion_isOpen {U : Set X} {u : X → Y} {c : Y} :
-    IsOpen (ConstantRegion μ U u c) := by
+theorem isOpen_constantRegion {U : Set X} {u : X → Y} {c : Y} :
+    IsOpen (constantRegion μ U u c) := by
   rw [isOpen_iff_forall_mem_open]
   intro x hx
   rcases hx.2 with ⟨V, hVo, hxV, hVU, hVc⟩
@@ -104,23 +104,23 @@ theorem aeConstants_eq_of_open_overlap
       (μ := μ) (s := V ∩ W) (ne_of_gt hpos) (hc'.and hd')
   exact hyc.symm.trans hyd
 
-theorem constantRegion_compl_isOpen
+theorem isOpen_constantRegion_compl
     {U : Set X} {u : X → Y} {c₀ : Y}
     (hlocal : ∀ x ∈ U, Nonempty (LocalAEConstantAt μ U u x)) :
-    IsOpen (U \ ConstantRegion μ U u c₀) := by
+    IsOpen (U \ constantRegion μ U u c₀) := by
   rw [isOpen_iff_forall_mem_open]
   intro x hx
   rcases hlocal x hx.1 with ⟨Lx⟩
-  refine ⟨Lx.neighborhood, ?_, Lx.neighborhood_open, Lx.mem_neighborhood⟩
+  refine ⟨Lx.neighborhood, ?_, Lx.isOpen_neighborhood, Lx.mem_neighborhood⟩
   intro y hy
   refine ⟨Lx.neighborhood_subset hy, ?_⟩
   intro hyS
   rcases hyS.2 with ⟨W, hWo, hyW, hWU, hWc⟩
   have hconst : Lx.constant = c₀ :=
-    aeConstants_eq_of_open_overlap μ Lx.neighborhood_open hWo ⟨y, hy, hyW⟩ Lx.ae_eq hWc
-  have hxS : x ∈ ConstantRegion μ U u c₀ := by
+    aeConstants_eq_of_open_overlap μ Lx.isOpen_neighborhood hWo ⟨y, hy, hyW⟩ Lx.ae_eq hWc
+  have hxS : x ∈ constantRegion μ U u c₀ := by
     refine ⟨Lx.neighborhood_subset Lx.mem_neighborhood, Lx.neighborhood,
-      Lx.neighborhood_open, Lx.mem_neighborhood, Lx.neighborhood_subset, ?_⟩
+      Lx.isOpen_neighborhood, Lx.mem_neighborhood, Lx.neighborhood_subset, ?_⟩
     simpa [hconst] using Lx.ae_eq
   exact hx.2 hxS
 
@@ -128,15 +128,15 @@ theorem constantRegion_compl_isOpen
 theorem constantRegion_eq_of_preconnected
     {U : Set X} (hU : IsPreconnected U) {u : X → Y} {c₀ : Y}
     (hlocal : ∀ x ∈ U, Nonempty (LocalAEConstantAt μ U u x))
-    (hne : (ConstantRegion μ U u c₀).Nonempty) : ConstantRegion μ U u c₀ = U := by
-  have hSopen := constantRegion_isOpen μ (U := U) (u := u) (c := c₀)
-  have hCopen := constantRegion_compl_isOpen μ (c₀ := c₀) hlocal
-  have hSsub : ConstantRegion μ U u c₀ ⊆ U := fun _ hx => hx.1
-  have hdis : Disjoint (ConstantRegion μ U u c₀) (U \ ConstantRegion μ U u c₀) :=
+    (hne : (constantRegion μ U u c₀).Nonempty) : constantRegion μ U u c₀ = U := by
+  have hSopen := isOpen_constantRegion μ (U := U) (u := u) (c := c₀)
+  have hCopen := isOpen_constantRegion_compl μ (c₀ := c₀) hlocal
+  have hSsub : constantRegion μ U u c₀ ⊆ U := fun _ hx => hx.1
+  have hdis : Disjoint (constantRegion μ U u c₀) (U \ constantRegion μ U u c₀) :=
     Set.disjoint_left.2 fun _ hxS hxC => hxC.2 hxS
-  have hcover : U ⊆ ConstantRegion μ U u c₀ ∪ (U \ ConstantRegion μ U u c₀) := by
+  have hcover : U ⊆ constantRegion μ U u c₀ ∪ (U \ constantRegion μ U u c₀) := by
     intro y hy
-    by_cases hyS : y ∈ ConstantRegion μ U u c₀
+    by_cases hyS : y ∈ constantRegion μ U u c₀
     · exact Or.inl hyS
     · exact Or.inr ⟨hy, hyS⟩
   rcases hU.subset_or_subset hSopen hCopen hdis hcover with hUS | hUC
@@ -152,13 +152,13 @@ theorem exists_aeConstantOn_of_local
     ∃ c : Y, AEConstantOn μ u U c := by
   rcases hU.nonempty with ⟨x₀, hx₀⟩
   rcases hlocal x₀ hx₀ with ⟨L₀⟩
-  have hxregion : x₀ ∈ ConstantRegion μ U u L₀.constant :=
-    ⟨hx₀, L₀.neighborhood, L₀.neighborhood_open, L₀.mem_neighborhood,
+  have hxregion : x₀ ∈ constantRegion μ U u L₀.constant :=
+    ⟨hx₀, L₀.neighborhood, L₀.isOpen_neighborhood, L₀.mem_neighborhood,
       L₀.neighborhood_subset, L₀.ae_eq⟩
   have hregion := constantRegion_eq_of_preconnected μ hU.2 hlocal ⟨x₀, hxregion⟩
   refine ⟨L₀.constant, aeConstantOn_of_everywhere_local μ hL ?_⟩
   intro x hx
-  have hxS : x ∈ ConstantRegion μ U u L₀.constant := by simpa [hregion] using hx
+  have hxS : x ∈ constantRegion μ U u L₀.constant := by simpa [hregion] using hx
   exact hxS.2
 
 /-- Empty domains are permitted when the codomain has a possible constant. -/

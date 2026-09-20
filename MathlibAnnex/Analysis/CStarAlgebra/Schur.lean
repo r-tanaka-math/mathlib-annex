@@ -32,7 +32,7 @@ def InCommutant (π : A →⋆ₐ[ℂ] (H →L[ℂ] H)) (T : H →L[ℂ] H) : Pr
 private def rangeClosure (T : H →L[ℂ] H) : Submodule ℂ H :=
   (LinearMap.range T.toLinearMap).topologicalClosure
 
-private theorem rangeClosure_isReducing (π : A →⋆ₐ[ℂ] (H →L[ℂ] H))
+private theorem isReducing_rangeClosure (π : A →⋆ₐ[ℂ] (H →L[ℂ] H))
     (T : H →L[ℂ] H) (hcomm : InCommutant π T) :
     IsReducing π (rangeClosure T) := by
   have hinv (a : A) : (rangeClosure T).IsInvariantUnder (π a) := by
@@ -86,7 +86,7 @@ private theorem rangeClosure_eq_top_of_irreducible
     (hcomm : InCommutant π T) : rangeClosure T = ⊤ := by
   rcases hπ (rangeClosure T)
     (LinearMap.range T.toLinearMap).isClosed_topologicalClosure
-    (rangeClosure_isReducing π T hcomm) with hbot | htop
+    (isReducing_rangeClosure π T hcomm) with hbot | htop
   · exact (rangeClosure_ne_bot hne hbot).elim
   · exact htop
 

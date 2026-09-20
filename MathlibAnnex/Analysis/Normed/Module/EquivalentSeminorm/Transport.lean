@@ -30,7 +30,7 @@ instance : AddCommGroup (Space M) := inferInstanceAs (AddCommGroup E)
 instance : Module ℝ (Space M) := inferInstanceAs (Module ℝ E)
 instance : Norm (Space M) := ⟨fun x => M.p (show E from x)⟩
 
-private theorem spaceCore : NormedSpace.Core ℝ (Space M) where
+private theorem normedSpaceCore_space : NormedSpace.Core ℝ (Space M) where
   norm_nonneg x := apply_nonneg M.p (show E from x)
   norm_smul c x := by
     change M.p (c • (show E from x)) = ‖c‖ * M.p (show E from x)
@@ -40,8 +40,8 @@ private theorem spaceCore : NormedSpace.Core ℝ (Space M) where
     change M.p (show E from x) = 0 ↔ (show E from x) = 0
     exact ⟨M.eq_zero_of_apply_eq_zero, fun h => by simp [h]⟩
 
-instance : NormedAddCommGroup (Space M) := NormedAddCommGroup.ofCore (spaceCore M)
-instance : NormedSpace ℝ (Space M) := NormedSpace.ofCore (spaceCore M)
+instance : NormedAddCommGroup (Space M) := NormedAddCommGroup.ofCore (normedSpaceCore_space M)
+instance : NormedSpace ℝ (Space M) := NormedSpace.ofCore (normedSpaceCore_space M)
 
 private def ofReference (x : E) : Space M := x
 private def toReference (x : Space M) : E := x

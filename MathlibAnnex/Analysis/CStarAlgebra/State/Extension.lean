@@ -47,7 +47,7 @@ theorem character_mem_stateSpace (chi : WeakDual.characterSpace ℂ A) :
   ⟨character_nonnegative chi, map_one chi⟩
 
 /-- Every character of a unital C-star algebra is a pure state. -/
-theorem character_isPureState (chi : WeakDual.characterSpace ℂ A) :
+theorem isPureState_character (chi : WeakDual.characterSpace ℂ A) :
     IsPureState A (WeakDual.CharacterSpace.toCLM chi) := by
   rw [IsPureState, mem_extremePoints]
   refine ⟨character_mem_stateSpace chi, ?_⟩
@@ -212,7 +212,7 @@ theorem isExtreme_weakStateExtensionFace (D : StarSubalgebra ℂ A) [IsClosed (D
     · intro d hd
       exact htheta.1 (d : A) (coe_nonnegative hd)
     · exact htheta.2
-  have hchi := character_isPureState chi
+  have hchi := isPureState_character chi
   rw [IsPureState, mem_extremePoints] at hchi
   have hsegD : WeakDual.CharacterSpace.toCLM chi ∈
       openSegment ℝ psiD thetaD := by

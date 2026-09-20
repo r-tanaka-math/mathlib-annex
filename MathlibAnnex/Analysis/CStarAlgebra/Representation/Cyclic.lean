@@ -75,7 +75,7 @@ theorem adjoint_mem_cyclicSubspace (pi : Representation A H) (eta : H)
   exact map_mem_cyclicSubspace pi eta (star a) hx
 
 /-- Every cyclic subspace is closed and reducing. -/
-theorem cyclicSubspace_reduces (pi : Representation A H) (eta : H) :
+theorem reduces_cyclicSubspace (pi : Representation A H) (eta : H) :
     pi.Reduces (cyclicSubspace pi eta) := by
   refine ⟨isClosed_cyclicSubspace pi eta, ?_⟩
   intro a x hx
@@ -102,7 +102,7 @@ theorem starProjection_commutes_of_reduces (pi : Representation A H)
 theorem cyclicSubspace_eq_top_of_isIrreducible (pi : Representation A H)
     (hirr : pi.IsIrreducible) {eta : H} (heta : eta ≠ 0) :
     cyclicSubspace pi eta = ⊤ := by
-  rcases hirr.2 (cyclicSubspace pi eta) (cyclicSubspace_reduces pi eta) with hbot | htop
+  rcases hirr.2 (cyclicSubspace pi eta) (reduces_cyclicSubspace pi eta) with hbot | htop
   · exfalso
     apply heta
     have hmem := self_mem_cyclicSubspace pi eta

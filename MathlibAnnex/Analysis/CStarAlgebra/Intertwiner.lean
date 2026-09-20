@@ -62,7 +62,7 @@ theorem Intertwines.adjoint
 
 /-- The positive initial operator of an intertwiner is in the source
 commutant. -/
-theorem Intertwines.adjoint_comp_self_inCommutant
+theorem Intertwines.inCommutant_adjoint_comp_self
     {π : A →⋆ₐ[ℂ] (H →L[ℂ] H)} {σ : A →⋆ₐ[ℂ] (K →L[ℂ] K)}
     {V : H →L[ℂ] K} (hV : Intertwines π σ V) :
     InCommutant π ((ContinuousLinearMap.adjoint V).comp V) := by
@@ -82,7 +82,7 @@ theorem Intertwines.adjoint_comp_self_inCommutant
       ContinuousLinearMap.comp_assoc _ _ _
 
 /-- The closed range of an intertwiner reduces the target representation. -/
-theorem Intertwines.rangeClosure_isReducing
+theorem Intertwines.isReducing_rangeClosure
     {π : A →⋆ₐ[ℂ] (H →L[ℂ] H)} {σ : A →⋆ₐ[ℂ] (K →L[ℂ] K)}
     {V : H →L[ℂ] K} (hV : Intertwines π σ V) :
     IsReducing σ V.rangeClosure := by
@@ -120,7 +120,7 @@ private theorem rangeClosure_eq_top_of_irreducible
     (hσ : IsIrreducible σ) {V : H →L[ℂ] K} (hV : V ≠ 0)
     (hint : Intertwines π σ V) : V.rangeClosure = ⊤ := by
   rcases hσ V.rangeClosure V.isClosed_rangeClosure
-      hint.rangeClosure_isReducing with hbot | htop
+      hint.isReducing_rangeClosure with hbot | htop
   · exact (rangeClosure_ne_bot hV hbot).elim
   · exact htop
 
@@ -142,7 +142,7 @@ theorem Intertwines.eq_zero_or_smul_unitary [Nontrivial H] [Nontrivial K]
       ContinuousLinearMap.adjoint_comp, ContinuousLinearMap.adjoint_adjoint]
   obtain ⟨r, hr⟩ := eq_algebraMap_of_isSelfAdjoint_of_irreducible
     π hπ ((ContinuousLinearMap.adjoint V).comp V) hPself
-      hV.adjoint_comp_self_inCommutant
+      hV.inCommutant_adjoint_comp_self
   have hnormsq (x : H) : ‖V x‖ ^ 2 = r * ‖x‖ ^ 2 := by
     rw [ContinuousLinearMap.apply_norm_sq_eq_inner_adjoint_left, hr,
       ContinuousLinearMap.algebraMap_apply]

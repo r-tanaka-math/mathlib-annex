@@ -62,8 +62,8 @@ private theorem toModelFrame_near {n : ℕ} (M : NormModel n) {η : ℝ} {B : Du
     (fun i => toModelRow M (B i)) ∈ DeterminantFrame.nearMaxFrames (modelBasis M) η :=
   ⟨toModelFrame_mem M h.1, h.2⟩
 
-private theorem inverseBound {n : ℕ} (M : NormModel n) {η : ℝ} (H : NearMaxInverseBound M η) {B : DualFrame n}
-    (h : B ∈ nearMaxFrames M η) (c : Coord n) : M.p (framePreimage B c) ≤ H.K * ‖c‖ := by
+private theorem seminorm_framePreimage_le {n : ℕ} (M : NormModel n) {η : ℝ} (H : NearMaxInverseBound M η) {B : DualFrame n}
+    (h : B ∈ nearMaxFrames M η) (c : Coord n) : M.p (framePreimage B c) ≤ H.boundConstant * ‖c‖ := by
   exact H.bound (toModelFrame_near M h) c
 
 private theorem detMax_pos {n : ℕ} (M : NormModel n) : 0 < detMax M :=
@@ -106,16 +106,16 @@ private theorem maxFrame_mem {n : ℕ} (M : NormModel n) : maxFrame M ∈ dualFr
 
 private abbrev replaceFrameRow {n : ℕ} := @DeterminantFrame.replaceRow n (Coord n) _ _
 private abbrev functionalRow {n : ℕ} := DeterminantFrame.functionalCoordinates (Pi.basisFun ℝ (Fin n))
-private theorem frameDet_continuous {n : ℕ} : Continuous (frameDet : DualFrame n → ℝ) :=
-  DeterminantFrame.frameDeterminant_continuous (Pi.basisFun ℝ (Fin n))
+private theorem continuous_frameDet {n : ℕ} : Continuous (frameDet : DualFrame n → ℝ) :=
+  DeterminantFrame.continuous_frameDeterminant (Pi.basisFun ℝ (Fin n))
 private theorem dualFrameMatrix_replaceFrameRow {n : ℕ} (B : DualFrame n) (i : Fin n) (r : Coord n →L[ℝ] ℝ) :
     dualFrameMatrix (replaceFrameRow B i r) = (dualFrameMatrix B).updateRow i (functionalRow r) :=
   DeterminantFrame.frameMatrix_replaceRow (Pi.basisFun ℝ (Fin n)) B i r
-private theorem cramerReplacement {n : ℕ} (B : DualFrame n) (hB : frameDet B ≠ 0) (r : Coord n →L[ℝ] ℝ) (c : Coord n) :
+private theorem sum_mul_replacementDet {n : ℕ} (B : DualFrame n) (hB : frameDet B ≠ 0) (r : Coord n →L[ℝ] ℝ) (c : Coord n) :
     (∑ i : Fin n, c i * replacementDet B i r) = frameDet B * r (framePreimage B c) :=
-  DeterminantFrame.cramerReplacement (Pi.basisFun ℝ (Fin n)) B hB r c
+  DeterminantFrame.sum_mul_replacementDeterminant (Pi.basisFun ℝ (Fin n)) B hB r c
 
-private theorem dualRowSet_isCompact {n : ℕ} (M : NormModel n) : IsCompact (dualRowSet M) := by
+private theorem isCompact_dualRowSet {n : ℕ} (M : NormModel n) : IsCompact (dualRowSet M) := by
   have hc : IsClosed (dualRowSet M) := by
     have heq : dualRowSet M = (⋂ x : Coord n, {r : Coord n →L[ℝ] ℝ | |r x| ≤ M.p x}) := by ext r; simp [dualRowSet, IsDualContraction]
     rw [heq]
@@ -130,10 +130,10 @@ private theorem dualRowSet_isCompact {n : ℕ} (M : NormModel n) : IsCompact (du
     exact (hr x).trans (M.le_upper x)
   exact Metric.isCompact_of_isClosed_isBounded hc hb
 
-private theorem dualFrameSet_isCompact {n : ℕ} (M : NormModel n) : IsCompact (dualFrameSet M) := by
+private theorem isCompact_dualFrameSet {n : ℕ} (M : NormModel n) : IsCompact (dualFrameSet M) := by
   have heq : dualFrameSet M = Set.univ.pi (fun _ : Fin n => dualRowSet M) := by ext B; simp [dualFrameSet, dualRowSet]
   rw [heq]
-  exact isCompact_univ_pi fun _ => dualRowSet_isCompact M
+  exact isCompact_univ_pi fun _ => isCompact_dualRowSet M
 
 
 private abbrev SupCoord (n : ℕ) := Fin n → ℝ
@@ -152,13 +152,13 @@ private def centerValue (C : FiniteCoefficientNet (n := n) K ρ) (c : C.centers)
 private def satelliteRadius (ε K : ℝ) : ℝ := min ε 1 / (8 * K)
 
 private theorem satelliteRadius_pos {ε K : ℝ} (hε : 0 < ε) (hK : 0 < K) :
-    0 < satelliteRadius ε K := by
+    0 < satelliteRadius ε boundConstant := by
   exact div_pos (lt_min hε zero_lt_one) (mul_pos (by norm_num) hK)
 
-private theorem two_mul_K_mul_satelliteRadius_lt_half {ε K : ℝ}
+private theorem two_mul_bound_mul_satelliteRadius_lt_half {ε K : ℝ}
     (hε : 0 < ε) (hK : 0 < K) :
     2 * K * satelliteRadius ε K < ε / 2 := by
-  have hden : 0 < 8 * K := mul_pos (by norm_num) hK
+  have hden : 0 < 8 * boundConstant := mul_pos (by norm_num) hK
   have hmin : min ε 1 ≤ ε := min_le_left _ _
   unfold satelliteRadius
   calc
@@ -171,8 +171,8 @@ private theorem satelliteRadius_lt_half_inv {ε K : ℝ}
     satelliteRadius ε K < 1 / (2 * K) := by
   have hmin : min ε 1 ≤ 1 := min_le_right _ _
   unfold satelliteRadius
-  have hK2 : 0 < 2 * K := mul_pos (by norm_num) hK
-  have hK8 : 0 < 8 * K := mul_pos (by norm_num) hK
+  have hK2 : 0 < 2 * boundConstant := mul_pos (by norm_num) hK
+  have hK8 : 0 < 8 * boundConstant := mul_pos (by norm_num) hK
   calc
     min ε 1 / (8 * K) ≤ 1 / (8 * K) :=
       div_le_div_of_nonneg_right hmin hK8.le
@@ -185,7 +185,7 @@ private noncomputable def satelliteRadiusNNReal (ε K : ℝ) (hε : 0 < ε) (hK 
   ⟨satelliteRadius ε K, (satelliteRadius_pos hε hK).le⟩
 
 @[simp] private theorem coe_satelliteRadiusNNReal (ε K : ℝ) (hε : 0 < ε) (hK : 0 < K) :
-    (satelliteRadiusNNReal ε K hε hK : ℝ) = satelliteRadius ε K := rfl
+    (satelliteRadiusNNReal ε K hε hK : ℝ) = satelliteRadius ε boundConstant := rfl
 
 private theorem satelliteRadiusNNReal_ne_zero {ε K : ℝ} (hε : 0 < ε) (hK : 0 < K) :
     satelliteRadiusNNReal ε K hε hK ≠ 0 := by
@@ -193,7 +193,7 @@ private theorem satelliteRadiusNNReal_ne_zero {ε K : ℝ} (hε : 0 < ε) (hK : 
     change 0 < satelliteRadius ε K
     exact satelliteRadius_pos hε hK)
 
-private theorem satelliteRowsSet_isCompact {n : ℕ} (M : NormModel n)
+private theorem isCompact_satelliteRowsSet {n : ℕ} (M : NormModel n)
     (J : Type u) [Fintype J] :
     IsCompact (satelliteRowsSet M J) := by
   have heq : satelliteRowsSet M J =
@@ -201,12 +201,12 @@ private theorem satelliteRowsSet_isCompact {n : ℕ} (M : NormModel n)
     ext sat
     simp [satelliteRowsSet, dualRowSet]
   rw [heq]
-  exact isCompact_univ_pi fun _ => dualRowSet_isCompact M
+  exact isCompact_univ_pi fun _ => isCompact_dualRowSet M
 
-private theorem satelliteConfigurationSet_isCompact {n : ℕ} (M : NormModel n)
+private theorem isCompact_satelliteConfigurationSet {n : ℕ} (M : NormModel n)
     (J : Type u) [Fintype J] :
     IsCompact (satelliteConfigurationSet M J) := by
-  exact (dualFrameSet_isCompact M).prod (satelliteRowsSet_isCompact M J)
+  exact (isCompact_dualFrameSet M).prod (isCompact_satelliteRowsSet M J)
 
 private theorem satelliteConfigurationSet_nonempty {n : ℕ} (M : NormModel n)
     (J : Type u) :
@@ -218,7 +218,7 @@ private theorem satelliteConfigurationSet_nonempty {n : ℕ} (M : NormModel n)
   · intro a x
     simpa only [zero_apply, abs_zero] using (apply_nonneg M.p x)
 
-private theorem configurationPolynomial_continuous {n : ℕ} {J : Type u} [Fintype J]
+private theorem continuous_configurationPolynomial {n : ℕ} {J : Type u} [Fintype J]
     (weight : ℝ) (coeff : J → Coord n) :
     Continuous (configurationPolynomial weight coeff) := by
   change Continuous fun C : SatelliteConfiguration n J =>
@@ -256,9 +256,9 @@ private theorem exists_maxSatelliteConfiguration {n : ℕ} (M : NormModel n)
       ∀ D ∈ satelliteConfigurationSet M J,
         |configurationPolynomial weight coeff D| ≤
           |configurationPolynomial weight coeff C| := by
-  rcases (satelliteConfigurationSet_isCompact M J).exists_isMaxOn
+  rcases (isCompact_satelliteConfigurationSet M J).exists_isMaxOn
       (satelliteConfigurationSet_nonempty M J)
-      (configurationPolynomial_continuous weight coeff).abs.continuousOn with
+      (continuous_configurationPolynomial weight coeff).abs.continuousOn with
     ⟨C, hC, hmax⟩
   exact ⟨C, hC, hmax⟩
 
@@ -283,8 +283,8 @@ private theorem maxNetSatelliteConfiguration_satellites_one_sub_epsilon
     {n : ℕ} (M : NormModel n) {η ε weight : ℝ}
     (hη0 : 0 ≤ η) (hηD : η < detMax M) (hε : 0 < ε)
     (H : NearMaxInverseBound M η)
-    (C : FiniteCoefficientNet (n := n) H.K
-      (satelliteRadiusNNReal ε H.K hε H.K_pos))
+    (C : FiniteCoefficientNet (n := n) H.boundConstant
+      (satelliteRadiusNNReal ε H.boundConstant hε H.boundConstant_pos))
     (hweight : 0 < weight)
     (hgap : satelliteBudget M (centerValue C) < weight * η)
     {x : Coord n} (hx : M.p x = 1) :
@@ -405,8 +405,8 @@ private theorem Internal.maxNetConfigurationMap_unit_lower {n : ℕ}
     (M : NormModel n) {η ε weight : ℝ}
     (hη0 : 0 ≤ η) (hηD : η < detMax M) (hε : 0 < ε)
     (H : NearMaxInverseBound M η)
-    (Cnet : FiniteCoefficientNet (n := n) H.K
-      (satelliteRadiusNNReal ε H.K hε H.K_pos))
+    (Cnet : FiniteCoefficientNet (n := n) H.boundConstant
+      (satelliteRadiusNNReal ε H.boundConstant hε H.boundConstant_pos))
     (hweight : 0 < weight)
     (hgap : satelliteBudget M (centerValue Cnet) < weight * η)
     {x : Coord n} (hx : M.p x = 1) :
@@ -421,8 +421,8 @@ theorem maxNetConfigurationMap_lower_of_ne_zero {n : ℕ}
     (M : NormModel n) {η ε weight : ℝ}
     (hη0 : 0 ≤ η) (hηD : η < detMax M) (hε : 0 < ε)
     (H : NearMaxInverseBound M η)
-    (Cnet : FiniteCoefficientNet (n := n) H.K
-      (satelliteRadiusNNReal ε H.K hε H.K_pos))
+    (Cnet : FiniteCoefficientNet (n := n) H.boundConstant
+      (satelliteRadiusNNReal ε H.boundConstant hε H.boundConstant_pos))
     (hweight : 0 < weight)
     (hgap : satelliteBudget M (centerValue Cnet) < weight * η)
     {x : Coord n} (hx0 : x ≠ 0) :

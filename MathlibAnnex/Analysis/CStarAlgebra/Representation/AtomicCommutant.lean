@@ -42,7 +42,7 @@ theorem atomicBlock_apply (T : HilbertSum H →L[ℂ] HilbertSum H)
 
 /-- Every matrix block of an operator in the atomic commutant is an
 intertwiner between the corresponding fiber representations. -/
-theorem atomicBlock_intertwines_of_inCommutant
+theorem intertwines_atomicBlock_of_inCommutant
     (pi : ∀ i, Representation A (H i))
     (T : HilbertSum H →L[ℂ] HilbertSum H)
     (hT : StarAlgHom.InCommutant (atomicRepresentation pi) T)
@@ -78,10 +78,10 @@ theorem eq_algebraMap_of_atomic_of_links
       atomicBlock T i i = algebraMap ℂ (H i →L[ℂ] H i) z := by
     apply StarAlgHom.eq_algebraMap_of_irreducible (pi i) (hirr i)
     intro a
-    exact atomicBlock_intertwines_of_inCommutant pi T hTsource i i a
+    exact intertwines_atomicBlock_of_inCommutant pi T hTsource i i a
   choose z hz using hblocks
   have hoff {i j : I} (hij : i ≠ j) : atomicBlock T i j = 0 := by
-    exact (atomicBlock_intertwines_of_inCommutant pi T hTsource i j).eq_zero_of_no_unitary
+    exact (intertwines_atomicBlock_of_inCommutant pi T hTsource i j).eq_zero_of_no_unitary
       (hirr i) (hirr j) (hno hij)
   have hsingle (i : I) (x : H i) :
       T (coordinateEmbedding i x) = coordinateEmbedding i (z i • x) := by

@@ -177,7 +177,7 @@ theorem mulVec_injective_of_maximalMinor_ne_zero
   exact congrFun hxy (s.orderedRows i)
 
 /-- All maximal minors vary continuously with the matrix entries over `ℝ`. -/
-theorem maximalMinors_continuous
+theorem continuous_maximalMinors
     {n : ℕ} {ι : Type u} [LinearOrder ι] :
     Continuous
       (maximalMinors : _root_.Matrix ι (Fin n) ℝ → MaximalMinorIndex n ι → ℝ) := by

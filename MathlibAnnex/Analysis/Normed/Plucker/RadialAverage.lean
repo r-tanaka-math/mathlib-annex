@@ -42,11 +42,11 @@ private theorem radialMap_model_dist {n : ℕ}
     {MX MY : EquivalentSeminorm (Fin n → ℝ)}
     (Δ : sphere (0 : Space MX) 1 ≃ᵢ sphere (0 : Space MY) 1) (x y : Fin n → ℝ) :
     MY.p (radialMap Δ x - radialMap Δ y) ≤ 3 * MX.p (x - y) := by
-  have h := (radialExtension_lipschitz Δ).dist_le_mul
+  have h := (lipschitzWith_radialExtension Δ).dist_le_mul
     (show Space MX from x) (show Space MX from y)
   simpa only [dist_space_eq, NNReal.coe_ofNat] using h
 
-private theorem radialMap_lipschitz {n : ℕ}
+private theorem lipschitzWith_radialMap {n : ℕ}
     {MX MY : EquivalentSeminorm (Fin n → ℝ)}
     (Δ : sphere (0 : Space MX) 1 ≃ᵢ sphere (0 : Space MY) 1) :
     LipschitzWith (3 * MX.upper / MY.lower).toNNReal (radialMap Δ) := by
@@ -90,24 +90,24 @@ private theorem radialMap_lower {n : ℕ}
     _ ≤ ‖radialMap Δ x - radialMap Δ y‖ :=
       (div_le_iff₀ hden).2 (by simpa only [mul_comm] using hprod)
 
-private theorem openBall_isOpen {n : ℕ} (M : EquivalentSeminorm (Fin n → ℝ)) :
+private theorem isOpen_openBall {n : ℕ} (M : EquivalentSeminorm (Fin n → ℝ)) :
     IsOpen (M.p.ball 0 1) := by
   rw [Seminorm.ball_zero_eq]
   exact isOpen_lt M.continuous_p continuous_const
 
-private theorem openBall_convex {n : ℕ} (M : EquivalentSeminorm (Fin n → ℝ)) :
+private theorem convex_openBall {n : ℕ} (M : EquivalentSeminorm (Fin n → ℝ)) :
     Convex ℝ (M.p.ball 0 1) := M.p.convex_ball 0 1
 
-private theorem openBall_connected {n : ℕ} (M : EquivalentSeminorm (Fin n → ℝ)) :
+private theorem isConnected_openBall {n : ℕ} (M : EquivalentSeminorm (Fin n → ℝ)) :
     IsConnected (M.p.ball 0 1) := by
-  refine (openBall_convex M).isConnected ?_
+  refine (convex_openBall M).isConnected ?_
   exact ⟨0, by simp⟩
 
-private theorem source_B52 {n : ℕ}
+private theorem ae_differentiableAt_radialMap {n : ℕ}
     {MX MY : EquivalentSeminorm (Fin n → ℝ)}
     (Δ : sphere (0 : Space MX) 1 ≃ᵢ sphere (0 : Space MY) 1) :
     ∀ᵐ x ∂volume, DifferentiableAt ℝ (radialMap Δ) x :=
-  (radialMap_lipschitz Δ).ae_differentiableAt
+  (lipschitzWith_radialMap Δ).ae_differentiableAt
 
 
 -- SR-SOURCE-B32: the source alias equality is definitional.
@@ -117,27 +117,27 @@ example {n : ℕ} {MX MY : EquivalentSeminorm (Fin n → ℝ)}
       radialExtension (X := Space MX) (Y := Space MY) Δ (show Space MX from x))) := rfl
 
 -- SR-SOURCE-B48: expand the original existential Lipschitz abbreviation.
-private theorem source_B48 {n : ℕ} {MX MY : EquivalentSeminorm (Fin n → ℝ)}
+private theorem exists_lipschitzWith_radialMap {n : ℕ} {MX MY : EquivalentSeminorm (Fin n → ℝ)}
     (Δ : sphere (0 : Space MX) 1 ≃ᵢ sphere (0 : Space MY) 1) :
-    ∃ C : ℝ≥0, LipschitzWith C (radialMap Δ) := ⟨_, radialMap_lipschitz Δ⟩
+    ∃ C : ℝ≥0, LipschitzWith C (radialMap Δ) := ⟨_, lipschitzWith_radialMap Δ⟩
 
 -- SR-SOURCE-B211: retain the exact nonempty-open-set volume argument.
-private theorem source_B211 {n : ℕ} {V : Set (Fin n → ℝ)}
+private theorem volume_pos_of_isOpen_of_nonempty {n : ℕ} {V : Set (Fin n → ℝ)}
     (hVo : IsOpen V) (hVne : V.Nonempty) : 0 < volume V := by
   exact Measure.measure_pos_of_nonempty_interior volume
     (by simpa [hVo.interior_eq] using hVne)
 
 -- SR-SOURCE-B53 and B54 remain private recovery support; the signed proof
 -- itself uses the global orientation theorem without choosing a point.
-private theorem source_B53 {n : ℕ} (_hn : 0 < n)
+private theorem exists_mem_openBall_differentiableAt_radialMap_of_pos {n : ℕ} (_hn : 0 < n)
     {MX MY : EquivalentSeminorm (Fin n → ℝ)}
     (Δ : sphere (0 : Space MX) 1 ≃ᵢ sphere (0 : Space MY) 1) :
     ∃ x ∈ MX.p.ball 0 1, DifferentiableAt ℝ (radialMap Δ) x := by
-  have hopen := openBall_isOpen MX
+  have hopen := isOpen_openBall MX
   have hne : (MX.p.ball 0 1).Nonempty := ⟨0, by simp⟩
-  have hpos : volume (MX.p.ball 0 1) ≠ 0 := (source_B211 hopen hne).ne'
+  have hpos : volume (MX.p.ball 0 1) ≠ 0 := (volume_pos_of_isOpen_of_nonempty hopen hne).ne'
   have hdiff : ∀ᵐ x ∂volume.restrict (MX.p.ball 0 1),
-      DifferentiableAt ℝ (radialMap Δ) x := ae_restrict_of_ae (source_B52 Δ)
+      DifferentiableAt ℝ (radialMap Δ) x := ae_restrict_of_ae (ae_differentiableAt_radialMap Δ)
   have hmem : ∀ᵐ x ∂volume.restrict (MX.p.ball 0 1), x ∈ MX.p.ball 0 1 :=
     ae_restrict_mem hopen.measurableSet
   haveI : (ae (volume.restrict (MX.p.ball 0 1))).NeBot :=
@@ -145,11 +145,11 @@ private theorem source_B53 {n : ℕ} (_hn : 0 < n)
   rcases (hmem.and hdiff).exists with ⟨x, hxmem, hxdiff⟩
   exact ⟨x, hxmem, hxdiff⟩
 
-private theorem source_B54 {m : ℕ}
+private theorem exists_mem_openBall_differentiableAt_radialMap_succ {m : ℕ}
     {MX MY : EquivalentSeminorm (Fin (m + 1) → ℝ)}
     (Δ : sphere (0 : Space MX) 1 ≃ᵢ sphere (0 : Space MY) 1) :
     ∃ x ∈ MX.p.ball 0 1, DifferentiableAt ℝ (radialMap Δ) x :=
-  source_B53 (Nat.succ_pos m) Δ
+  exists_mem_openBall_differentiableAt_radialMap_of_pos (Nat.succ_pos m) Δ
 
 -- SR-SOURCE-B243: the old coordinate vector is exactly Pi.single.
 private theorem referenceMatrix_apply {n N : ℕ}
@@ -163,7 +163,7 @@ private structure SignedRadialData {m : ℕ}
     (Δ : sphere (0 : Space MX) 1 ≃ᵢ sphere (0 : Space MY) 1) where
   radial : (Fin (m + 1) → ℝ) → (Fin (m + 1) → ℝ)
   lipschitz : ∃ C : ℝ≥0, LipschitzWith C radial
-  onSphere : ∀ u : MX.unitSphere,
+  radial_coe_unitSphere : ∀ u : MX.unitSphere,
     radial u.val = (show Fin (m + 1) → ℝ from
       (Δ ⟨(show Space MX from u.val), mem_sphere_zero_iff_norm.mpr u.property⟩).val)
   average_linear_comp : ∀ {N : ℕ}
@@ -205,7 +205,7 @@ private theorem derivativePlucker_linear_radial_apply_ae {m N : ℕ}
           ContinuousLinearMap.det (fderiv ℝ (radialMap Δ) x) := by
   have hae : ∀ᵐ x ∂volume.restrict MX.closedUnitBall,
       DifferentiableAt ℝ (radialMap Δ) x :=
-    (radialMap_lipschitz Δ).ae_differentiableAt.filter_mono ae_restrict_le
+    (lipschitzWith_radialMap Δ).ae_differentiableAt.filter_mono ae_restrict_le
   filter_upwards [hae] with x hx
   exact derivativeGenerator_comp_linear_apply MX A (radialMap Δ) x s hx
 
@@ -260,8 +260,8 @@ theorem derivativeAverage_comp_linear_radial_apply {m N : ℕ}
     apply integral_congr_ae
     exact (derivativePlucker_linear_radial_apply_ae Δ A q).mono
       (fun _ hx => by simpa [mul_assoc] using hx)
-  have hint := derivativeGenerator_integrableOn_compact MX
-    ⟨_, A.lipschitz.comp (radialMap_lipschitz Δ)⟩ MX.closedUnitBall_isCompact
+  have hint := integrableOn_derivativeGenerator_compact MX
+    ⟨_, A.lipschitz.comp (lipschitzWith_radialMap Δ)⟩ MX.isCompact_closedUnitBall
   have hcoord : ∀ t : Matrix.MaximalMinorIndex (m + 1) (Fin N),
       Integrable (fun x => derivativeGenerator MX (fun z => A (radialMap Δ z)) x t)
         (volume.restrict MX.closedUnitBall) := fun t => hint.eval t
@@ -303,8 +303,8 @@ private def radialOpenData {m : ℕ}
     BilipschitzOrientation.BiLipschitzOpenData (m + 1) where
   source := MX.p.ball 0 1
   target := MY.p.ball 0 1
-  source_open := openBall_isOpen MX
-  target_open := openBall_isOpen MY
+  isOpen_source := isOpen_openBall MX
+  isOpen_target := isOpen_openBall MY
   f := radialMap Δ
   g := radialMap Δ.symm
   mapsTo_f := by intro x hx; simpa using hx
@@ -312,19 +312,19 @@ private def radialOpenData {m : ℕ}
   left_inv := by intro x _; exact radialMap_leftInverse Δ x
   right_inv := by intro x _; exact radialMap_leftInverse Δ.symm x
   fConstant := (3 * MX.upper / MY.lower).toNNReal
-  lipschitzWith_f := radialMap_lipschitz Δ
+  lipschitzWith_f := lipschitzWith_radialMap Δ
   gConstant := (3 * MY.upper / MX.lower).toNNReal
-  lipschitzWith_g := radialMap_lipschitz Δ.symm
+  lipschitzWith_g := lipschitzWith_radialMap Δ.symm
   lower := referenceAntiConstant MX MY
   lower_pos := referenceAntiConstant_pos MX MY
   anti := radialMap_lower Δ
 
-private theorem piolaData_connected {m : ℕ}
+private theorem isConnected_piolaData {m : ℕ}
     {MX MY : EquivalentSeminorm (Fin (m + 1) → ℝ)}
     (Δ : sphere (0 : Space MX) 1 ≃ᵢ sphere (0 : Space MY) 1) :
     IsConnected (radialOpenData Δ).source ∧
     IsConnected (radialOpenData Δ).target :=
-  ⟨openBall_connected MX, openBall_connected MY⟩
+  ⟨isConnected_openBall MX, isConnected_openBall MY⟩
 end Internal
 
 
@@ -341,14 +341,14 @@ theorem derivativeAverage_comp_linear_radial {m N : ℕ}
   let D := radialOpenData Δ
   have hpos : 0 < volume D.target := by
     change 0 < volume (MY.p.ball 0 1)
-    exact source_B211 (openBall_isOpen MY) ⟨0, by simp⟩
+    exact volume_pos_of_isOpen_of_nonempty (isOpen_openBall MY) ⟨0, by simp⟩
   have hfinite : volume D.target ≠ ∞ :=
     ne_top_of_le_ne_top MY.closedUnitBall_isCompact.measure_ne_top
       (measure_mono (by
         intro x hx
         exact MY.mem_closedUnitBall.mpr (le_of_lt (by simpa [D, radialOpenData] using hx))))
   obtain ⟨ε, hε, hs⟩ := BilipschitzOrientation.integral_det_fderiv_eq_signed_volume
-    D (piolaData_connected Δ).2.isPreconnected hpos hfinite
+    D (isConnected_piolaData Δ).2.isPreconnected hpos hfinite
   change (∫ x in MX.p.ball 0 1, ContinuousLinearMap.det (fderiv ℝ (radialMap Δ) x) ∂volume) =
     ε * (volume (MY.p.ball 0 1)).toReal at hs
   rw [modelOpenBall_volume_eq_ballVolume MY] at hs
@@ -363,13 +363,13 @@ theorem derivativeAverage_comp_linear_radial {m N : ℕ}
   ring
 
 namespace Internal
-private def PiolaOrientation_concreteSignedRadialData {m : ℕ}
+private def piolaOrientationConcreteSignedRadialData {m : ℕ}
     (MX MY : EquivalentSeminorm (Fin (m + 1) → ℝ))
     (Δ : sphere (0 : Space MX) 1 ≃ᵢ sphere (0 : Space MY) 1) :
     SignedRadialData MX MY Δ where
   radial := radialMap Δ
-  lipschitz := source_B48 Δ
-  onSphere := by
+  lipschitz := exists_lipschitzWith_radialMap Δ
+  radial_coe_unitSphere := by
     intro u
     exact radialExtension_on_sphere Δ
       ⟨(show Space MX from u.val), mem_sphere_zero_iff_norm.mpr u.property⟩

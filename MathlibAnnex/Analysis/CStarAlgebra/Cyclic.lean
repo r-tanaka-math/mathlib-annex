@@ -59,7 +59,7 @@ private theorem cyclicSubspace_invariant (π : A →⋆ₐ[ℂ] (H →L[ℂ] H))
     rintro _ ⟨a, rfl⟩
     exact ⟨b * a, by simp [orbitMap]⟩).closure (π b).continuous hx
 
-theorem cyclicSubspace_isReducing (π : A →⋆ₐ[ℂ] (H →L[ℂ] H)) (ξ : H) :
+theorem isReducing_cyclicSubspace (π : A →⋆ₐ[ℂ] (H →L[ℂ] H)) (ξ : H) :
     IsReducing π (cyclicSubspace π ξ) := by
   intro a
   refine ⟨cyclicSubspace_invariant π ξ a, ?_⟩
@@ -71,7 +71,7 @@ theorem cyclicSubspace_isReducing (π : A →⋆ₐ[ℂ] (H →L[ℂ] H)) (ξ : 
 theorem cyclicSubspace_eq_top (π : A →⋆ₐ[ℂ] (H →L[ℂ] H))
     (hπ : IsIrreducible π) {ξ : H} (hξ : ξ ≠ 0) : cyclicSubspace π ξ = ⊤ := by
   rcases hπ (cyclicSubspace π ξ) (isClosed_cyclicSubspace π ξ)
-    (cyclicSubspace_isReducing π ξ) with hbot | htop
+    (isReducing_cyclicSubspace π ξ) with hbot | htop
   · exfalso
     have hmem : ξ ∈ cyclicSubspace π ξ := by
       simpa using orbit_mem_cyclicSubspace π ξ (1 : A)

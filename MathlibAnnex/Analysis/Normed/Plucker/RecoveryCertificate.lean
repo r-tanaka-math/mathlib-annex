@@ -68,8 +68,8 @@ private theorem toModelFrame_near {n : ℕ} (M : NormModel n) {η : ℝ} {B : Du
     (fun i => toModelRow M (B i)) ∈ DeterminantFrame.nearMaxFrames (modelBasis M) η :=
   ⟨toModelFrame_mem M h.1, h.2⟩
 
-private theorem inverseBound {n : ℕ} (M : NormModel n) {η : ℝ} (H : NearMaxInverseBound M η) {B : DualFrame n}
-    (h : B ∈ nearMaxFrames M η) (c : Coord n) : M.p (framePreimage B c) ≤ H.K * ‖c‖ := by
+private theorem seminorm_framePreimage_le {n : ℕ} (M : NormModel n) {η : ℝ} (H : NearMaxInverseBound M η) {B : DualFrame n}
+    (h : B ∈ nearMaxFrames M η) (c : Coord n) : M.p (framePreimage B c) ≤ H.boundConstant * ‖c‖ := by
   exact H.bound (toModelFrame_near M h) c
 
 private theorem detMax_pos {n : ℕ} (M : NormModel n) : 0 < detMax M :=
@@ -95,13 +95,13 @@ private def centerValue (C : FiniteCoefficientNet (n := n) K ρ) (c : C.centers)
 private def satelliteRadius (ε K : ℝ) : ℝ := min ε 1 / (8 * K)
 
 private theorem satelliteRadius_pos {ε K : ℝ} (hε : 0 < ε) (hK : 0 < K) :
-    0 < satelliteRadius ε K := by
+    0 < satelliteRadius ε boundConstant := by
   exact div_pos (lt_min hε zero_lt_one) (mul_pos (by norm_num) hK)
 
-private theorem two_mul_K_mul_satelliteRadius_lt_half {ε K : ℝ}
+private theorem two_mul_bound_mul_satelliteRadius_lt_half {ε K : ℝ}
     (hε : 0 < ε) (hK : 0 < K) :
     2 * K * satelliteRadius ε K < ε / 2 := by
-  have hden : 0 < 8 * K := mul_pos (by norm_num) hK
+  have hden : 0 < 8 * boundConstant := mul_pos (by norm_num) hK
   have hmin : min ε 1 ≤ ε := min_le_left _ _
   unfold satelliteRadius
   calc
@@ -114,8 +114,8 @@ private theorem satelliteRadius_lt_half_inv {ε K : ℝ}
     satelliteRadius ε K < 1 / (2 * K) := by
   have hmin : min ε 1 ≤ 1 := min_le_right _ _
   unfold satelliteRadius
-  have hK2 : 0 < 2 * K := mul_pos (by norm_num) hK
-  have hK8 : 0 < 8 * K := mul_pos (by norm_num) hK
+  have hK2 : 0 < 2 * boundConstant := mul_pos (by norm_num) hK
+  have hK8 : 0 < 8 * boundConstant := mul_pos (by norm_num) hK
   calc
     min ε 1 / (8 * K) ≤ 1 / (8 * K) :=
       div_le_div_of_nonneg_right hmin hK8.le
@@ -128,7 +128,7 @@ private noncomputable def satelliteRadiusNNReal (ε K : ℝ) (hε : 0 < ε) (hK 
   ⟨satelliteRadius ε K, (satelliteRadius_pos hε hK).le⟩
 
 @[simp] private theorem coe_satelliteRadiusNNReal (ε K : ℝ) (hε : 0 < ε) (hK : 0 < K) :
-    (satelliteRadiusNNReal ε K hε hK : ℝ) = satelliteRadius ε K := rfl
+    (satelliteRadiusNNReal ε K hε hK : ℝ) = satelliteRadius ε boundConstant := rfl
 
 private abbrev MinorIndex (n N : ℕ) := MathlibAnnex.Matrix.MaximalMinorIndex n (Fin N)
 private abbrev PluckerCoord (n N : ℕ) := MinorIndex n N → ℝ
@@ -172,7 +172,7 @@ private theorem maximalMinor_configurationFinMap_base
 private noncomputable def rawPluckerCompact {n N : ℕ} (M : NormModel n) :
     TopologicalSpace.NonemptyCompacts (PluckerCoord n N) where
   carrier := MathlibAnnex.PluckerBody.generators M N
-  isCompact' := MathlibAnnex.PluckerBody.generators_isCompact M
+  isCompact' := MathlibAnnex.PluckerBody.isCompact_generators M
   nonempty' := MathlibAnnex.PluckerBody.generators_nonempty M
 
 private theorem clm_injective_of_maximalMinor_ne_zero {n N : ℕ}
@@ -228,21 +228,21 @@ private theorem targetRawSupportMaximizer_leading_ne_zero
     {m : ℕ} (M : NormModel (m + 1)) {η ε weight : ℝ}
     (hη0 : 0 ≤ η) (hηD : η < detMax M) (_hε : 0 < ε)
     (H : NearMaxInverseBound M η)
-    (Cnet : FiniteCoefficientNet (n := m + 1) H.K
-      (satelliteRadiusNNReal ε H.K _hε H.K_pos))
+    (Cnet : FiniteCoefficientNet (n := m + 1) H.boundConstant
+      (satelliteRadiusNNReal ε H.boundConstant _hε H.boundConstant_pos))
     (hweight : 0 < weight)
     (hgap : satelliteBudget M (centerValue Cnet) < weight * η)
     {z : PluckerCoord (m + 1)
       (positiveSatelliteAmbientDim m Cnet.centers)}
     (hz : z ∈ MathlibAnnex.NonemptyCompacts.maxSlice (rawPluckerCompact
-      (N := positiveSatelliteAmbientDim m Cnet.centers) M)
+      (ambientDim := positiveSatelliteAmbientDim m Cnet.centers) M)
         (orientedSatelliteSupport weight (centerValue Cnet)
           (maxSatelliteConfiguration M Cnet.centers
             weight (centerValue Cnet)))) :
     z (baseMinorIndex (m := m) (J := Cnet.centers)) ≠ 0 := by
   -- [R11-API-CHECK:ANC-001]
   classical
-  rcases rawOrientedSupportMaximizer_isAbsolutePolynomialMaximizer
+  rcases exists_contraction_maximizing_abs_configurationPolynomial_of_mem_maxSlice
       M weight (centerValue Cnet) hz with
     ⟨A, hA, hzA, hC, hmax⟩
   let C : SatelliteConfiguration (m + 1) Cnet.centers :=
@@ -276,14 +276,14 @@ private theorem targetRawSupportMaximizer_anchoredGood
     {m : ℕ} (M : NormModel (m + 1)) {η ε weight : ℝ}
     (hη0 : 0 ≤ η) (hηD : η < detMax M) (hε : 0 < ε)
     (H : NearMaxInverseBound M η)
-    (Cnet : FiniteCoefficientNet (n := m + 1) H.K
-      (satelliteRadiusNNReal ε H.K hε H.K_pos))
+    (Cnet : FiniteCoefficientNet (n := m + 1) H.boundConstant
+      (satelliteRadiusNNReal ε H.boundConstant hε H.boundConstant_pos))
     (hweight : 0 < weight)
     (hgap : satelliteBudget M (centerValue Cnet) < weight * η)
     {z : PluckerCoord (m + 1)
       (positiveSatelliteAmbientDim m Cnet.centers)}
     (hz : z ∈ MathlibAnnex.NonemptyCompacts.maxSlice (rawPluckerCompact
-      (N := positiveSatelliteAmbientDim m Cnet.centers) M)
+      (ambientDim := positiveSatelliteAmbientDim m Cnet.centers) M)
         (orientedSatelliteSupport weight (centerValue Cnet)
           (maxSatelliteConfiguration M Cnet.centers
             weight (centerValue Cnet)))) :
@@ -301,8 +301,8 @@ private theorem exists_commonAnchoredRaw
     {m : ℕ} (MX MY : NormModel (m + 1)) {η ε weight : ℝ}
     (hη0 : 0 ≤ η) (hηD : η < detMax MY) (hε : 0 < ε)
     (H : NearMaxInverseBound MY η)
-    (Cnet : FiniteCoefficientNet (n := m + 1) H.K
-      (satelliteRadiusNNReal ε H.K hε H.K_pos))
+    (Cnet : FiniteCoefficientNet (n := m + 1) H.boundConstant
+      (satelliteRadiusNNReal ε H.boundConstant hε H.boundConstant_pos))
     (hweight : 0 < weight)
     (hgap : satelliteBudget MY (centerValue Cnet) < weight * η)
     (hHull :
@@ -319,9 +319,9 @@ private theorem exists_commonAnchoredRaw
   -- [R11-API-CHECK:ANC-002]
   classical
   let RX := rawPluckerCompact
-    (N := positiveSatelliteAmbientDim m Cnet.centers) MX
+    (ambientDim := positiveSatelliteAmbientDim m Cnet.centers) MX
   let RY := rawPluckerCompact
-    (N := positiveSatelliteAmbientDim m Cnet.centers) MY
+    (ambientDim := positiveSatelliteAmbientDim m Cnet.centers) MY
   let Cstar : SatelliteConfiguration (m + 1) Cnet.centers :=
     maxSatelliteConfiguration MY Cnet.centers weight (centerValue Cnet)
   let ℓ := orientedSatelliteSupport weight (centerValue Cnet) Cstar
@@ -344,14 +344,14 @@ private structure AnchoredAlmostIsometryMatch {m : ℕ}
   z : PluckerCoord (m + 1) ((m + 1) + q)
   sourceMap : Coord (m + 1) →L[ℝ] SupCoord ((m + 1) + q)
   targetMap : Coord (m + 1) →L[ℝ] SupCoord ((m + 1) + q)
-  sourceContraction : MX.IsContraction sourceMap
-  targetContraction : MY.IsContraction targetMap
-  targetAlmost : FinMapAlmostIsometric MY ε targetMap
+  isContraction_sourceMap : MX.IsContraction sourceMap
+  isContraction_targetMap : MY.IsContraction targetMap
+  finMapAlmostIsometric_targetMap : FinMapAlmostIsometric MY ε targetMap
   sourceSign : PluckerSign
   targetSign : PluckerSign
-  sourceSigned : z = sourceSign.value • MathlibAnnex.Matrix.ballVolumeScaledMaximalMinors MX sourceMap
-  targetSigned : z = targetSign.value • MathlibAnnex.Matrix.ballVolumeScaledMaximalMinors MY targetMap
-  leadingNonzero : z (leadingMinorIndex m q) ≠ 0
+  eq_sourceSign_smul_ballVolumeScaledMaximalMinors : z = sourceSign.value • MathlibAnnex.Matrix.ballVolumeScaledMaximalMinors MX sourceMap
+  eq_targetSign_smul_ballVolumeScaledMaximalMinors : z = targetSign.value • MathlibAnnex.Matrix.ballVolumeScaledMaximalMinors MY targetMap
+  apply_leadingMinorIndex_ne_zero : z (leadingMinorIndex m q) ≠ 0
 
 /-- Convert the old `z = v ∨ z = -v` representation into an explicit sign. -/
 private theorem exists_sign_representation {ι : Type*} [Fintype ι]
@@ -362,12 +362,12 @@ private theorem exists_sign_representation {ι : Type*} [Fintype ι]
   · exact ⟨PluckerSign.negative, by simp [h]⟩
 
 /-- Fixed-satellite-dimension anchored extraction. -/
-private theorem exists_anchoredAlmostIsometryMatch_at_satelliteDimension
+private theorem nonempty_anchoredAlmostIsometryMatch_at_satelliteDimension
     {m : ℕ} (MX MY : NormModel (m + 1)) {η ε weight : ℝ}
     (hη0 : 0 ≤ η) (hηD : η < detMax MY) (hε : 0 < ε)
     (H : NearMaxInverseBound MY η)
-    (Cnet : FiniteCoefficientNet (n := m + 1) H.K
-      (satelliteRadiusNNReal ε H.K hε H.K_pos))
+    (Cnet : FiniteCoefficientNet (n := m + 1) H.boundConstant
+      (satelliteRadiusNNReal ε H.boundConstant hε H.boundConstant_pos))
     (hweight : 0 < weight)
     (hgap : satelliteBudget MY (centerValue Cnet) < weight * η)
     (hHull :
@@ -388,21 +388,21 @@ private theorem exists_anchoredAlmostIsometryMatch_at_satelliteDimension
     z := z
     sourceMap := T
     targetMap := A
-    sourceContraction := hT
-    targetContraction := hA
-    targetAlmost := hAlmost
+    isContraction_sourceMap := hT
+    isContraction_targetMap := hA
+    finMapAlmostIsometric_targetMap := hAlmost
     sourceSign := sT
     targetSign := sA
-    sourceSigned := hsT
-    targetSigned := hsA
-    leadingNonzero := ?_
+    eq_sourceSign_smul_ballVolumeScaledMaximalMinors := hsT
+    eq_targetSign_smul_ballVolumeScaledMaximalMinors := hsA
+    apply_leadingMinorIndex_ne_zero := ?_
   }⟩
   simpa [q, leadingMinorIndex, positiveSatelliteAmbientDim,
     baseMinorIndex, baseRowOrderEmb] using hzLead
 
 /-- Equality of all finite Plücker bodies produces an anchored match for every
 positive distortion parameter. -/
-private theorem exists_anchoredAlmostIsometryMatch_of_all_body_eq
+private theorem nonempty_anchoredAlmostIsometryMatch_of_all_body_eq
     {m : ℕ} (MX MY : NormModel (m + 1)) {ε : ℝ} (hε : 0 < ε)
     (hBodies : ∀ N : ℕ, MathlibAnnex.PluckerBody.body MX N = MathlibAnnex.PluckerBody.body MY N) :
     Nonempty (AnchoredAlmostIsometryMatch MX MY ε) := by
@@ -416,7 +416,7 @@ private theorem exists_anchoredAlmostIsometryMatch_of_all_body_eq
     linarith
   rcases exists_goodSatellitePackage MY hη hηD hε with
     ⟨H, Cnet, weight, hweight, hgap, _hselectedGood⟩
-  exact exists_anchoredAlmostIsometryMatch_at_satelliteDimension
+  exact nonempty_anchoredAlmostIsometryMatch_at_satelliteDimension
     MX MY hη.le hηD hε H Cnet hweight hgap
     (hBodies (positiveSatelliteAmbientDim m Cnet.centers))
 private def AnchoredAlmostIsometryMatch.orientationProduct
@@ -447,14 +447,14 @@ private theorem orientationProduct_abs : |P.orientationProduct| = 1 := by
 
 /-- Equality of the common raw point gives the weighted maximal-minor relation
 coordinate by coordinate. -/
-private theorem weightedMaximalMinorRelation
+private theorem volume_mul_maximalMinor_sourceMap_eq
     (s : MinorIndex (m + 1) ((m + 1) + P.q)) :
     MX.closedUnitBallVolume * maximalMinor (clmMatrix P.sourceMap) s =
       P.orientationProduct * MY.closedUnitBallVolume *
         maximalMinor (clmMatrix P.targetMap) s := by
   -- [R11-API-CHECK:WMI-001]
-  have hs := congrFun P.sourceSigned s
-  have ht := congrFun P.targetSigned s
+  have hs := congrFun P.eq_sourceSign_smul_ballVolumeScaledMaximalMinors s
+  have ht := congrFun P.eq_targetSign_smul_ballVolumeScaledMaximalMinors s
   have hcommon :
       P.sourceSign.value *
           (MX.closedUnitBallVolume * maximalMinor (clmMatrix P.sourceMap) s) =
@@ -488,8 +488,8 @@ private theorem sourceLeadingMinor_ne_zero :
     maximalMinor (clmMatrix P.sourceMap) (leadingMinorIndex m P.q) ≠ 0 := by
   -- [R11-API-CHECK:WMI-002]
   intro hzero
-  have hs := congrFun P.sourceSigned (leadingMinorIndex m P.q)
-  apply P.leadingNonzero
+  have hs := congrFun P.eq_sourceSign_smul_ballVolumeScaledMaximalMinors (leadingMinorIndex m P.q)
+  apply P.apply_leadingMinorIndex_ne_zero
   rw [hs]
   simp [MathlibAnnex.Matrix.ballVolumeScaledMaximalMinors, MathlibAnnex.Matrix.maximalMinors, hzero]
 
@@ -498,8 +498,8 @@ private theorem targetLeadingMinor_ne_zero :
     maximalMinor (clmMatrix P.targetMap) (leadingMinorIndex m P.q) ≠ 0 := by
   -- [R11-API-CHECK:WMI-003]
   intro hzero
-  have ht := congrFun P.targetSigned (leadingMinorIndex m P.q)
-  apply P.leadingNonzero
+  have ht := congrFun P.eq_targetSign_smul_ballVolumeScaledMaximalMinors (leadingMinorIndex m P.q)
+  apply P.apply_leadingMinorIndex_ne_zero
   rw [ht]
   simp [MathlibAnnex.Matrix.ballVolumeScaledMaximalMinors, MathlibAnnex.Matrix.maximalMinors, hzero]
 
@@ -516,7 +516,7 @@ private theorem targetMap_injective : Function.Injective P.targetMap :=
 end AnchoredAlmostIsometryMatch
 
 private abbrev matrixCLM {n N : ℕ} (A : Matrix (Fin N) (Fin n) ℝ) :
-    Coord n →L[ℝ] SupCoord N := LinearMap.toContinuousLinearMap (Matrix.toLin' A)
+    Coord n →L[ℝ] SupCoord ambientDim := LinearMap.toContinuousLinearMap (Matrix.toLin' A)
 @[simp] private theorem matrixCLM_apply {n N : ℕ} (A : Matrix (Fin N) (Fin n) ℝ) (x : Coord n) :
     matrixCLM A x = A.mulVec x := rfl
 @[simp] private theorem clmMatrix_matrixCLM {n N : ℕ} (A : Matrix (Fin N) (Fin n) ℝ) :
@@ -527,7 +527,7 @@ private theorem frameCoordinates_eq_mulVec {n : ℕ} (B : DualFrame n) (x : Coor
     frameCoordinates B x = (dualFrameMatrix B).mulVec x := by
   simpa [frameCoordinates, dualFrameMatrix, DeterminantFrame.coordinateEquiv] using
     DeterminantFrame.frameCoordinates_eq_mulVec (Pi.basisFun ℝ (Fin n)) B x
-private theorem finSatelliteDimEq (m q : ℕ) :
+private theorem positiveSatelliteAmbientDim_fin (m q : ℕ) :
     positiveSatelliteAmbientDim m (Fin q) = (m + 1) + q := by
   simp [positiveSatelliteAmbientDim]
 
@@ -574,7 +574,7 @@ private theorem castFinCLM_comp {n k N N' : ℕ} (h : N' = N)
   rfl
 
 private theorem castBaseMinorIndex_eq_leading (m q : ℕ) :
-    castMinorIndex (finSatelliteDimEq m q).symm
+    castMinorIndex (positiveSatelliteAmbientDim_fin m q).symm
         (baseMinorIndex (m := m) (J := Fin q)) =
       leadingMinorIndex m q := by
   have aux (a b : ℕ) (h : a = b) :
@@ -595,12 +595,12 @@ variable {m : ℕ} {MX MY : NormModel (m + 1)} {ε : ℝ}
 private noncomputable def sourceMapForConfiguration :
     Coord (m + 1) →L[ℝ]
       SupCoord (positiveSatelliteAmbientDim m (Fin P.q)) :=
-  castFinCLM (finSatelliteDimEq m P.q) P.sourceMap
+  castFinCLM (positiveSatelliteAmbientDim_fin m P.q) P.sourceMap
 
 private noncomputable def targetMapForConfiguration :
     Coord (m + 1) →L[ℝ]
       SupCoord (positiveSatelliteAmbientDim m (Fin P.q)) :=
-  castFinCLM (finSatelliteDimEq m P.q) P.targetMap
+  castFinCLM (positiveSatelliteAmbientDim_fin m P.q) P.targetMap
 
 /-- Source map read as a base-first satellite configuration. -/
 private noncomputable def sourceConfiguration :
@@ -627,7 +627,7 @@ configuration. -/
 private theorem sourceLeadingMinor_eq_baseDet :
     maximalMinor (clmMatrix P.sourceMap) (leadingMinorIndex m P.q) =
       frameDet P.sourceConfiguration.1 := by
-  let hdim := finSatelliteDimEq m P.q
+  let hdim := positiveSatelliteAmbientDim_fin m P.q
   let sCard := baseMinorIndex (m := m) (J := Fin P.q)
   let sRaw : MinorIndex (m + 1) ((m + 1) + P.q) :=
     castMinorIndex hdim.symm sCard
@@ -658,7 +658,7 @@ configuration. -/
 private theorem targetLeadingMinor_eq_baseDet :
     maximalMinor (clmMatrix P.targetMap) (leadingMinorIndex m P.q) =
       frameDet P.targetConfiguration.1 := by
-  let hdim := finSatelliteDimEq m P.q
+  let hdim := positiveSatelliteAmbientDim_fin m P.q
   let sCard := baseMinorIndex (m := m) (J := Fin P.q)
   let sRaw : MinorIndex (m + 1) ((m + 1) + P.q) :=
     castMinorIndex hdim.symm sCard
@@ -726,13 +726,13 @@ private noncomputable def inducedLinearMap : Coord (m + 1) →L[ℝ] Coord (m + 
   -- [R11-API-CHECK:CHT-004]
   simp [inducedLinearMap, inducedMatrix, matrixCLM_apply,
     Matrix.mulVec_mulVec, frameCoordinates_eq_mulVec]
-private theorem weightedBaseDetRelation :
+private theorem volume_mul_frameDet_sourceConfiguration_eq :
     MX.closedUnitBallVolume * frameDet P.sourceConfiguration.1 =
       P.orientationProduct * MY.closedUnitBallVolume *
         frameDet P.targetConfiguration.1 := by
   -- [R11-API-CHECK:CHT-006]
   rw [← P.sourceLeadingMinor_eq_baseDet, ← P.targetLeadingMinor_eq_baseDet]
-  exact P.weightedMaximalMinorRelation (leadingMinorIndex m P.q)
+  exact P.volume_mul_maximalMinor_sourceMap_eq (leadingMinorIndex m P.q)
 
 /-- The generic R09 factorization is applied in the same fixed leading chart. -/
 private theorem factorization : P.targetMap.comp P.inducedLinearMap = P.sourceMap := by
@@ -746,7 +746,7 @@ private theorem factorization : P.targetMap.comp P.inducedLinearMap = P.sourceMa
     calc
       MX.closedUnitBallVolume * maximalMinor (clmMatrix P.sourceMap) t =
           P.orientationProduct * MY.closedUnitBallVolume * maximalMinor (clmMatrix P.targetMap) t :=
-        P.weightedMaximalMinorRelation t
+        P.volume_mul_maximalMinor_sourceMap_eq t
       _ = MX.closedUnitBallVolume * (c * maximalMinor (clmMatrix P.targetMap) t) := by
         dsimp [c]
         field_simp [MX.closedUnitBallVolume_pos.ne']
@@ -809,7 +809,7 @@ private theorem inducedLinearMap_strict_model_bound
     simpa using congrArg (fun F : Coord (m + 1) →L[ℝ]
       SupCoord ((m + 1) + P.q) => F x) P.factorization
   rw [hfactor] at hlower
-  exact hlower.trans_le (P.sourceContraction x)
+  exact hlower.trans_le (P.isContraction_sourceMap x)
 
 /-- Non-strict recovered-map estimate valid at every vector. -/
 private theorem inducedLinearMap_model_bound (x : Coord (m + 1)) :
@@ -914,7 +914,7 @@ private theorem inducedDet_signed_volume :
     MX.closedUnitBallVolume * P.inducedDet =
       P.orientationProduct * MY.closedUnitBallVolume := by
   -- [R11-API-CHECK:VOL-006]
-  have hweighted := P.weightedMaximalMinorRelation
+  have hweighted := P.volume_mul_maximalMinor_sourceMap_eq
     (leadingMinorIndex m P.q)
   rw [P.sourceMinor_eq_targetMinor_mul_inducedDet] at hweighted
   have hA := P.targetLeadingMinor_ne_zero
@@ -952,17 +952,17 @@ open Internal
 structure LinearCertificate {m : ℕ}
     (MX MY : EquivalentSeminorm (Fin (m + 1) → ℝ)) (ε : ℝ) where
   q : ℕ
-  sourceMap : (Fin (m + 1) → ℝ) →L[ℝ] (Fin ((m + 1) + q) → ℝ)
-  targetMap : (Fin (m + 1) → ℝ) →L[ℝ] (Fin ((m + 1) + q) → ℝ)
-  L : (Fin (m + 1) → ℝ) →L[ℝ] (Fin (m + 1) → ℝ)
-  factor : targetMap.comp L = sourceMap
-  ambientRangeEq : Set.range sourceMap = Set.range targetMap
-  injective : Function.Injective L
-  surjective : Function.Surjective L
-  modelBound : ∀ x, (1 - ε) * MY.p (L x) ≤ MX.p x
+  sourceMap : (Fin (m + 1) → ℝ) →linearMap[ℝ] (Fin ((m + 1) + q) → ℝ)
+  targetMap : (Fin (m + 1) → ℝ) →linearMap[ℝ] (Fin ((m + 1) + q) → ℝ)
+  linearMap : (Fin (m + 1) → ℝ) →linearMap[ℝ] (Fin (m + 1) → ℝ)
+  factor : targetMap.comp linearMap = sourceMap
+  range_sourceMap_eq_range_targetMap : Set.range sourceMap = Set.range targetMap
+  injective : Function.Injective linearMap
+  surjective : Function.Surjective linearMap
+  one_sub_mul_seminorm_linearMap_le : ∀ x, (1 - ε) * MY.p (linearMap x) ≤ MX.p x
   det : ℝ
-  det_eq : det = ContinuousLinearMap.det L
-  exactTopVolume : MX.closedUnitBallVolume * |det| = MY.closedUnitBallVolume
+  det_eq : det = ContinuousLinearMap.det linearMap
+  closedUnitBallVolume_mul_abs_det : MX.closedUnitBallVolume * |det| = MY.closedUnitBallVolume
 
 namespace Internal
 private noncomputable def AnchoredAlmostIsometryMatch.toRecoveryCertificate
@@ -972,25 +972,25 @@ private noncomputable def AnchoredAlmostIsometryMatch.toRecoveryCertificate
   q := P.q
   sourceMap := P.sourceMap
   targetMap := P.targetMap
-  L := P.inducedLinearMap
+  linearMap := P.inducedLinearMap
   factor := P.factorization
-  ambientRangeEq := P.ambientRange_eq
+  range_sourceMap_eq_range_targetMap := P.ambientRange_eq
   injective := P.inducedLinearMap_injective
   surjective := P.inducedLinearMap_surjective
-  modelBound := P.inducedLinearMap_model_bound
+  one_sub_mul_seminorm_linearMap_le := P.inducedLinearMap_model_bound
   det := P.inducedDet
   det_eq := by
     simp [AnchoredAlmostIsometryMatch.inducedDet,
       AnchoredAlmostIsometryMatch.inducedLinearMap,
       clmMatrix_matrixCLM, ← LinearMap.det_toMatrix', clmMatrix]
-  exactTopVolume := P.inducedDet_abs_volume
+  closedUnitBallVolume_mul_abs_det := P.inducedDet_abs_volume
 
 end Internal
-theorem exists_linearCertificate_of_pluckerBodies_eq
+theorem nonempty_linearCertificate_of_pluckerBodies_eq
     {m : ℕ} (MX MY : EquivalentSeminorm (Fin (m + 1) → ℝ)) {ε : ℝ} (hε : 0 < ε)
     (hBodies : ∀ N : ℕ, MathlibAnnex.PluckerBody.body MX N = MathlibAnnex.PluckerBody.body MY N) :
     Nonempty (LinearCertificate MX MY ε) := by
-  rcases exists_anchoredAlmostIsometryMatch_of_all_body_eq MX MY hε hBodies
+  rcases nonempty_anchoredAlmostIsometryMatch_of_all_body_eq MX MY hε hBodies
     with ⟨P⟩
   exact ⟨P.toRecoveryCertificate⟩
 
@@ -1001,22 +1001,22 @@ variable {m : ℕ} {MX MY : EquivalentSeminorm (Fin (m + 1) → ℝ)} {ε : ℝ}
     (C : LinearCertificate MX MY ε)
 
 /-- Model-norm uniformity at distortions at most one half. -/
-theorem modelNorm_le_two (hεhalf : ε ≤ (1 / 2 : ℝ))
+theorem seminorm_linearMap_le_two_mul (hεhalf : ε ≤ (1 / 2 : ℝ))
     (x : (Fin (m + 1) → ℝ)) :
-    MY.p (C.L x) ≤ 2 * MX.p x := by
+    MY.p (C.linearMap x) ≤ 2 * MX.p x := by
   -- [R11-API-CHECK:REC-001]
   have hcoeff : (1 / 2 : ℝ) ≤ 1 - ε := by linarith
-  have hnonneg : 0 ≤ MY.p (C.L x) := apply_nonneg MY.p _
-  have h := C.modelBound x
+  have hnonneg : 0 ≤ MY.p (C.linearMap x) := apply_nonneg MY.p _
+  have h := C.one_sub_mul_seminorm_linearMap_le x
   nlinarith
 
 /-- A distortion-independent reference-norm bound for the future sequence. -/
 theorem referenceNorm_le (hεhalf : ε ≤ (1 / 2 : ℝ))
     (x : (Fin (m + 1) → ℝ)) :
-    ‖C.L x‖ ≤ (2 * MX.upper / MY.lower) * ‖x‖ := by
+    ‖C.linearMap x‖ ≤ (2 * MX.upper / MY.lower) * ‖x‖ := by
   -- [R11-API-CHECK:REC-002]
-  have hlow := MY.lower_le (C.L x)
-  have hmid := C.modelNorm_le_two hεhalf x
+  have hlow := MY.lower_le (C.linearMap x)
+  have hmid := C.seminorm_linearMap_le_two_mul hεhalf x
   have hupp := MX.le_upper x
   rw [div_mul_eq_mul_div]
   apply (le_div_iff₀ MY.lower_pos).2

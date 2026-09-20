@@ -29,7 +29,7 @@ its adjoint. -/
 def Reduces (K : Submodule 𝕜 E) (T : E →L[𝕜] E) : Prop :=
   K.IsInvariantUnder T ∧ K.IsInvariantUnder (T†)
 
-theorem IsInvariantUnder.strongLimit {ι : Type*} {l : Filter ι} [l.NeBot]
+theorem IsInvariantUnder.of_stronglyConverges {ι : Type*} {l : Filter ι} [l.NeBot]
     {K : Submodule 𝕜 E} (hK : IsClosed (K : Set E))
     {A : ι → E →L[𝕜] E} {T : E →L[𝕜] E}
     (hA : ContinuousLinearMap.StronglyConverges A l T)
@@ -37,7 +37,7 @@ theorem IsInvariantUnder.strongLimit {ι : Type*} {l : Filter ι} [l.NeBot]
   intro x hx
   exact hK.mem_of_tendsto (hA x) (Eventually.of_forall fun i ↦ hinv i hx)
 
-theorem Reduces.strongLimits {ι : Type*} {l : Filter ι} [l.NeBot]
+theorem Reduces.of_stronglyConverges {ι : Type*} {l : Filter ι} [l.NeBot]
     {K : Submodule 𝕜 E} (hK : IsClosed (K : Set E))
     {A : ι → E →L[𝕜] E} {B : ι → E →L[𝕜] E}
     {S T : E →L[𝕜] E}
@@ -46,12 +46,12 @@ theorem Reduces.strongLimits {ι : Type*} {l : Filter ι} [l.NeBot]
     (hAdj : T = (S†))
     (hinvA : ∀ i, K.IsInvariantUnder (A i))
     (hinvB : ∀ i, K.IsInvariantUnder (B i)) : K.Reduces S := by
-  refine ⟨IsInvariantUnder.strongLimit hK hA hinvA, ?_⟩
-  simpa only [← hAdj] using IsInvariantUnder.strongLimit hK hB hinvB
+  refine ⟨IsInvariantUnder.of_stronglyConverges hK hA hinvA, ?_⟩
+  simpa only [← hAdj] using IsInvariantUnder.of_stronglyConverges hK hB hinvB
 
 /-- A closed subspace reducing every summand reduces a strong sum, provided
 the adjoint partial sums are also known to converge strongly to the adjoint. -/
-theorem Reduces.strongSum {K : Submodule 𝕜 E} (hK : IsClosed (K : Set E))
+theorem Reduces.of_stronglyConverges_partialSum {K : Submodule 𝕜 E} (hK : IsClosed (K : Set E))
     {W : ℕ → E →L[𝕜] E} {S T : E →L[𝕜] E}
     (hW : ∀ n, K.Reduces (W n))
     (hS : ContinuousLinearMap.StronglyConverges
@@ -59,7 +59,7 @@ theorem Reduces.strongSum {K : Submodule 𝕜 E} (hK : IsClosed (K : Set E))
     (hT : ContinuousLinearMap.StronglyConverges
       (ContinuousLinearMap.partialSum fun n ↦ (W n)†) atTop T)
     (hAdj : T = S†) : K.Reduces S := by
-  apply Reduces.strongLimits hK hS hT hAdj
+  apply Reduces.of_stronglyConverges hK hS hT hAdj
   · intro N x hx
     rw [ContinuousLinearMap.partialSum_apply]
     exact K.sum_mem fun n _ ↦ (hW n).1 hx

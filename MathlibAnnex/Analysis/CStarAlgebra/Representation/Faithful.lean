@@ -90,7 +90,7 @@ theorem injective_of_singleton [Nontrivial A]
     letI : Nontrivial f.GNS := nontrivial_of_ne xi 0 hxi_ne
     have hirr : Representation.IsIrreducible f.gnsStarAlgHom :=
       (Representation.isIrreducible_iff_starAlgHom f.gnsStarAlgHom).2
-        (pureState_gnsStarAlgHom_isIrreducible phi hphi hpure)
+        (isIrreducible_pureState_gnsStarAlgHom phi hphi hpure)
     obtain ⟨U, hU⟩ := hsingle.2 f.GNS f.gnsStarAlgHom hirr
     have hfa : f.gnsStarAlgHom a = 0 := by
       apply ContinuousLinearMap.ext

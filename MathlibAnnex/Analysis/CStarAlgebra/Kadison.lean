@@ -46,7 +46,7 @@ noncomputable def boundedSelfAdjointTransform {A : Type*} [CStarAlgebra A]
     (a : A) : A :=
   cfc boundedSelfAdjointScalar a
 
-theorem boundedSelfAdjointTransform_isSelfAdjoint
+theorem isSelfAdjoint_boundedSelfAdjointTransform
     {A : Type*} [CStarAlgebra A] {a : A} (ha : IsSelfAdjoint a) :
     IsSelfAdjoint (boundedSelfAdjointTransform a) := by
   exact IsSelfAdjoint.cfc
@@ -104,7 +104,7 @@ noncomputable def strictContractionPreimage
     {A : Type*} [CStarAlgebra A] (a : A) : A :=
   cfc strictContractionPreimageScalar a
 
-theorem strictContractionPreimage_isSelfAdjoint
+theorem isSelfAdjoint_strictContractionPreimage
     {A : Type*} [CStarAlgebra A] (a : A) :
     IsSelfAdjoint (strictContractionPreimage a) :=
   IsSelfAdjoint.cfc
@@ -425,7 +425,7 @@ theorem StarAlgHom.exists_selfAdjoint_norm_le_one_atomic_apply_sub_norm_lt_of_ir
   | inr hI =>
       letI := hI
       let S : H →L[ℂ] H := strictContractionPreimage T
-      have hS : IsSelfAdjoint S := strictContractionPreimage_isSelfAdjoint T
+      have hS : IsSelfAdjoint S := isSelfAdjoint_strictContractionPreimage T
       let δ : ℝ := ε / (2 * (Fintype.card I : ℝ))
       have hcard : 0 < (Fintype.card I : ℝ) := by
         exact_mod_cast Fintype.card_pos
@@ -439,7 +439,7 @@ theorem StarAlgHom.exists_selfAdjoint_norm_le_one_atomic_apply_sub_norm_lt_of_ir
         π.exists_selfAdjoint_atomic_apply_sub_norm_lt_of_irreducible hπ η S hS hδ
       let a : A := boundedSelfAdjointTransform b
       have haself : IsSelfAdjoint a :=
-        boundedSelfAdjointTransform_isSelfAdjoint hbself
+        isSelfAdjoint_boundedSelfAdjointTransform hbself
       have hanorm : ‖a‖ ≤ 1 := norm_boundedSelfAdjointTransform_le_one b
       refine ⟨a, haself, hanorm, ?_⟩
       have hπbself : IsSelfAdjoint (π b) := hbself.map π

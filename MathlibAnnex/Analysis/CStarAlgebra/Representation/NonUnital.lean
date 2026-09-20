@@ -39,7 +39,7 @@ theorem one_idempotent (pi : NonUnitalRepresentation (A := A) (H := H)) :
 
 /-- The range of `pi 1` is a closed reducing subspace, even before unitality
 has been established. -/
-theorem range_one_reduces (pi : NonUnitalRepresentation (A := A) (H := H)) :
+theorem reduces_range_one (pi : NonUnitalRepresentation (A := A) (H := H)) :
     pi.Reduces (pi 1).range := by
   have hp := one_idempotent pi
   refine ⟨ContinuousLinearMap.IsIdempotentElem.isClosed_range hp, ?_⟩
@@ -85,7 +85,7 @@ theorem map_one_eq_one_of_isIrreducible
     rw [hrange, Submodule.mem_bot] at hx
     simpa using hx
   have hrange : (pi 1).range = (⊤ : Submodule ℂ H) :=
-    (hirr.2 (pi 1).range (range_one_reduces pi)).resolve_left hrange_ne
+    (hirr.2 (pi 1).range (reduces_range_one pi)).resolve_left hrange_ne
   apply ContinuousLinearMap.ext
   intro x
   have hx : x ∈ (pi 1).range := by rw [hrange]; trivial
@@ -145,7 +145,7 @@ def IsUniqueIrreducibleModelAmongNonUnital
 /-- A universal model for unital irreducible representations is already a
 universal model for ordinary possibly nonunital nonzero irreducible
 representations: irreducibility forces the latter to preserve the unit. -/
-theorem IsUniqueIrreducibleModel.amongNonUnital
+theorem IsUniqueIrreducibleModel.isUniqueIrreducibleModelAmongNonUnital
     {pi : Representation A H}
     (hpi : Representation.IsUniqueIrreducibleModel.{u, v, w} pi) :
     Representation.IsUniqueIrreducibleModelAmongNonUnital.{u, v, w} pi := by

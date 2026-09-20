@@ -9,7 +9,7 @@ universe u v
 
 namespace MathlibAnnex.Sphere
 /-- Transport the accepted model theorem through any common finite coordinate system. -/
-theorem linearIsometryEquiv_of_coordinate_model
+theorem nonempty_linearIsometryEquiv_of_coordinate_model
     {m : ℕ} {X : Type u} {Y : Type v}
     [NormedAddCommGroup X] [NormedSpace ℝ X]
     [NormedAddCommGroup Y] [NormedSpace ℝ Y]
@@ -19,6 +19,6 @@ theorem linearIsometryEquiv_of_coordinate_model
   let MX := EquivalentSeminorm.ofContinuousLinearEquiv eX
   let MY := EquivalentSeminorm.ofContinuousLinearEquiv eY
   let ΔM := EquivalentSeminorm.sphereIsometryEquiv eX eY Δ
-  rcases EquivalentSeminorm.linearIsometryEquiv_of_sphereIsometryEquiv MX MY ΔM with ⟨A⟩
+  rcases EquivalentSeminorm.nonempty_linearIsometryEquiv_of_sphereIsometryEquiv MX MY ΔM with ⟨A⟩
   exact ⟨EquivalentSeminorm.transportLinearIsometryEquiv eX eY A⟩
 end MathlibAnnex.Sphere

@@ -16,7 +16,7 @@ def maximalMinorIntegrand {n N : ℕ} (s : Matrix.MaximalMinorIndex n (Fin N))
     (f : (Fin n → ℝ) → (Fin N → ℝ)) (x : Fin n → ℝ) : ℝ :=
   LinearMap.det ((ContinuousLinearMap.selectedSquare s (fderiv ℝ f x)).toLinearMap)
 
-theorem selectedOutput_hasCompactSupport
+theorem hasCompactSupport_selectedOutput
     {n N : ℕ} (s : Matrix.MaximalMinorIndex n (Fin N)) {u : (Fin n → ℝ) → (Fin N → ℝ)}
     (huc : HasCompactSupport u) :
     HasCompactSupport (fun x => ContinuousLinearMap.selectedOutput s (u x)) :=
@@ -41,7 +41,7 @@ theorem integral_maximalMinor_fderiv_add_sub_eq_zero_of_contDiff
   have hgc : ContDiff ℝ (↑(⊤ : ℕ∞)) (fun x => π (g x)) := π.contDiff.comp hg
   have hucd : ContDiff ℝ (↑(⊤ : ℕ∞)) (fun x => π (u x)) := π.contDiff.comp hu
   have hucs : HasCompactSupport (fun x => π (u x)) :=
-    selectedOutput_hasCompactSupport s huc
+    hasCompactSupport_selectedOutput s huc
   have hsq := Piola.integral_det_fderiv_add_sub_eq_zero_of_contDiff hgc hucd hucs
 
   have hsum : (fun y => π (g y) + π (u y)) =
@@ -61,12 +61,12 @@ theorem integral_maximalMinor_fderiv_add_sub_eq_zero_of_contDiff
     exact (π.hasFDerivAt.comp x
       ((hg.differentiable (by simp)) x).hasFDerivAt).fderiv
   simpa only [maximalMinorIntegrand, ContinuousLinearMap.selectedSquare, hdplus, hdg] using hsq
-theorem maximalMinorIntegrand_mollify_continuous {n N : ℕ}
+theorem continuous_maximalMinorIntegrand_mollify {n N : ℕ}
     (s : Matrix.MaximalMinorIndex n (Fin N)) {ε : ℝ} (hε : 0 < ε)
     {f : (Fin n → ℝ) → (Fin N → ℝ)} (hf : LocallyIntegrable f volume) :
     Continuous (maximalMinorIntegrand s (mollify ε f)) := by
   have hD : Continuous (fun x => fderiv ℝ (mollify ε f) x) :=
-    (mollify_contDiff hε hf).continuous_fderiv (by simp)
+    (contDiff_mollify hε hf).continuous_fderiv (by simp)
   change Continuous (fun x => LinearMap.det ((ContinuousLinearMap.selectedSquare s
     (fderiv ℝ (mollify ε f) x)).toLinearMap))
   apply ContinuousLinearMap.continuous_det.comp
@@ -172,8 +172,8 @@ theorem integral_maximalMinor_fderiv_add_sub_eq_zero_of_lipschitzWith
     rw [mollify_add ε g u hgLI huLI]
     rw [← integral_topMinor_difference_eq_setIntegral s hsupp]
     exact integral_maximalMinor_fderiv_add_sub_eq_zero_of_contDiff s
-      (mollify_contDiff hε' hgLI)
-      (mollify_contDiff hε' huLI)
+      (contDiff_mollify hε' hgLI)
+      (contDiff_mollify hε' huLI)
       (hK.of_isClosed_subset (isClosed_tsupport _) hsupp)
   have hconv_plus := tendsto_integral_maximalMinor_mollify s hplus hK
   have hconv_g := tendsto_integral_maximalMinor_mollify s hgL hK
@@ -187,10 +187,10 @@ theorem integral_maximalMinor_fderiv_add_sub_eq_zero_of_lipschitzWith
     have hε' : 0 < ε := hε
     exact MeasureTheory.integral_sub
       (ContinuousOn.integrableOn_compact hK
-        (maximalMinorIntegrand_mollify_continuous s hε'
+        (continuous_maximalMinorIntegrand_mollify s hε'
         (hplus.continuous.locallyIntegrable)).continuousOn)
       (ContinuousOn.integrableOn_compact hK
-        (maximalMinorIntegrand_mollify_continuous s hε' hgLI).continuousOn)
+        (continuous_maximalMinorIntegrand_mollify s hε' hgLI).continuousOn)
   have hdiff : Tendsto
       (fun ε => ∫ x in K,
         (maximalMinorIntegrand s (mollify ε (fun y => g y + u y)) x -

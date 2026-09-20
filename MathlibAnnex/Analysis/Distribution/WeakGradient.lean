@@ -12,11 +12,11 @@ variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
 variable {μ : Measure E} [μ.IsAddHaarMeasure]
 
 /-- Local conclusion on any open domain; no connectedness is needed. -/
-theorem WeakDivergenceZero.locally_aeConstant
+theorem WeakDivergenceZero.nonempty_localAEConstantAt
     {U : Set E} {u : E → ℝ} (hweak : WeakDivergenceZero μ U u)
     (hU : IsOpen U) (hu : LocallyIntegrableOn u U μ)
     {x : E} (hx : x ∈ U) : Nonempty (LocalAEConstantAt μ U u x) :=
-  WeakGradient.exists_localAEConstantAt hU hu hweak hx
+  WeakGradient.nonempty_localAEConstantAt hU hu hweak hx
 
 /-- Global a.e. constancy, including the empty-domain and zero-dimensional cases. -/
 theorem WeakDivergenceZero.exists_aeConstantOn
@@ -25,7 +25,7 @@ theorem WeakDivergenceZero.exists_aeConstantOn
     ∃ c : ℝ, AEConstantOn μ u U c := by
   exact exists_aeConstantOn_of_local_preconnected μ hUc
     (HereditarilyLindelofSpace.isLindelof U)
-    (fun _ hx => hweak.locally_aeConstant hU hu hx)
+    (fun _ hx => hweak.nonempty_localAEConstantAt hU hu hx)
 
 /-- Continuity is the extra hypothesis needed to upgrade the a.e. statement. -/
 theorem WeakDivergenceZero.exists_eqOn

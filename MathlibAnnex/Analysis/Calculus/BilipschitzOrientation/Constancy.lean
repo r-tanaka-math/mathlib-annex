@@ -26,7 +26,7 @@ namespace BilipschitzOrientation
 
 /-- The transported sign is locally integrable because it is measurable and
 bounded in norm by one. -/
-theorem targetJacobianSign_locallyIntegrableOn {n : ℕ}
+theorem locallyIntegrableOn_targetJacobianSign {n : ℕ}
     (D : BiLipschitzOpenData n) :
     LocallyIntegrableOn (targetJacobianSign D) D.target := by
   have hfderiv_meas : Measurable
@@ -52,8 +52,8 @@ constant.  This is the exact R05 weak-divergence-zero interface. -/
 theorem targetJacobianSign_ae_const {n : ℕ}
     (D : BiLipschitzOpenData n) (hpre : IsPreconnected D.target) :
     ∃ c : ℝ, AEConstantOn volume (targetJacobianSign D) D.target c := by
-  exact (targetJacobianSign_weakDivergenceZero D).exists_aeConstantOn
-    D.target_open hpre (targetJacobianSign_locallyIntegrableOn D)
+  exact (weakDivergenceZero_targetJacobianSign D).exists_aeConstantOn
+    D.isOpen_target hpre (locallyIntegrableOn_targetJacobianSign D)
 
 /-- Positive target measure excludes a vacuous a.e. constant and forces its
 value to be exactly `+1` or `-1`. -/

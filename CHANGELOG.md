@@ -1,3 +1,16 @@
+# Proposed v0.4.0 — naming migration (not released)
+
+Breaking source API naming changes and twelve module-path relocations, with
+mathematical source otherwise retained. The exact migration map is supplied in
+the audited naming-migration dispatch; only two explicitly listed identity aliases
+are removed. No compatibility aliases preserving nonconforming public names are
+added. Old releases remain available; new consumers must use the published name map.
+Full local qualification and owner-manual private hosted qualification are pending.
+Source admission, source release, LFH/Catalog migration and website selection are
+separate acts. This entry does not set a publication date.
+
+---
+
 # Changelog
 
 ## 0.3.0 (private release candidate)

@@ -35,7 +35,7 @@ theorem isCompactOperatorModel_of_singleton [Nontrivial A]
     (hsingle : IsSingletonIrreducibleModel.{u, v, u} pi) :
     IsCompactOperatorModel pi := by
   exact ⟨injective_of_singleton pi hsingle,
-    map_isCompactOperator_of_singleton pi hsingle,
+    isCompactOperator_map_of_singleton pi hsingle,
     exists_preimage_of_compact_singleton pi hsingle⟩
 
 /-- Faithfulness and equality of the represented range with all compact
@@ -50,7 +50,7 @@ theorem faithful_and_compactOperatorModel_of_singleton [Nontrivial A]
 
 /-- Closed-ideal simplicity turns the one nonzero compact image supplied by
 the singleton argument into compactness of the entire represented image. -/
-theorem map_isCompactOperator_of_singleton_of_isSimple [Nontrivial A]
+theorem isCompactOperator_map_of_singleton_of_isSimple [Nontrivial A]
     [TopologicalSpace.SeparableSpace H]
     (pi : NonUnitalCStarRepresentation A H)
     (hsingle : IsSingletonIrreducibleModel.{u, v, u} pi)
@@ -86,7 +86,7 @@ theorem isCompactOperatorModel_of_singleton_of_isSimple [Nontrivial A]
     (hsimple : IsSimpleCStarAlgebra A) :
     IsCompactOperatorModel pi := by
   refine ⟨injective_of_singleton pi hsingle,
-    map_isCompactOperator_of_singleton_of_isSimple pi hsingle hsimple, ?_⟩
+    isCompactOperator_map_of_singleton_of_isSimple pi hsingle hsimple, ?_⟩
   exact exists_preimage_of_compact_singleton pi hsingle
 
 /-- Faithfulness and exact compact range, conditionally on the generic

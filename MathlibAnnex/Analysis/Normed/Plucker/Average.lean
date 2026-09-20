@@ -49,25 +49,25 @@ theorem derivativeAverage_mem_body {n N : ℕ} (M : EquivalentSeminorm (Fin n �
     have hp := M.closedUnitBallVolume_pos
     simp [EquivalentSeminorm.closedUnitBallVolume, h] at hp
   apply (convex_convexHull ℝ (PluckerBody.generators M N)).set_average_mem
-    (isCompact_convexHull_pi _ (PluckerBody.generators_isCompact M)).isClosed
+    (isCompact_convexHull_pi _ (PluckerBody.isCompact_generators M)).isClosed
     hzero M.closedUnitBall_isCompact.measure_ne_top
   · filter_upwards [hcontract] with x hx
     exact subset_convexHull ℝ _ (derivativeGenerator_mem_raw M f hx)
   · exact hint
 
 /-- A global seminorm increment bound gives integrability on the model ball. -/
-theorem derivativeGenerator_integrable_of_seminormLipschitz {n N : ℕ}
+theorem integrableOn_derivativeGenerator_of_seminormLipschitz {n N : ℕ}
     (M : EquivalentSeminorm (Fin n → ℝ)) {f : (Fin n → ℝ) → (Fin N → ℝ)}
     (hf : ∀ x y, ‖f x - f y‖ ≤ M.p (x - y)) :
     IntegrableOn (derivativeGenerator M f) M.closedUnitBall volume := by
   have hmeas : StronglyMeasurable (derivativeGenerator M f) :=
-    ((Matrix.ballVolumeScaledMaximalMinors_continuous M).measurable.comp
+    ((Matrix.continuous_ballVolumeScaledMaximalMinors M).measurable.comp
       (measurable_fderiv ℝ f)).stronglyMeasurable
   have hcontract : ∀ᵐ x ∂volume.restrict M.closedUnitBall,
       M.IsContraction (fderiv ℝ f x) :=
     FDeriv.ae_norm_apply_le_seminorm_of_lipschitz M.p
       ⟨M.upper, M.upper_pos.le⟩ M.le_upper hf M.closedUnitBall
-  rcases (PluckerBody.generators_isCompact (N := N) M).isBounded.subset_closedBall
+  rcases (PluckerBody.isCompact_generators (N := N) M).isBounded.subset_closedBall
       (0 : Matrix.MaximalMinorIndex n (Fin N) → ℝ) with ⟨C, hC⟩
   have hnorm : ∀ᵐ x ∂volume.restrict M.closedUnitBall,
       ‖derivativeGenerator M f x‖ ≤ max C 0 := by
@@ -82,7 +82,7 @@ theorem derivativeGenerator_integrable_of_seminormLipschitz {n N : ℕ}
 
 /-- An ordinary Lipschitz map has integrable derivative generators on every
 compact subset of its finite-dimensional source. -/
-theorem derivativeGenerator_integrableOn_compact {n N : ℕ}
+theorem integrableOn_derivativeGenerator_compact {n N : ℕ}
     (M : EquivalentSeminorm (Fin n → ℝ)) {f : (Fin n → ℝ) → (Fin N → ℝ)}
     (hf : ∃ C : NNReal, LipschitzWith C f) {K : Set (Fin n → ℝ)} (hK : IsCompact K) :
     IntegrableOn (derivativeGenerator M f) K volume := by
@@ -92,9 +92,9 @@ theorem derivativeGenerator_integrableOn_compact {n N : ℕ}
     simpa [D] using
       (isCompact_closedBall (0 : (Fin n → ℝ) →L[ℝ] (Fin N → ℝ)) (C : ℝ))
   have hP : IsCompact (Matrix.ballVolumeScaledMaximalMinors M '' D) :=
-    hD.image (Matrix.ballVolumeScaledMaximalMinors_continuous M)
+    hD.image (Matrix.continuous_ballVolumeScaledMaximalMinors M)
   have hmeas : StronglyMeasurable (derivativeGenerator M f) :=
-    ((Matrix.ballVolumeScaledMaximalMinors_continuous M).measurable.comp
+    ((Matrix.continuous_ballVolumeScaledMaximalMinors M).measurable.comp
       (measurable_fderiv ℝ f)).stronglyMeasurable
   have hmem : ∀ᵐ x ∂volume.restrict K,
       derivativeGenerator M f x ∈ Matrix.ballVolumeScaledMaximalMinors M '' D :=

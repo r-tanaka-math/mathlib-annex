@@ -41,7 +41,7 @@ theorem rankOne_link_vanishes_on_other_copy {J K : Type*}
 
 /-- The rank-one operator associated to a unit vector is an orthogonal
 projection. -/
-theorem rankOne_self_isStarProjection (x : H) (hx : ‖x‖ = 1) :
+theorem isStarProjection_rankOne_self (x : H) (hx : ‖x‖ = 1) :
     IsStarProjection (InnerProductSpace.rankOne ℂ x x) := by
   constructor
   · rw [isIdempotentElem_iff]

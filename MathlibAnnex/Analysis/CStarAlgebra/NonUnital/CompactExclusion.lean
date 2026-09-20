@@ -67,7 +67,7 @@ private theorem exists_selfAdjoint_not_isCompactOperator
 
 /-- In a genuinely non-unital separable singleton irreducible model every
 represented operator is compact.  No simplicity assumption is used. -/
-theorem map_isCompactOperator_of_singleton [Nontrivial A]
+theorem isCompactOperator_map_of_singleton [Nontrivial A]
     [TopologicalSpace.SeparableSpace H]
     (pi : NonUnitalCStarRepresentation A H)
     (hsingle : IsSingletonIrreducibleModel.{u, v, u} pi) :

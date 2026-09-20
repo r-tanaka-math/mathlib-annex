@@ -40,11 +40,11 @@ private theorem radialMap_model_dist {n : ℕ}
     {MX MY : EquivalentSeminorm (Fin n → ℝ)}
     (Δ : sphere (0 : Space MX) 1 ≃ᵢ sphere (0 : Space MY) 1) (x y : Fin n → ℝ) :
     MY.p (radialMap Δ x - radialMap Δ y) ≤ 3 * MX.p (x - y) := by
-  have h := (radialExtension_lipschitz Δ).dist_le_mul
+  have h := (lipschitzWith_radialExtension Δ).dist_le_mul
     (show Space MX from x) (show Space MX from y)
   simpa only [dist_space_eq, NNReal.coe_ofNat] using h
 
-private theorem radialMap_lipschitz {n : ℕ}
+private theorem lipschitzWith_radialMap {n : ℕ}
     {MX MY : EquivalentSeminorm (Fin n → ℝ)}
     (Δ : sphere (0 : Space MX) 1 ≃ᵢ sphere (0 : Space MY) 1) :
     LipschitzWith (3 * MX.upper / MY.lower).toNNReal (radialMap Δ) := by
@@ -67,7 +67,7 @@ private def coordinateBoundaryData {m N : ℕ}
   fun u => A (show Fin (m + 1) → ℝ from
     (Δ ⟨(show Space MX from u.val), mem_sphere_zero_iff_norm.mpr u.property⟩).val)
 
-private theorem coordinateBoundaryData_modelLipschitz {m N : ℕ}
+private theorem norm_coordinateBoundaryData_sub_le_seminorm_sub {m N : ℕ}
     {MX MY : EquivalentSeminorm (Fin (m + 1) → ℝ)}
     (Δ : Metric.sphere (0 : Space MX) 1 ≃ᵢ Metric.sphere (0 : Space MY) 1)
     (A : (Fin (m + 1) → ℝ) →L[ℝ] (Fin N → ℝ)) (hA : MY.IsContraction A) :
@@ -125,11 +125,11 @@ private theorem average_eq_of_trace {m N : ℕ}
     derivativeAverage M F = derivativeAverage M G := by
   ext s
   rw [average_apply_eq_integral M s F
-      (derivativeGenerator_integrableOn_compact M ⟨CF, hF⟩ M.closedUnitBall_isCompact),
+      (integrableOn_derivativeGenerator_compact M ⟨CF, hF⟩ M.isCompact_closedUnitBall),
     average_apply_eq_integral M s G
-      (derivativeGenerator_integrableOn_compact M ⟨CG, hG⟩ M.closedUnitBall_isCompact)]
+      (integrableOn_derivativeGenerator_compact M ⟨CG, hG⟩ M.isCompact_closedUnitBall)]
   exact NullLagrangian.integral_maximalMinor_eq_of_pointwise_boundary_eq
-    M.p M.continuous_p M.closedUnitBall_isCompact s hF hG htrace
+    M.p M.continuous_p M.isCompact_closedUnitBall s hF hG htrace
 
 /-- A normalized target generator belongs to the source body under a unit-sphere isometry. -/
 theorem normalizedGenerator_mem_of_sphereIsometry {m N : ℕ}
@@ -141,13 +141,13 @@ theorem normalizedGenerator_mem_of_sphereIsometry {m N : ℕ}
   -- SR-SOURCE-B72: obtain exactly the public existential's average-membership field.
   obtain ⟨f, hf, htrace, _hderiv, _hint, hmem⟩ :=
     exists_extension_with_derivativeAverage_mem MX g
-      (coordinateBoundaryData_modelLipschitz Δ A hA)
+      (norm_coordinateBoundaryData_sub_le_seminorm_sub Δ A hA)
   have hfl : LipschitzWith ⟨MX.upper, MX.upper_pos.le⟩ f := by
     refine LipschitzWith.of_dist_le_mul ?_
     intro x y
     change ‖f x - f y‖ ≤ MX.upper * ‖x - y‖
     exact (hf x y).trans (MX.le_upper (x - y))
-  have hgl := A.lipschitz.comp (radialMap_lipschitz Δ)
+  have hgl := A.lipschitz.comp (lipschitzWith_radialMap Δ)
   have hboundary : ∀ x, MX.p x = 1 → f x = A (radialMap Δ x) := by
     intro x hx
     rw [htrace ⟨x, hx⟩]

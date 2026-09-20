@@ -1,6 +1,21 @@
 # MathlibAnnex
 
-MathlibAnnex is a project-independent, Mathlib-first library of reusable Lean declarations. The 0.3.0 private release candidate includes Project import entries for the Mankiewicz Extension Theorem, Sphere Rigidity, and Rosenberg formalizations. The intended source tag is `v0.3.0`; publication has not occurred. The Lake package is `mathlibAnnex`; its root import is `MathlibAnnex`.
+MathlibAnnex is a project-independent, Mathlib-first library of reusable Lean declarations.
+This tree is the **unbuilt private naming-migration candidate for proposed v0.4.0**.
+It integrates the preserved mathematical source for Mankiewicz, Sphere Rigidity,
+Rosenberg, Naimark and Pure State Homogeneity with reviewed naming changes.
+No new source admission, hosted qualification, public source release, LFH release,
+Catalog selection or website publication is asserted by this candidate.
+The proposed version is an internal candidate label; no tag has been created.
+
+The existing public releases and their exact historical source/LFH bindings remain
+unchanged. The latest public source observed on 20 September 2026 was v0.3.0;
+this is an observation, not a moving `latest` guarantee. Do not rewrite or delete
+old tags/releases to deploy this naming migration. Keep public Git ancestry and
+publish a separately authorized successor after exact new-source qualification.
+
+The Lake package is `mathlibAnnex`; its root import is `MathlibAnnex`.
+See [Naming migration](docs/naming-migration-v0.4.0.md) for scope and boundaries.
 
 ## Mankiewicz source entry
 

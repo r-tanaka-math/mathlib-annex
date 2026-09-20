@@ -122,12 +122,12 @@ theorem denseRange_atomicOrbit_of_irreducible
     intro a
     change P.comp (ρ a) = (ρ a).comp P
     exact Submodule.Reduces.starProjection_commute
-      (cyclicSubspace_isReducing ρ x a)
+      (isReducing_cyclicSubspace ρ x a)
   have hblocks (i j : I) : ∃ c : ℂ,
       atomicBlock P i j = algebraMap ℂ (H →L[ℂ] H) c := by
     apply eq_algebraMap_of_irreducible π hπ
     intro a
-    exact atomicBlock_intertwines_of_inCommutant
+    exact intertwines_atomicBlock_of_inCommutant
       (fun _ : I => π) P hPcomm i j a
   choose c hc using hblocks
   have hxsum : x = ∑ i : I, coordinateEmbedding i (ξ i) := by
@@ -231,12 +231,12 @@ theorem diagonal_apply_mem_cyclicSubspace_of_irreducible
     intro a
     change P.comp (ρ a) = (ρ a).comp P
     exact Submodule.Reduces.starProjection_commute
-      (cyclicSubspace_isReducing ρ x a)
+      (isReducing_cyclicSubspace ρ x a)
   have hblocks (i j : I) : ∃ c : ℂ,
       atomicBlock P i j = algebraMap ℂ (H →L[ℂ] H) c := by
     apply eq_algebraMap_of_irreducible π hπ
     intro a
-    exact atomicBlock_intertwines_of_inCommutant
+    exact intertwines_atomicBlock_of_inCommutant
       (fun _ : I => π) P hPcomm i j a
   choose c hc using hblocks
   have hsum (y : HilbertSum (fun _ : I => H)) :

@@ -34,11 +34,11 @@ private theorem radialMap_model_dist {n : ℕ}
     {MX MY : EquivalentSeminorm (Fin n → ℝ)}
     (Δ : sphere (0 : Space MX) 1 ≃ᵢ sphere (0 : Space MY) 1) (x y : Fin n → ℝ) :
     MY.p (radialMap Δ x - radialMap Δ y) ≤ 3 * MX.p (x - y) := by
-  have h := (radialExtension_lipschitz Δ).dist_le_mul
+  have h := (lipschitzWith_radialExtension Δ).dist_le_mul
     (show Space MX from x) (show Space MX from y)
   simpa only [dist_space_eq, NNReal.coe_ofNat] using h
 
-private theorem radialMap_lipschitz {n : ℕ}
+private theorem lipschitzWith_radialMap {n : ℕ}
     {MX MY : EquivalentSeminorm (Fin n → ℝ)}
     (Δ : sphere (0 : Space MX) 1 ≃ᵢ sphere (0 : Space MY) 1) :
     LipschitzWith (3 * MX.upper / MY.lower).toNNReal (radialMap Δ) := by
@@ -58,7 +58,7 @@ namespace Internal
 private def modelRadialAntiConstant {n : ℕ} (MX MY : EquivalentSeminorm (Fin n → ℝ)) : ℝ :=
   MX.lower / (3 * MY.upper)
 
-private theorem source_B41 {n : ℕ} (MX MY : EquivalentSeminorm (Fin n → ℝ)) :
+private theorem modelRadialAntiConstant_pos {n : ℕ} (MX MY : EquivalentSeminorm (Fin n → ℝ)) :
     0 < modelRadialAntiConstant MX MY :=
   div_pos MX.lower_pos (mul_pos (by norm_num) MY.upper_pos)
 end Internal
@@ -82,17 +82,17 @@ private theorem radialMap_lower {n : ℕ}
     _ ≤ ‖radialMap Δ x - radialMap Δ y‖ :=
       (div_le_iff₀ hden).2 (by simpa only [mul_comm] using hprod)
 
-private theorem source_B45 {n : ℕ} (M : EquivalentSeminorm (Fin n → ℝ)) :
+private theorem isOpen_seminorm_ball {n : ℕ} (M : EquivalentSeminorm (Fin n → ℝ)) :
     IsOpen (M.p.ball 0 1) := by
   rw [Seminorm.ball_zero_eq]
   exact isOpen_lt M.continuous_p continuous_const
 
-private theorem source_B46 {n : ℕ} (M : EquivalentSeminorm (Fin n → ℝ)) :
+private theorem convex_seminorm_ball {n : ℕ} (M : EquivalentSeminorm (Fin n → ℝ)) :
     Convex ℝ (M.p.ball 0 1) := M.p.convex_ball 0 1
 
-private theorem source_B47 {n : ℕ} (M : EquivalentSeminorm (Fin n → ℝ)) :
+private theorem isConnected_seminorm_ball {n : ℕ} (M : EquivalentSeminorm (Fin n → ℝ)) :
     IsConnected (M.p.ball 0 1) := by
-  refine (source_B46 M).isConnected ?_
+  refine (convex_seminorm_ball M).isConnected ?_
   exact ⟨0, by simp⟩
 
 namespace Internal
@@ -108,24 +108,24 @@ private def modelSphereCopyEquiv {n : ℕ} (M : EquivalentSeminorm (Fin n → �
 
 /-- Under the frozen ModelSphereIso substitution the ordinary sphere isometry
 is already the input; transport is the identity. -/
-private def ModelSphereIso_toSphereIso {n : ℕ}
+private def modelSphereIsoToSphereIso {n : ℕ}
     {MX MY : EquivalentSeminorm (Fin n → ℝ)}
     (Δ : sphere (0 : Space MX) 1 ≃ᵢ sphere (0 : Space MY) 1) :
     sphere (0 : Space MX) 1 ≃ᵢ sphere (0 : Space MY) 1 := Δ
 
-@[simp] private theorem ModelSphereIso_toSphereIso_symm {n : ℕ}
+@[simp] private theorem modelSphereIsoToSphereIso_symm {n : ℕ}
     {MX MY : EquivalentSeminorm (Fin n → ℝ)}
     (Δ : sphere (0 : Space MX) 1 ≃ᵢ sphere (0 : Space MY) 1) :
-    ModelSphereIso_toSphereIso Δ.symm = (ModelSphereIso_toSphereIso Δ).symm := rfl
+    modelSphereIsoToSphereIso Δ.symm = (modelSphereIsoToSphereIso Δ).symm := rfl
 
-private theorem modelRadialReferenceAntilipschitz {n : ℕ}
+private theorem antilipschitzWith_radialMap {n : ℕ}
     {MX MY : EquivalentSeminorm (Fin n → ℝ)}
     (Δ : sphere (0 : Space MX) 1 ≃ᵢ sphere (0 : Space MY) 1) :
     AntilipschitzWith (modelRadialAntiConstant MX MY).toNNReal⁻¹ (radialMap Δ) := by
   refine AntilipschitzWith.of_le_mul_dist ?_
   intro x y
   have h := radialMap_lower Δ x y
-  have hc := source_B41 MX MY
+  have hc := modelRadialAntiConstant_pos MX MY
   have h' : ‖x - y‖ ≤ (modelRadialAntiConstant MX MY)⁻¹ *
       ‖radialMap Δ x - radialMap Δ y‖ := by
     rw [inv_mul_eq_div]
@@ -152,7 +152,7 @@ theorem radialExtension_image_ball {n : ℕ}
     · simpa only [mem_setOf_eq, radialMap_p] using hy
     · exact radialMap_leftInverse Δ.symm y
 
-private theorem source_B43 {n : ℕ} (M : EquivalentSeminorm (Fin n → ℝ)) :
+private theorem setOf_seminorm_lt_one_eq_ball {n : ℕ} (M : EquivalentSeminorm (Fin n → ℝ)) :
     {x | M.p x < 1} = M.p.ball 0 1 := (Seminorm.ball_zero_eq M.p).symm
 
 end MathlibAnnex.Sphere

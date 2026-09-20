@@ -39,15 +39,15 @@ def middle (D : LocalBallData U x) : Set E := closedBall x (2 * D.radius)
 @[simp] theorem center_mem_inner (D : LocalBallData U x) : x ∈ D.inner := by
   exact mem_ball_self D.radius_pos
 
- theorem inner_isOpen (D : LocalBallData U x) : IsOpen D.inner := isOpen_ball
+ theorem isOpen_inner (D : LocalBallData U x) : IsOpen D.inner := isOpen_ball
 
  theorem inner_nonempty (D : LocalBallData U x) : D.inner.Nonempty :=
   ⟨x, D.center_mem_inner⟩
 
- theorem carrier_isCompact (D : LocalBallData U x) : IsCompact D.carrier :=
+ theorem isCompact_carrier (D : LocalBallData U x) : IsCompact D.carrier :=
   isCompact_closedBall _ _
 
- theorem carrier_measurable (D : LocalBallData U x) : MeasurableSet D.carrier :=
+ theorem measurableSet_carrier (D : LocalBallData U x) : MeasurableSet D.carrier :=
   measurableSet_closedBall
 
  theorem carrier_subset (D : LocalBallData U x) : D.carrier ⊆ U :=
@@ -86,7 +86,7 @@ theorem translated_closedBall_subset_middle (D : LocalBallData U x)
 end LocalBallData
 
 /-- Every point of an open set has a quantitative local ball. -/
-theorem exists_localBallData {U : Set E}
+theorem nonempty_localBallData {U : Set E}
     (hU : IsOpen U) {x : E} (hx : x ∈ U) :
     Nonempty (LocalBallData U x) := by
 
@@ -117,23 +117,23 @@ theorem integrableOn_localBallCarrier {U : Set E}
     {u : E → ℝ} (hu : LocallyIntegrableOn u U μ)
     {x : E} (D : LocalBallData U x) :
     IntegrableOn u D.carrier μ := by
-  exact hu.integrableOn_compact_subset D.carrier_subset D.carrier_isCompact
+  exact hu.integrableOn_compact_subset D.carrier_subset D.isCompact_carrier
 
 /-- The compact localization is globally integrable. -/
-theorem compactLocalization_integrable {U : Set E}
+theorem integrable_compactLocalization {U : Set E}
     {u : E → ℝ} (hu : LocallyIntegrableOn u U μ)
     {x : E} (D : LocalBallData U x) :
     Integrable (compactLocalization D.carrier u) μ := by
 
-  rw [compactLocalization, integrable_indicator_iff D.carrier_measurable]
+  rw [compactLocalization, integrable_indicator_iff D.measurableSet_carrier]
   exact integrableOn_localBallCarrier hu D
 
 /-- Hence the compact localization is globally locally integrable. -/
-theorem compactLocalization_locallyIntegrable {U : Set E}
+theorem locallyIntegrable_compactLocalization {U : Set E}
     {u : E → ℝ} (hu : LocallyIntegrableOn u U μ)
     {x : E} (D : LocalBallData U x) :
     LocallyIntegrable (compactLocalization D.carrier u) μ :=
-  (compactLocalization_integrable hu D).locallyIntegrable
+  (integrable_compactLocalization hu D).locallyIntegrable
 
 /-- On the inner ball, compact localization does not change the function. -/
 theorem compactLocalization_eq_ae_inner {U : Set E}
@@ -178,7 +178,7 @@ theorem shrinkingBump_rOut_le_half (R : ℝ) (hR : 0 < R) (k : ℕ) :
   exact div_le_div_of_nonneg_left hR.le (by positivity) hk
 
 /-- Outer radii tend to zero. -/
-theorem shrinkingBump_rOut_tendsto_zero (R : ℝ) (hR : 0 < R) :
+theorem tendsto_shrinkingBump_rOut_zero (R : ℝ) (hR : 0 < R) :
     Tendsto (fun k : ℕ => (shrinkingBump (E := E) R hR k).rOut)
       atTop (𝓝 0) := by
 
@@ -199,14 +199,14 @@ noncomputable def localMollification (R : ℝ) (hR : 0 < R)
 
 /-- The controlled mollifications converge a.e. to every globally locally
 integrable scalar function. -/
-theorem localMollification_tendsto_ae (R : ℝ) (hR : 0 < R)
+theorem ae_tendsto_localMollification (R : ℝ) (hR : 0 < R)
     {v : E → ℝ} (hv : LocallyIntegrable v μ) :
     ∀ᵐ y ∂μ,
       Tendsto (fun k : ℕ => localMollification (μ := μ) R hR v k y)
         atTop (𝓝 (v y)) := by
 
   exact ContDiffBump.ae_convolution_tendsto_right_of_locallyIntegrable
-    (shrinkingBump_rOut_tendsto_zero (E := E) R hR)
+    (tendsto_shrinkingBump_rOut_zero (E := E) R hR)
     (Eventually.of_forall fun k => shrinkingBump_ratio (E := E) R hR k)
     hv
 
@@ -363,7 +363,7 @@ theorem localMollification_fderiv_apply_eq_zero
       (localMollification (μ := μ) D.radius D.radius_pos
         (compactLocalization D.carrier u) k) y (e) = 0 := by
   rw [localMollification_fderiv_apply D.radius D.radius_pos
-    (compactLocalization_locallyIntegrable hu D) k y e]
+    (locallyIntegrable_compactLocalization hu D) k y e]
   have hweak0 := weakIntegral_eq_localized_bumpIntegral hU hweak D hy k e
   simp_rw [divergence_translatedBumpField] at hweak0
   have hneg : -(∫ z, compactLocalization D.carrier u z *
@@ -385,7 +385,7 @@ theorem localMollification_fderiv_eq_zero
   exact localMollification_fderiv_apply_eq_zero hU hu hweak D hy k e
 
 /-- The local mollification is smooth. -/
-theorem localMollification_contDiff
+theorem contDiff_localMollification
     {U : Set E} {u : E → ℝ}
     (hu : LocallyIntegrableOn u U μ)
     {x : E} (D : LocalBallData U x) (k : ℕ) :
@@ -397,7 +397,7 @@ theorem localMollification_contDiff
     |>.contDiff_convolution_left (lsmul ℝ ℝ)
       ((shrinkingBump (E := E) D.radius D.radius_pos k).contDiff_normed
         (μ := μ) (n := (⊤ : ℕ∞)))
-      (compactLocalization_locallyIntegrable hu D)
+      (locallyIntegrable_compactLocalization hu D)
 
 /-- Each mollification is pointwise constant on the connected inner ball. -/
 theorem exists_localMollification_constant
@@ -409,7 +409,7 @@ theorem exists_localMollification_constant
     ∃ c : ℝ, ∀ y ∈ D.inner,
       localMollification (μ := μ) D.radius D.radius_pos
         (compactLocalization D.carrier u) k y = c := by
-  have hsmooth := localMollification_contDiff hu D k
+  have hsmooth := contDiff_localMollification hu D k
   exact D.inner_isOpen.exists_is_const_of_fderiv_eq_zero
     (convex_ball x D.radius |>.isPreconnected)
     (hsmooth.differentiable (by simp)).differentiableOn
@@ -431,8 +431,8 @@ theorem exists_inner_convergencePoint {U : Set E}
         (fun k : ℕ => localMollification (μ := μ) D.radius D.radius_pos
           (compactLocalization D.carrier u) k y₀)
         atTop (𝓝 (compactLocalization D.carrier u y₀)) := by
-  have hconv := localMollification_tendsto_ae D.radius D.radius_pos
-    (compactLocalization_locallyIntegrable hu D)
+  have hconv := ae_tendsto_localMollification D.radius D.radius_pos
+    (locallyIntegrable_compactLocalization hu D)
   have hconvInner : ∀ᵐ y ∂μ.restrict D.inner,
       Tendsto
         (fun k : ℕ => localMollification (μ := μ) D.radius D.radius_pos
@@ -476,8 +476,8 @@ theorem compactLocalization_aeConstant_inner
       (compactLocalization D.carrier u) D.inner c := by
   rcases exists_inner_convergencePoint hu D with ⟨y₀, hy₀, hconv₀⟩
   refine ⟨compactLocalization D.carrier u y₀, ?_⟩
-  have hconv := localMollification_tendsto_ae D.radius D.radius_pos
-    (compactLocalization_locallyIntegrable hu D)
+  have hconv := ae_tendsto_localMollification D.radius D.radius_pos
+    (locallyIntegrable_compactLocalization hu D)
   have hconvInner : ∀ᵐ y ∂μ.restrict D.inner,
       Tendsto
         (fun k : ℕ => localMollification (μ := μ) D.radius D.radius_pos
@@ -514,18 +514,18 @@ theorem exists_aeConstant_inner
 
 /-- Every point has an open neighborhood on which the function is a.e.
 constant. -/
-theorem exists_localAEConstantAt
+theorem nonempty_localAEConstantAt
     {U : Set E} (hU : IsOpen U)
     {u : E → ℝ}
     (hu : LocallyIntegrableOn u U μ)
     (hweak : WeakDivergenceZero μ U u)
     {x : E} (hx : x ∈ U) :
     Nonempty (LocalAEConstantAt μ U u x) := by
-  rcases exists_localBallData hU hx with ⟨D⟩
+  rcases nonempty_localBallData hU hx with ⟨D⟩
   rcases exists_aeConstant_inner hU hu hweak D with ⟨c, hc⟩
   refine ⟨{
     neighborhood := D.inner
-    neighborhood_open := D.inner_isOpen
+    isOpen_neighborhood := D.isOpen_inner
     mem_neighborhood := D.center_mem_inner
     neighborhood_subset := D.inner_subset_carrier.trans D.carrier_subset
     constant := c
