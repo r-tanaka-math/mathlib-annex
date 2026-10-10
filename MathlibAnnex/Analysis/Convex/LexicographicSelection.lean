@@ -1,4 +1,9 @@
-import Mathlib
+import Mathlib.Analysis.Convex.Combination
+import Mathlib.Topology.Sets.Compacts
+import Mathlib.Analysis.Normed.Module.FiniteDimension
+import Mathlib.Topology.Order.Compact
+import Mathlib.Analysis.InnerProductSpace.Basic
+import Mathlib.AlgebraicTopology.SimplexCategory.Basic
 
 /-!
 # Lexicographic selection from compact generators

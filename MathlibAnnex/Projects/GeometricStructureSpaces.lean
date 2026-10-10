@@ -1,0 +1,14 @@
+/- Proposed GSS facade: imports only; locally parse/build before adoption. -/
+import MathlibAnnex.Analysis.CStarAlgebra.FacialStructure.NormOneTranslate
+import MathlibAnnex.Analysis.CStarAlgebra.GeometricStructure.BoundedOperatorModelCharacterization
+import MathlibAnnex.Analysis.CStarAlgebra.GeometricStructure.ElementaryCharacterization
+import MathlibAnnex.Analysis.CStarAlgebra.GeometricStructure.ElementaryFiniteDimensionalRigidity
+import MathlibAnnex.Analysis.CStarAlgebra.GeometricStructure.SubhomogeneousCharacterization
+import MathlibAnnex.Analysis.InnerProductSpace.ClosedOperatorIdealClassification
+import MathlibAnnex.Analysis.Normed.GeometricStructure.L1ComplexNontransitive
+import MathlibAnnex.Analysis.Normed.GeometricStructure.L1ComplexSpectrum
+import MathlibAnnex.Analysis.Normed.GeometricStructure.L1NonTopological
+import MathlibAnnex.Analysis.Normed.GeometricStructure.L1RealSpectrum
+import MathlibAnnex.Analysis.Normed.GeometricStructure.SmoothSpectrum
+import MathlibAnnex.Topology.ClosureSpace.TopCatEquivalence
+import MathlibAnnex.Topology.ClosureSpace.TransformIso

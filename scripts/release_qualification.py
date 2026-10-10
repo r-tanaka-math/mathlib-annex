@@ -12,7 +12,10 @@ CHECKS=('identity','build','downstream_import','project_entry_import','sphere_ri
 ALLOW=['propext','Classical.choice','Quot.sound']
 def digest(data):return hashlib.sha256(data).hexdigest()
 def write(path,value):path.write_text(json.dumps(value,sort_keys=True,indent=2)+'\n',encoding='utf-8')
-def run(args):return subprocess.run(args,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
+def run(args):
+    if args[:3]==['lake','env','lean'] and '-j' not in args:
+        args=args[:3]+['-j','1','-M','4096']+args[3:]
+    return subprocess.run(args,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
 def require(ok,message):
     if not ok:raise ValueError(message)
 def outcome(value):return {'SUCCESS':'PASS','FAILURE':'FAIL','success':'PASS','failure':'FAIL','cancelled':'CANCELLED','skipped':'NOT_RUN','':'NOT_RUN'}.get(value,'NOT_RUN')

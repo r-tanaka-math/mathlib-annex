@@ -1,77 +1,65 @@
 # MathlibAnnex
 
 MathlibAnnex is a project-independent, Mathlib-first library of reusable Lean declarations.
-This tree is the **unbuilt private naming-migration candidate for proposed v0.4.0**.
-It integrates the preserved mathematical source for Mankiewicz, Sphere Rigidity,
-Rosenberg, Naimark and Pure State Homogeneity with reviewed naming changes.
-No new source admission, hosted qualification, public source release, LFH release,
-Catalog selection or website publication is asserted by this candidate.
-The proposed version is an internal candidate label; no tag has been created.
-
-The existing public releases and their exact historical source/LFH bindings remain
-unchanged. The latest public source observed on 20 September 2026 was v0.3.0;
-this is an observation, not a moving `latest` guarantee. Do not rewrite or delete
-old tags/releases to deploy this naming migration. Keep public Git ancestry and
-publish a separately authorized successor after exact new-source qualification.
-
-The Lake package is `mathlibAnnex`; its root import is `MathlibAnnex`.
-See [Naming migration](docs/naming-migration-v0.4.0.md) for scope and boundaries.
-
-## Mankiewicz source entry
-
-The mathematical scope covers affine-isometry extension on open connected domains, an ambient-interior convex-set corollary, and positive-radius ball corollaries over real normed spaces. Finite dimensionality and completeness are not added. The whole-space Mazur–Ulam theorem remains provided by Mathlib.
+**v0.5.0 is a source-only Geometric Structure Spaces (GSS) release.** It adds 328 GSS
+library modules and an imports-only Project entry, while retaining the v0.4.0 library
+and its five Project entries. The complete library contains 732 modules and six
+Project facades; the root is `MathlibAnnex` and the Lake package is `mathlibAnnex`.
 
 ```lean
-import MathlibAnnex.Projects.Mankiewicz
-#check MathlibAnnex.IsometryEquiv.existsUnique_affineExtension
+import MathlibAnnex.Projects.GeometricStructureSpaces
 ```
 
-The Project entry contains only comments and imports. It introduces no declaration, instance, notation, alias or copied proof. Canonical declarations remain in mathematically organized modules. The root `MathlibAnnex` import remains available. [Root import example](examples/Import.lean) and [Project import example](examples/ImportMankiewicz.lean) demonstrate both entry points.
+The GSS facade has 13 direct roots and resolves to 309 GSS modules plus 57 existing
+Annex providers. `import MathlibAnnex` covers all 328 GSS modules, including the
+19 outside that facade closure. Facades contain comments and imports only; they
+introduce no declarations, aliases, instances or copied proofs.
 
-The [Project Source Manifest](docs/projects/mankiewicz.json) records entry bytes, direct roots, the resolved MathlibAnnex source closure, dependency identities and compiled-axiom policy. It binds source content without referring to the Git commit or tree that contains the manifest. Actual immutable release identities and the exact successful qualification receipt belong to the external publication record described in [Verification](VERIFICATION.md).
+The six Project source entries are:
 
-## Rosenberg source entry
+| Project | Import | Source manifest |
+| --- | --- | --- |
+| Geometric Structure Spaces | `MathlibAnnex.Projects.GeometricStructureSpaces` | [GSS](docs/projects/geometric-structure-spaces.json) |
+| Mankiewicz | `MathlibAnnex.Projects.Mankiewicz` | [Mankiewicz](docs/projects/mankiewicz.json) |
+| Sphere Rigidity | `MathlibAnnex.Projects.SphereRigidity` | [Sphere Rigidity](docs/projects/sphere-rigidity.json) |
+| Rosenberg | `MathlibAnnex.Projects.Rosenberg` | [Rosenberg](docs/projects/rosenberg.json) |
+| Naimark | `MathlibAnnex.Projects.Naimark` | [Naimark](docs/projects/naimark.json) |
+| Pure State Homogeneity | `MathlibAnnex.Projects.PureStateHomogeneity` | [Pure State Homogeneity](docs/projects/pure-state-homogeneity.json) |
 
-The candidate adds 60 reusable modules for the Rosenberg theorem route. The source admits genuinely non-unital complex C*-algebras and retains the exact separability, nonzero irreducibility, singleton-equivalence-class, compact-image, and compact-preimage conclusions established by the Lean declarations. The Project facade is navigation only; reusable ownership remains in the library modules.
+## Qualified source and environment
 
-```lean
-import MathlibAnnex.Projects.Rosenberg
-#check MathlibAnnex.Analysis.CStarAlgebra.NonUnitalCStarRepresentation.isCompactOperatorModel_of_singleton
-```
+Hosted run **38063627833, attempt 1** passed all 14 required gates for commit
+`4d4cfc1b2b5a2642a6a90d3fc5c4e6f4f8abdfa4`, tree
+`2df11956be5a3b1c55827c291d74bfc03cd6727c`. The 739 targets comprise 312 verified
+checkpoint restorations and 427 fresh native Linux compilations. The final
+module-origin audit covers 14,281 declarations, including 6,029 GSS declarations,
+and matches all 3,252 public GSS names. Only `propext`, `Classical.choice` and
+`Quot.sound` are allowed axioms.
 
-The [Rosenberg Project Source Manifest](docs/projects/rosenberg.json) binds the two direct roots, exact 60-module closure and import edges, entry bytes, environment pins, parser qualification contract, and external publication boundary. It does not publish Cards or a Project view.
+- Lean: `leanprover/lean4:v4.32.0-rc1`.
+- Mathlib: `360da6fa66c1273b76b6b2d8c5666fd5ac2e3b56`.
+- All nine dependencies: exact committed [lake-manifest.json](lake-manifest.json).
 
-## Reproducible environment
+This public projection preserves all 756 Lean files, dependency pins, executable
+workflow/helpers, module keys and proof evidence from that qualified source.
+Only release documentation and metadata differ. The [v0.5.0 release](docs/releases/v0.5.0.md)
+and [verification record](VERIFICATION.md) explain the external binding to the
+actual public commit, tree, annotated tag and asset hashes.
 
-- Lean toolchain: `leanprover/lean4:v4.32.0-rc1`.
-- Mathlib revision: `360da6fa66c1273b76b6b2d8c5666fd5ac2e3b56`.
-- Dependency lock: the exact committed `lake-manifest.json`.
-
-```text
-lake build MathlibAnnex
-lake env lean examples/Import.lean
-lake env lean examples/ImportMankiewicz.lean
-lake env lean examples/ImportSphereRigidity.lean
-lake env lean examples/ImportRosenberg.lean
-```
-
-The root library build includes all three Project facades. Release qualification requires an exact source identity check, library build, all four independent imports, compiled-axiom audit, LF blob policy and repository cleanliness. The manual qualification workflow produces a machine receipt and raw logs; it performs no deployment. See [Verification](VERIFICATION.md) for the policy and receipt binding.
+Qualification is checkpoint-assisted with normal Lean kernel acceptance and a
+final compiled-axiom audit. Independent single-runner clean qualification is
+`NOT_RUN`; the whole of Mathlib was not rebuilt without caches. This release
+does not certify full-paper semantic correspondence, novelty, LFH Cards or
+website publication. Previous tags and historical records are retained.
 
 ## License and corrections
 
-Original MathlibAnnex Lean source, Project import facades, examples, repository software and ordinary technical documentation are licensed under the [Apache License 2.0](LICENSE). External components retain their own terms; see [Third-party notices](THIRD_PARTY_NOTICES.md). This source license does not cover separately published LFH content, Brief Reports, prior-art notes, website editorial content or private Workbench/LFH technology.
-
-No dependency source, compiled cache or external toolchain is vendored. Canonical library source remains in this library rather than being copied into project-owned research repositories. This is AI-assisted material selected and maintained by Ryotaro Tanaka; no novelty or first-formalization claim is made. Report corrections through the repository issue tracker, identifying an exact source revision as described in [Contributing](CONTRIBUTING.md).
-
-Source qualification, source admission, LFH declaration cards and Project views, document correspondence, and website publication have separate records. A build result alone does not establish those other states.
-
-## Sphere Rigidity source in v0.2.0
-
-The v0.2.0 source tree adds the coherent 48-module Sphere Rigidity delta and the comments/imports-only `MathlibAnnex.Projects.SphereRigidity` entry. Its single direct root is `MathlibAnnex.Analysis.Normed.Sphere.MetricRigidity`; exact closure bytes and environment pins are recorded in [the Project Source Manifest](docs/projects/sphere-rigidity.json). The intended source tag is `v0.2.0`. This in-tree description does not assert that the tag or public release exists; actual public commit, tree, tag and qualification identities belong to the external publication record.
-
-```lean
-import MathlibAnnex.Projects.SphereRigidity
-#check MathlibAnnex.Sphere.nonempty_isometryEquiv_iff_nonempty_linearIsometryEquiv_of_finiteDimensional
-```
-
-Formal source admission is separate from Declaration Cards, the Research Companion, document correspondence, LFH publication and website publication. Cards are `NOT_STARTED`; the Research Companion / Progressive Project is `IN_PREPARATION`. Document correspondence is a separate, not-yet-completed axis.
+Original Lean source, facades, examples, repository software and ordinary technical
+documentation use the [Apache License 2.0](LICENSE). External components retain
+their terms; see [Third-party notices](THIRD_PARTY_NOTICES.md). This license does
+not cover separately published LFH content, research documents, website editorial
+content or private Workbench/LFH technology. No dependency cache or toolchain is
+vendored. This AI-assisted source is selected and maintained by Ryotaro Tanaka;
+no novelty or first-formalization claim is made. See [Contributing](CONTRIBUTING.md)
+for corrections against exact revisions and [the historical naming migration](docs/naming-migration-v0.4.0.md)
+for changes introduced before this release.

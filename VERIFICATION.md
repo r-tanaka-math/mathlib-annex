@@ -1,3 +1,84 @@
+# MathlibAnnex v0.5.0 verification
+
+## Current accepted qualification
+
+Run `38063627833`, attempt `1`, qualified commit
+`4d4cfc1b2b5a2642a6a90d3fc5c4e6f4f8abdfa4` and tree
+`2df11956be5a3b1c55827c291d74bfc03cd6727c` on Linux. All 14 mandatory gates passed:
+
+- `build`: PASS.
+- `cleanliness`: PASS.
+- `compiled_axiom_audit`: PASS.
+- `complete_source_coverage`: PASS.
+- `downstream_import`: PASS.
+- `gss_project_entry_import`: PASS.
+- `gss_public_census`: PASS.
+- `identity`: PASS.
+- `naimark_entry_import`: PASS.
+- `project_entry_import`: PASS.
+- `project_entry_parser`: PASS.
+- `pure_state_homogeneity_entry_import`: PASS.
+- `rosenberg_entry_import`: PASS.
+- `sphere_rigidity_entry_import`: PASS.
+
+All 739 source targets are accounted for: 312 `CHECKPOINT_RESTORED`, 427 `FRESH`,
+and zero qualification inherited merely from a cache hit. The 732 library modules,
+six imports-only facades and root are covered. Native successful outputs were
+bound to source, compiler, Linux platform, flags, dependency output hashes and
+their original producer run/attempt. Historical intermediate `AXIOM_PENDING`
+receipts are unchanged; the final successful receipt supplies the separate audit.
+The module-origin census records 14,281 declarations (6,029 GSS), checks all
+3,252 public GSS names, and permits only `propext`, `Classical.choice`, `Quot.sound`.
+
+Lean is `leanprover/lean4:v4.32.0-rc1`, Mathlib is
+`360da6fa66c1273b76b6b2d8c5666fd5ac2e3b56`; all nine locked dependencies remain exact.
+The unchanged workflow has ten ordered native stages (base, seven GSS, other,
+final) and a separate lightweight failure-report path. It is manually triggered
+and does not deploy. Ordinary compilations use `-j 1 -M 4096`; the exact plan
+retains the bounded DiscreteCCR and CompactRepresentationRigidity exceptions.
+Resource guards, artifact guards and required gates remain unchanged.
+
+## Metadata-only publication binding
+
+The qualified identity above is not rewritten to the public identity. This bounded
+v0.5.0 publication changes only twelve release documents/metadata files. All 756
+Lean files, pins, workflow/helpers, 739 targets, fourteen gates, module keys and
+type/axiom evidence remain identical. Under the owner's explicit v0.5.0 authority
+and qualification-reuse rule, this metadata-only projection reuses the exact
+formal qualification; it does not require another full Lean build.
+
+The Release assets `PUBLICATION_RECORD.json` and `SOURCE_RELEASE_MANIFEST.json`
+record the new public commit/tree, sole public-main parent, annotated tag, source
+inventory and hashes, and the qualified-to-public mapping. The exact original
+`GITHUB_QUALIFICATION_RECEIPT.json` retains its historical `formal_public_admission=false`,
+`owner_acceptance=false` and `public_deployment=NOT_PERFORMED`: that workflow
+performed no publication. The later owner-authorized source publication is a
+separate act. In-tree manifests bind source bytes; containing Git identities live
+in the external record to avoid self-referential hashes.
+
+The limited public qualification-evidence ZIP supplies the original receipt,
+catalog, gate summary and parser/import evidence. Full original native logs,
+outputs and census are preserved in a private permanent archive, independently
+of Actions expiration, with exact identities in the publication record.
+
+## Explicit limits
+
+Independent single-runner clean qualification: `NOT_RUN`. Full Mathlib rebuild
+without cache: not performed. Full-paper source/exposition semantic review,
+independent leanchecker/nanoda execution, novelty certification, LFH publication
+and website updates are outside this source release. Normal Lean kernel acceptance
+and compiled-axiom audit establish their stated formal checks only.
+
+## Historical preparation contracts (unchanged text)
+
+The following text is the preserved pre-publication record from the qualified R9
+source. Its pending/unbuilt labels, earlier gate counts and unconditional
+metadata-rebuild rule describe those earlier candidate contracts. They are not
+the current v0.5.0 status. The bounded metadata-only exception above supersedes
+that old rebuild rule only for this exact unchanged formal source projection.
+
+---
+
 # Naming-migration qualification status
 
 This v0.4.0 candidate has **not yet passed a Lean build or hosted qualification**.
@@ -57,3 +138,13 @@ That run is prior exact RC evidence, **not** qualification of this final `0.2.0`
 ## Rosenberg v0.3.0 private-candidate boundary
 
 The candidate reuses the exact qualified 60-module Rosenberg source and adds source-release integration, an imports-only facade, manifest, independent import example, and v3 workflow receipt. Local qualification must pass on the exact frozen candidate. Hosted qualification remains pending until the owner manually dispatches the private workflow with the exact returned commit/tree values. No public repository write, tag, Release, Card/Catalog/Project publication, or website change is performed by candidate staging.
+
+## Segmented candidate qualification (receipt v5)
+
+Candidate 0.5.0 retains the eleven existing required checks and adds GSS independent entry import, all 3252 public-name/module matches, and complete source coverage. `docs/qualification/segmented-plan.json` assigns all 739 library/Project/root source modules once in dependency order. A missing, skipped, cancelled, failed, foreign-platform or differently bound stage fails final qualification.
+
+Each job has a 330-minute hard limit and a 300-minute soft deadline measured from pre-setup identity. Native Lean is run sequentially with `-j 1 -M 4096`. Only exact pinned Mathlib dependency cache is eligible; Annex outputs are generated natively in this Linux run. Verified delta artifacts bind each output to source hashes, prior local import output hashes, compiler identity, the containing commit/tree, workflow/helper/plan/lock hashes and run ID/attempt. `.olean.private`, `.olean.server` and `.ir` are preserved when generated, together with the main `.olean` and optional `.ilean`. No Lake success trace is fabricated.
+
+The final stage retains whole-root and all five existing independent Project checks, adds GSS import, validates all six facades with the pinned Lean parser, and checks exact manifest closures. The whole-library module-origin census records types, levels, instances, simp status and dependencies and rejects every axiom outside `propext`, `Classical.choice`, `Quot.sound`. Inspection data is streamed separately from compiler stdout; both are preserved. Failed final checks retain already completed outcomes.
+
+The receipt schema is `docs/qualification/github-release-qualification-receipt-v5-segmented.schema.json`. A successful segmented run qualifies only this mode and exact source identity. Independent single-runner clean qualification and full-paper semantic review are separate NOT_RUN claims. Manual dispatch requires verified included execution/storage budget and an existing stop on additional charges. The workflow uses ordinary GitHub-hosted Linux runners, no scheduled/push trigger and three-day artifact retention. Before upload, measured payload bytes plus a conservative ZIP bound and verified prior reservations must stay within the fixed 1,500,000,000-byte cumulative budget; excess refuses upload. Before downloading prior artifacts, their actual same-run identity and expires_at must provide at least the current job timeout of remaining life. This does not guarantee unlimited queue time. This source document does not assert that any dispatch, receipt, staging save or public release has occurred.

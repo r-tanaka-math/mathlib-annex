@@ -1,4 +1,10 @@
-import Mathlib
+import Mathlib.Analysis.Convex.Caratheodory
+import Mathlib.Analysis.Convex.Topology
+import Mathlib.Analysis.Convex.StdSimplex
+import Mathlib.Tactic.FunProp
+import Mathlib.LinearAlgebra.StdBasis
+import Mathlib.LinearAlgebra.Dimension.StrongRankCondition
+import Mathlib.AlgebraicTopology.SimplexCategory.Basic
 
 /-!
 # Compact convex hulls in finite real coordinate spaces

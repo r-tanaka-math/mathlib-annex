@@ -1,3 +1,29 @@
+# Changelog
+
+## v0.5.0 — GSS source release (2026-10-11)
+
+- Add 328 reusable GSS modules and one imports-only facade; retain all existing
+  v0.4.0 source and five Project entries. Total: 732 libraries, six facades, 739 targets.
+- Publish the exact mathematical source qualified by run 38063627833/attempt 1:
+  all 14 gates PASS, 312 restored plus 427 fresh Linux native targets, 14,281
+  audited declarations, 6,029 GSS declarations and 3,252 public GSS names.
+- Finish twelve release documentation/metadata files without changing Lean,
+  dependencies, workflow/helpers, resource limits, type/universe or axiom evidence.
+  Correct the auxiliary DiscreteCCR bytes/hash entry to the already-qualified source.
+- Bind public identities separately from the original qualified commit/tree and
+  historical receipt. Preserve all previous tags and public ancestry.
+- Independent single-runner clean qualification remains NOT_RUN. Full-paper
+  semantic review, LFH/HP updates and novelty certification are not part of this release.
+
+## Historical candidate entries (preserved)
+
+The entries below retain their original candidate-time wording. Their pending
+labels are historical observations, not the current v0.5.0 qualification status.
+The v0.4.0 public baseline is commit `437e6e46228bbb8e91211ebded349d7a30020e73`;
+its source and five Project contributions remain available in this successor.
+
+---
+
 # Proposed v0.4.0 — naming migration (not released)
 
 Breaking source API naming changes and twelve module-path relocations, with
@@ -57,3 +83,10 @@ and the faithful-separable-representation cardinal upper bound. For the same
 fixed counterexample, the candidate supplies cardinality and norm density
 continuum and a CH iff density-aleph-one existence corollary. These additions
 await exact-tree local and hosted qualification; no public release is performed.
+
+## 0.5.0 private candidate — not published
+
+- Add all 328 GSS libraries and a thin Project facade with 13 direct imports.
+- Preserve the five existing Project entries, root-wide coverage and all locked toolchain/dependency revisions.
+- Prepare nine dependent manual qualification jobs with exact source/output provenance, full declaration/axiom census and unchanged baseline gates.
+- Hosted qualification and public release remain pending.

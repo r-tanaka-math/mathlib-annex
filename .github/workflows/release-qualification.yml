@@ -1,1 +1,2355 @@
-{"jobs":{"qualify":{"defaults":{"run":{"shell":"bash"}},"env":{"LAKE_ARTIFACT_CACHE":"false","LAKE_NO_CACHE":"true","QUALIFICATION_MODE":"HOSTED_CLEAN_ANNEX"},"if":"${{ github.event_name == 'workflow_dispatch' && github.event.repository.private == true }}","name":"Build, import, compiled-axiom audit and evidence","runs-on":"ubuntu-24.04","steps":[{"id":"prepare","name":"Prepare durable runner evidence","run":"set -euo pipefail\nmkdir -p \"$RUNNER_TEMP/release-qualification\"\necho \"QUALIFICATION_DIR=$RUNNER_TEMP/release-qualification\" >> \"$GITHUB_ENV\"\ncat > \"$RUNNER_TEMP/release-qualification-bash-env\" <<'BASH'\nexec > >(tee -a \"$QUALIFICATION_DIR/raw-shell.log\") 2>&1\nBASH\necho \"BASH_ENV=$RUNNER_TEMP/release-qualification-bash-env\" >> \"$GITHUB_ENV\"\n","shell":"bash"},{"id":"checkout","name":"Checkout exact selected private candidate","uses":"actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5","with":{"fetch-depth":1,"persist-credentials":false,"ref":"${{ github.sha }}"}},{"env":{"EXPECTED_COMMIT":"${{ inputs.expected_commit }}","EXPECTED_MATHLIB":"${{ inputs.expected_mathlib }}","EXPECTED_TOOLCHAIN":"${{ inputs.expected_toolchain }}","EXPECTED_TREE":"${{ inputs.expected_tree }}","WORKFLOW_SHA":"${{ github.workflow_sha }}"},"id":"identity","name":"Bind exact source and workflow identities","run":"python3 scripts/release_qualification.py identity"},{"continue-on-error":true,"id":"lean","if":"${{ steps.identity.outcome == 'success' }}","name":"Build MathlibAnnex and audit compiled axioms","timeout-minutes":300,"uses":"leanprover/lean-action@50fcf42d2e460296f1a34b402e990d1b24f8b596","with":{"auto-config":false,"axiom-audit":true,"axiom-audit-allow":"propext,Classical.choice,Quot.sound","axiom-audit-root":"MathlibAnnex","build":true,"build-args":"MathlibAnnex","check-reservoir-eligibility":false,"lean4checker":false,"leanchecker":false,"lint":false,"mk_all-check":false,"nanoda":false,"test":false,"use-github-cache":false,"use-mathlib-cache":true}},{"continue-on-error":true,"id":"downstream","if":"${{ steps.identity.outcome == 'success' && steps.lean.outputs.build-status == 'SUCCESS' }}","name":"Check downstream root import","run":"python3 scripts/release_qualification.py import"},{"continue-on-error":true,"id":"project_entry","if":"${{ steps.identity.outcome == 'success' && steps.lean.outputs.build-status == 'SUCCESS' }}","name":"Check downstream Mankiewicz Project-entry import","run":"python3 scripts/release_qualification.py project-import"},{"continue-on-error":true,"id":"sphere_project_entry","if":"${{ steps.identity.outcome == 'success' && steps.lean.outputs.build-status == 'SUCCESS' }}","name":"Check downstream Sphere Rigidity Project-entry import","run":"python3 scripts/release_qualification.py sphere-project-import"},{"continue-on-error":true,"id":"naimark_project_entry","if":"${{ steps.identity.outcome == 'success' && steps.lean.outputs.build-status == 'SUCCESS' }}","name":"Check Naimark, SEP, density/CH signatures and module-origin axiom census","run":"python3 scripts/release_qualification.py naimark-project-import"},{"continue-on-error":true,"id":"pure_state_homogeneity_project_entry","if":"${{ steps.identity.outcome == 'success' && steps.lean.outputs.build-status == 'SUCCESS' }}","name":"Check Pure State Homogeneity","run":"python3 scripts/release_qualification.py pure-state-homogeneity-project-import"},{"continue-on-error":true,"id":"rosenberg_project_entry","if":"${{ steps.identity.outcome == 'success' && steps.lean.outputs.build-status == 'SUCCESS' }}","name":"Check Rosenberg including nonunital density endpoints","run":"python3 scripts/release_qualification.py rosenberg-project-import"},{"continue-on-error":true,"id":"project_entry_parser","if":"${{ steps.identity.outcome == 'success' && steps.lean.outputs.build-status == 'SUCCESS' }}","name":"Check all Project facades with pinned Lean parser","run":"python3 scripts/release_qualification.py entry-parser"},{"continue-on-error":true,"id":"clean","if":"${{ always() && steps.checkout.outcome == 'success' }}","name":"Check tracked, staged and porcelain cleanliness","run":"python3 scripts/release_qualification.py clean"},{"env":{"AXIOM_STATUS":"${{ steps.lean.outputs.axiom-audit-status }}","BUILD_STATUS":"${{ steps.lean.outputs.build-status }}","CLEAN_OUTCOME":"${{ steps.clean.outcome }}","IDENTITY_OUTCOME":"${{ steps.identity.outcome }}","IMPORT_OUTCOME":"${{ steps.downstream.outcome }}","NAIMARK_PROJECT_IMPORT_OUTCOME":"${{ steps.naimark_project_entry.outcome }}","PROJECT_ENTRY_PARSER_OUTCOME":"${{ steps.project_entry_parser.outcome }}","PROJECT_IMPORT_OUTCOME":"${{ steps.project_entry.outcome }}","PURE_STATE_HOMOGENEITY_PROJECT_IMPORT_OUTCOME":"${{ steps.pure_state_homogeneity_project_entry.outcome }}","ROSENBERG_PROJECT_IMPORT_OUTCOME":"${{ steps.rosenberg_project_entry.outcome }}","SPHERE_PROJECT_IMPORT_OUTCOME":"${{ steps.sphere_project_entry.outcome }}"},"id":"summary","if":"${{ always() }}","name":"Write owner summary and machine receipt","run":"if test -f scripts/release_qualification.py; then\n  python3 scripts/release_qualification.py summary\nelse\n  python3 - <<'PY'\nimport json,os,pathlib\np=pathlib.Path(os.environ['QUALIFICATION_DIR'])\nv={'schema':'mathlibannex.checkout-failure-receipt.v1','qualification':'FAIL','reason':'Checkout or runner helper unavailable','public_deployment':'NOT PERFORMED'}\n(p/'qualification.json').write_text(json.dumps(v,sort_keys=True)+'\\n')\nwith open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f:f.write('# Qualification failed\\n\\nCheckout/helper unavailable. Public deployment: NOT PERFORMED.\\n')\nPY\nfi\n"},{"id":"upload","if":"${{ always() }}","name":"Upload qualification receipt and raw logs","uses":"actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02","with":{"if-no-files-found":"error","name":"release-qualification-${{ github.sha }}-${{ github.run_attempt }}","path":"${{ runner.temp }}/release-qualification/","retention-days":30}},{"id":"require","if":"${{ always() }}","name":"Require every independent check to pass","run":"python3 scripts/release_qualification.py require"}],"timeout-minutes":330}},"name":"Manual release qualification","on":{"workflow_dispatch":{"inputs":{"expected_commit":{"description":"Exact frozen private release commit (40 hex)","required":true,"type":"string"},"expected_mathlib":{"default":"360da6fa66c1273b76b6b2d8c5666fd5ac2e3b56","description":"Exact Mathlib commit","required":true,"type":"string"},"expected_toolchain":{"default":"leanprover/lean4:v4.32.0-rc1","description":"Exact Lean release toolchain","required":true,"type":"string"},"expected_tree":{"description":"Exact frozen private release tree (40 hex)","required":true,"type":"string"}}}},"permissions":{"contents":"read"}}
+{
+  "concurrency": {
+    "cancel-in-progress": false,
+    "group": "gss-${{ github.sha }}"
+  },
+  "jobs": {
+    "base": {
+      "defaults": {
+        "run": {
+          "shell": "bash"
+        }
+      },
+      "env": {
+        "EXPECTED_COMMIT": "${{ inputs.expected_commit }}",
+        "EXPECTED_MATHLIB": "${{ inputs.expected_mathlib }}",
+        "EXPECTED_TOOLCHAIN": "${{ inputs.expected_toolchain }}",
+        "EXPECTED_TREE": "${{ inputs.expected_tree }}",
+        "LAKE_ARTIFACT_CACHE": "false",
+        "LAKE_NO_CACHE": "true",
+        "QUALIFICATION_MODE": "BOOTSTRAP_SCOPED_LINUX",
+        "REPOSITORY_PRIVATE": "${{ github.event.repository.private }}",
+        "STAGE_NAME": "base",
+        "WORKFLOW_SHA": "${{ github.workflow_sha }}"
+      },
+      "if": "${{ github.event_name == 'workflow_dispatch' && github.event.repository.private == true && github.repository_id == '1367564442' }}",
+      "name": "base dependency-scoped native qualification",
+      "runs-on": "ubuntu-24.04",
+      "steps": [
+        {
+          "id": "prepare_paths",
+          "name": "Define runner-local paths before identity checks",
+          "run": "set -euo pipefail\n: \"${RUNNER_TEMP:?RUNNER_TEMP must be provided by GitHub}\"\n: \"${GITHUB_ENV:?GITHUB_ENV must be provided by GitHub}\"\nprintf '%s\\n' \"INCOMING_DIR=$RUNNER_TEMP/gss-incoming\" \"PAYLOAD_DIR=$RUNNER_TEMP/gss-payload\" \"QUALIFICATION_DIR=$RUNNER_TEMP/gss-evidence\" >> \"$GITHUB_ENV\"\nprintf '%s\\n' \"MATHLIB_CACHE_DIR=$RUNNER_TEMP/gss-mathlib-compressed\" >> \"$GITHUB_ENV\"\n",
+          "shell": "bash"
+        },
+        {
+          "id": "checkout",
+          "uses": "actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5",
+          "with": {
+            "fetch-depth": 1,
+            "persist-credentials": false,
+            "ref": "${{ github.sha }}"
+          }
+        },
+        {
+          "id": "identity",
+          "name": "Bind exact candidate before setup",
+          "run": "python3 -B scripts/segmented_qualification.py identity"
+        },
+        {
+          "id": "before_setup",
+          "run": "python3 -B scripts/segmented_qualification.py capacity before_setup\npython3 -B scripts/segmented_qualification.py setup-admission"
+        },
+        {
+          "id": "lean_setup",
+          "uses": "leanprover/lean-action@50fcf42d2e460296f1a34b402e990d1b24f8b596",
+          "with": {
+            "auto-config": false,
+            "axiom-audit": false,
+            "build": false,
+            "check-reservoir-eligibility": false,
+            "lean4checker": false,
+            "leanchecker": false,
+            "lint": false,
+            "mk_all-check": false,
+            "nanoda": false,
+            "test": false,
+            "use-github-cache": false,
+            "use-mathlib-cache": false
+          }
+        },
+        {
+          "env": {
+            "SETUP_OUTCOME": "${{ steps.lean_setup.outcome }}"
+          },
+          "id": "after_toolchain",
+          "if": "${{ always() && steps.identity.outcome == 'success' }}",
+          "run": "python3 -B scripts/segmented_qualification.py capacity after_toolchain_setup"
+        },
+        {
+          "id": "cache_get",
+          "run": "python3 -B scripts/segmented_qualification.py cache-get"
+        },
+        {
+          "env": {
+            "CACHE_OUTCOME": "${{ steps.cache_get.outcome }}"
+          },
+          "id": "after_cache",
+          "if": "${{ always() && steps.identity.outcome == 'success' }}",
+          "run": "python3 -B scripts/segmented_qualification.py capacity after_cache_expansion"
+        },
+        {
+          "id": "cleanup_compressed",
+          "run": "python3 -B scripts/segmented_qualification.py cleanup-compressed"
+        },
+        {
+          "id": "native_admission",
+          "run": "python3 -B scripts/segmented_qualification.py native-admission"
+        },
+        {
+          "continue-on-error": true,
+          "env": {
+            "GH_TOKEN": "${{ github.token }}"
+          },
+          "id": "compile",
+          "name": "Sequential native Lean: base",
+          "run": "python3 -B scripts/segmented_qualification.py stage base",
+          "timeout-minutes": 300
+        },
+        {
+          "env": {
+            "CACHE_OUTCOME": "${{ steps.cache_get.outcome }}",
+            "COMPILE_OUTCOME": "${{ steps.compile.outcome }}",
+            "DOWNLOAD_OUTCOME": "",
+            "FINAL_CHECKS_OUTCOME": "",
+            "IDENTITY_OUTCOME": "${{ steps.identity.outcome }}",
+            "RESOURCE_OUTCOME": "${{ steps.native_admission.outcome }}",
+            "SETUP_OUTCOME": "${{ steps.lean_setup.outcome }}"
+          },
+          "id": "collect",
+          "if": "${{ always() }}",
+          "run": "python3 -B scripts/segmented_qualification.py collect"
+        },
+        {
+          "id": "upload_guard",
+          "if": "${{ always() && steps.collect.outcome == 'success' }}",
+          "name": "Measure actual payload and cumulative storage bound",
+          "run": "python3 -B scripts/segmented_qualification.py upload-guard"
+        },
+        {
+          "id": "upload_evidence",
+          "if": "${{ always() && steps.upload_guard.outcome == 'success' }}",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "compression-level": 6,
+            "if-no-files-found": "error",
+            "include-hidden-files": true,
+            "name": "gss-base-evidence-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "${{ runner.temp }}/gss-job-evidence",
+            "retention-days": 3
+          }
+        },
+        {
+          "id": "upload_b0",
+          "if": "${{ always() && steps.upload_guard.outcome == 'success' && contains(fromJSON(steps.upload_guard.outputs.bundles || '[]'), 'base-b00') }}",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "compression-level": 6,
+            "if-no-files-found": "error",
+            "include-hidden-files": true,
+            "name": "gss-base-b00-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "${{ runner.temp }}/gss-bundles/base-b00",
+            "retention-days": 3
+          }
+        },
+        {
+          "id": "upload_b1",
+          "if": "${{ always() && steps.upload_guard.outcome == 'success' && contains(fromJSON(steps.upload_guard.outputs.bundles || '[]'), 'base-b01') }}",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "compression-level": 6,
+            "if-no-files-found": "error",
+            "include-hidden-files": true,
+            "name": "gss-base-b01-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "${{ runner.temp }}/gss-bundles/base-b01",
+            "retention-days": 3
+          }
+        },
+        {
+          "id": "upload",
+          "if": "${{ always() && steps.upload_guard.outcome == 'success' }}",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "compression-level": 6,
+            "if-no-files-found": "error",
+            "include-hidden-files": true,
+            "name": "gss-base-receipt-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "${{ runner.temp }}/gss-payload",
+            "retention-days": 3
+          }
+        },
+        {
+          "env": {
+            "UPLOAD_OUTCOME": "${{ steps.upload_evidence.outcome == 'success' && steps.upload_b0.outcome == 'success' && steps.upload_b1.outcome == 'success' && steps.upload.outcome == 'success' && 'success' || 'failure' }}"
+          },
+          "id": "require",
+          "if": "${{ always() }}",
+          "run": "python3 -B scripts/segmented_qualification.py require-stage"
+        },
+        {
+          "id": "diagnostic",
+          "if": "${{ always() && steps.identity.outcome == 'success' }}",
+          "name": "Bounded diagnostics independent of build reserve",
+          "run": "python3 -B scripts/segmented_qualification.py diagnostic"
+        },
+        {
+          "id": "diagnostic_upload",
+          "if": "${{ always() && steps.diagnostic.outcome == 'success' }}",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "compression-level": 6,
+            "if-no-files-found": "error",
+            "name": "gss-base-diagnostic-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "${{ runner.temp }}/gss-diagnostic",
+            "retention-days": 3
+          }
+        }
+      ],
+      "timeout-minutes": 330
+    },
+    "failure_report": {
+      "defaults": {
+        "run": {
+          "shell": "bash"
+        }
+      },
+      "env": {
+        "EXPECTED_COMMIT": "${{ inputs.expected_commit }}",
+        "EXPECTED_MATHLIB": "${{ inputs.expected_mathlib }}",
+        "EXPECTED_TOOLCHAIN": "${{ inputs.expected_toolchain }}",
+        "EXPECTED_TREE": "${{ inputs.expected_tree }}",
+        "LAKE_ARTIFACT_CACHE": "false",
+        "LAKE_NO_CACHE": "true",
+        "NEEDS_JSON": "${{ toJSON(needs) }}",
+        "QUALIFICATION_MODE": "BOOTSTRAP_SCOPED_LINUX",
+        "REPOSITORY_PRIVATE": "${{ github.event.repository.private }}",
+        "STAGE_NAME": "failure-report",
+        "WORKFLOW_SHA": "${{ github.workflow_sha }}"
+      },
+      "if": "${{ always() && github.event_name == 'workflow_dispatch' && github.event.repository.private == true && github.repository_id == '1367564442' && (contains(needs.*.result, 'failure') || contains(needs.*.result, 'skipped') || contains(needs.*.result, 'cancelled')) }}",
+      "name": "Bounded failure report (no Lean setup)",
+      "needs": [
+        "base",
+        "gss_01",
+        "gss_02",
+        "gss_03",
+        "gss_04",
+        "gss_05",
+        "gss_06",
+        "gss_07",
+        "other",
+        "final"
+      ],
+      "runs-on": "ubuntu-24.04",
+      "steps": [
+        {
+          "id": "prepare_paths",
+          "name": "Define runner-local paths before identity checks",
+          "run": "set -euo pipefail\n: \"${RUNNER_TEMP:?RUNNER_TEMP must be provided by GitHub}\"\n: \"${GITHUB_ENV:?GITHUB_ENV must be provided by GitHub}\"\nprintf '%s\\n' \"INCOMING_DIR=$RUNNER_TEMP/gss-incoming\" \"PAYLOAD_DIR=$RUNNER_TEMP/gss-payload\" \"QUALIFICATION_DIR=$RUNNER_TEMP/gss-evidence\" >> \"$GITHUB_ENV\"\nprintf '%s\\n' \"MATHLIB_CACHE_DIR=$RUNNER_TEMP/gss-mathlib-compressed\" >> \"$GITHUB_ENV\"\n",
+          "shell": "bash"
+        },
+        {
+          "id": "checkout",
+          "uses": "actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5",
+          "with": {
+            "fetch-depth": 1,
+            "persist-credentials": false,
+            "ref": "${{ github.sha }}"
+          }
+        },
+        {
+          "id": "report",
+          "name": "Bounded failure report without Lean or prior artifacts",
+          "run": "python3 -B scripts/segmented_qualification.py failure-report"
+        },
+        {
+          "id": "upload",
+          "if": "${{ always() && steps.report.outcome == 'success' }}",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "compression-level": 6,
+            "if-no-files-found": "error",
+            "include-hidden-files": true,
+            "name": "gss-failure-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "${{ runner.temp }}/gss-payload",
+            "retention-days": 3
+          }
+        },
+        {
+          "id": "fail",
+          "if": "${{ always() }}",
+          "run": "echo \"Required qualification job failed; failure reporting never converts this to PASS.\"\nexit 1"
+        }
+      ],
+      "timeout-minutes": 5
+    },
+    "final": {
+      "defaults": {
+        "run": {
+          "shell": "bash"
+        }
+      },
+      "env": {
+        "EXPECTED_COMMIT": "${{ inputs.expected_commit }}",
+        "EXPECTED_MATHLIB": "${{ inputs.expected_mathlib }}",
+        "EXPECTED_TOOLCHAIN": "${{ inputs.expected_toolchain }}",
+        "EXPECTED_TREE": "${{ inputs.expected_tree }}",
+        "LAKE_ARTIFACT_CACHE": "false",
+        "LAKE_NO_CACHE": "true",
+        "QUALIFICATION_MODE": "BOOTSTRAP_SCOPED_LINUX",
+        "REPOSITORY_PRIVATE": "${{ github.event.repository.private }}",
+        "STAGE_NAME": "final",
+        "WORKFLOW_SHA": "${{ github.workflow_sha }}"
+      },
+      "if": "${{ success() && github.event_name == 'workflow_dispatch' && github.event.repository.private == true && github.repository_id == '1367564442' }}",
+      "name": "final dependency-scoped native qualification",
+      "needs": [
+        "base",
+        "gss_01",
+        "gss_02",
+        "gss_03",
+        "gss_04",
+        "gss_05",
+        "gss_06",
+        "gss_07",
+        "other"
+      ],
+      "runs-on": "ubuntu-24.04",
+      "steps": [
+        {
+          "id": "prepare_paths",
+          "name": "Define runner-local paths before identity checks",
+          "run": "set -euo pipefail\n: \"${RUNNER_TEMP:?RUNNER_TEMP must be provided by GitHub}\"\n: \"${GITHUB_ENV:?GITHUB_ENV must be provided by GitHub}\"\nprintf '%s\\n' \"INCOMING_DIR=$RUNNER_TEMP/gss-incoming\" \"PAYLOAD_DIR=$RUNNER_TEMP/gss-payload\" \"QUALIFICATION_DIR=$RUNNER_TEMP/gss-evidence\" >> \"$GITHUB_ENV\"\nprintf '%s\\n' \"MATHLIB_CACHE_DIR=$RUNNER_TEMP/gss-mathlib-compressed\" >> \"$GITHUB_ENV\"\n",
+          "shell": "bash"
+        },
+        {
+          "id": "checkout",
+          "uses": "actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5",
+          "with": {
+            "fetch-depth": 1,
+            "persist-credentials": false,
+            "ref": "${{ github.sha }}"
+          }
+        },
+        {
+          "id": "identity",
+          "name": "Bind exact candidate before setup",
+          "run": "python3 -B scripts/segmented_qualification.py identity"
+        },
+        {
+          "id": "before_setup",
+          "run": "python3 -B scripts/segmented_qualification.py capacity before_setup\npython3 -B scripts/segmented_qualification.py setup-admission"
+        },
+        {
+          "id": "lean_setup",
+          "uses": "leanprover/lean-action@50fcf42d2e460296f1a34b402e990d1b24f8b596",
+          "with": {
+            "auto-config": false,
+            "axiom-audit": false,
+            "build": false,
+            "check-reservoir-eligibility": false,
+            "lean4checker": false,
+            "leanchecker": false,
+            "lint": false,
+            "mk_all-check": false,
+            "nanoda": false,
+            "test": false,
+            "use-github-cache": false,
+            "use-mathlib-cache": false
+          }
+        },
+        {
+          "env": {
+            "SETUP_OUTCOME": "${{ steps.lean_setup.outcome }}"
+          },
+          "id": "after_toolchain",
+          "if": "${{ always() && steps.identity.outcome == 'success' }}",
+          "run": "python3 -B scripts/segmented_qualification.py capacity after_toolchain_setup"
+        },
+        {
+          "id": "cache_get",
+          "run": "python3 -B scripts/segmented_qualification.py cache-get"
+        },
+        {
+          "env": {
+            "CACHE_OUTCOME": "${{ steps.cache_get.outcome }}"
+          },
+          "id": "after_cache",
+          "if": "${{ always() && steps.identity.outcome == 'success' }}",
+          "run": "python3 -B scripts/segmented_qualification.py capacity after_cache_expansion"
+        },
+        {
+          "id": "cleanup_compressed",
+          "run": "python3 -B scripts/segmented_qualification.py cleanup-compressed"
+        },
+        {
+          "id": "native_admission",
+          "run": "python3 -B scripts/segmented_qualification.py native-admission"
+        },
+        {
+          "env": {
+            "GH_TOKEN": "${{ secrets.GITHUB_TOKEN }}"
+          },
+          "id": "download",
+          "name": "Read exact current or explicitly bound prior-attempt artifacts",
+          "run": "python3 -B scripts/segmented_qualification.py download-prior\n"
+        },
+        {
+          "continue-on-error": true,
+          "env": {
+            "GH_TOKEN": "${{ github.token }}"
+          },
+          "id": "compile",
+          "name": "Sequential native Lean: final",
+          "run": "python3 -B scripts/segmented_qualification.py stage final",
+          "timeout-minutes": 300
+        },
+        {
+          "continue-on-error": true,
+          "id": "checks",
+          "if": "${{ always() && steps.compile.outcome == 'success' }}",
+          "name": "Whole coverage, five Projects plus GSS, parser and compiled census",
+          "run": "python3 -B scripts/segmented_qualification.py final",
+          "timeout-minutes": 300
+        },
+        {
+          "env": {
+            "CACHE_OUTCOME": "${{ steps.cache_get.outcome }}",
+            "COMPILE_OUTCOME": "${{ steps.compile.outcome }}",
+            "DOWNLOAD_OUTCOME": "${{ steps.download.outcome }}",
+            "FINAL_CHECKS_OUTCOME": "${{ steps.checks.outcome }}",
+            "IDENTITY_OUTCOME": "${{ steps.identity.outcome }}",
+            "RESOURCE_OUTCOME": "${{ steps.native_admission.outcome }}",
+            "SETUP_OUTCOME": "${{ steps.lean_setup.outcome }}"
+          },
+          "id": "collect",
+          "if": "${{ always() }}",
+          "run": "python3 -B scripts/segmented_qualification.py collect"
+        },
+        {
+          "id": "upload_guard",
+          "if": "${{ always() && steps.collect.outcome == 'success' }}",
+          "name": "Measure actual payload and cumulative storage bound",
+          "run": "python3 -B scripts/segmented_qualification.py upload-guard"
+        },
+        {
+          "id": "upload_evidence",
+          "if": "${{ always() && steps.upload_guard.outcome == 'success' }}",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "compression-level": 6,
+            "if-no-files-found": "error",
+            "include-hidden-files": true,
+            "name": "gss-final-evidence-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "${{ runner.temp }}/gss-job-evidence",
+            "retention-days": 3
+          }
+        },
+        {
+          "id": "upload_b0",
+          "if": "${{ always() && steps.upload_guard.outcome == 'success' && contains(fromJSON(steps.upload_guard.outputs.bundles || '[]'), 'final-b00') }}",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "compression-level": 6,
+            "if-no-files-found": "error",
+            "include-hidden-files": true,
+            "name": "gss-final-b00-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "${{ runner.temp }}/gss-bundles/final-b00",
+            "retention-days": 3
+          }
+        },
+        {
+          "id": "upload",
+          "if": "${{ always() && steps.upload_guard.outcome == 'success' }}",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "compression-level": 6,
+            "if-no-files-found": "error",
+            "include-hidden-files": true,
+            "name": "gss-final-receipt-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "${{ runner.temp }}/gss-payload",
+            "retention-days": 3
+          }
+        },
+        {
+          "env": {
+            "UPLOAD_OUTCOME": "${{ steps.upload_evidence.outcome == 'success' && steps.upload_b0.outcome == 'success' && steps.upload.outcome == 'success' && 'success' || 'failure' }}"
+          },
+          "id": "require",
+          "if": "${{ always() }}",
+          "run": "python3 -B scripts/segmented_qualification.py require"
+        },
+        {
+          "id": "diagnostic",
+          "if": "${{ always() && steps.identity.outcome == 'success' }}",
+          "name": "Bounded diagnostics independent of build reserve",
+          "run": "python3 -B scripts/segmented_qualification.py diagnostic"
+        },
+        {
+          "id": "diagnostic_upload",
+          "if": "${{ always() && steps.diagnostic.outcome == 'success' }}",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "compression-level": 6,
+            "if-no-files-found": "error",
+            "name": "gss-final-diagnostic-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "${{ runner.temp }}/gss-diagnostic",
+            "retention-days": 3
+          }
+        }
+      ],
+      "timeout-minutes": 330
+    },
+    "gss_01": {
+      "defaults": {
+        "run": {
+          "shell": "bash"
+        }
+      },
+      "env": {
+        "EXPECTED_COMMIT": "${{ inputs.expected_commit }}",
+        "EXPECTED_MATHLIB": "${{ inputs.expected_mathlib }}",
+        "EXPECTED_TOOLCHAIN": "${{ inputs.expected_toolchain }}",
+        "EXPECTED_TREE": "${{ inputs.expected_tree }}",
+        "LAKE_ARTIFACT_CACHE": "false",
+        "LAKE_NO_CACHE": "true",
+        "QUALIFICATION_MODE": "BOOTSTRAP_SCOPED_LINUX",
+        "REPOSITORY_PRIVATE": "${{ github.event.repository.private }}",
+        "STAGE_NAME": "gss_01",
+        "WORKFLOW_SHA": "${{ github.workflow_sha }}"
+      },
+      "if": "${{ github.event_name == 'workflow_dispatch' && github.event.repository.private == true && github.repository_id == '1367564442' }}",
+      "name": "gss_01 dependency-scoped native qualification",
+      "needs": [
+        "base"
+      ],
+      "runs-on": "ubuntu-24.04",
+      "steps": [
+        {
+          "id": "prepare_paths",
+          "name": "Define runner-local paths before identity checks",
+          "run": "set -euo pipefail\n: \"${RUNNER_TEMP:?RUNNER_TEMP must be provided by GitHub}\"\n: \"${GITHUB_ENV:?GITHUB_ENV must be provided by GitHub}\"\nprintf '%s\\n' \"INCOMING_DIR=$RUNNER_TEMP/gss-incoming\" \"PAYLOAD_DIR=$RUNNER_TEMP/gss-payload\" \"QUALIFICATION_DIR=$RUNNER_TEMP/gss-evidence\" >> \"$GITHUB_ENV\"\nprintf '%s\\n' \"MATHLIB_CACHE_DIR=$RUNNER_TEMP/gss-mathlib-compressed\" >> \"$GITHUB_ENV\"\n",
+          "shell": "bash"
+        },
+        {
+          "id": "checkout",
+          "uses": "actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5",
+          "with": {
+            "fetch-depth": 1,
+            "persist-credentials": false,
+            "ref": "${{ github.sha }}"
+          }
+        },
+        {
+          "id": "identity",
+          "name": "Bind exact candidate before setup",
+          "run": "python3 -B scripts/segmented_qualification.py identity"
+        },
+        {
+          "id": "before_setup",
+          "run": "python3 -B scripts/segmented_qualification.py capacity before_setup\npython3 -B scripts/segmented_qualification.py setup-admission"
+        },
+        {
+          "id": "lean_setup",
+          "uses": "leanprover/lean-action@50fcf42d2e460296f1a34b402e990d1b24f8b596",
+          "with": {
+            "auto-config": false,
+            "axiom-audit": false,
+            "build": false,
+            "check-reservoir-eligibility": false,
+            "lean4checker": false,
+            "leanchecker": false,
+            "lint": false,
+            "mk_all-check": false,
+            "nanoda": false,
+            "test": false,
+            "use-github-cache": false,
+            "use-mathlib-cache": false
+          }
+        },
+        {
+          "env": {
+            "SETUP_OUTCOME": "${{ steps.lean_setup.outcome }}"
+          },
+          "id": "after_toolchain",
+          "if": "${{ always() && steps.identity.outcome == 'success' }}",
+          "run": "python3 -B scripts/segmented_qualification.py capacity after_toolchain_setup"
+        },
+        {
+          "id": "cache_get",
+          "run": "python3 -B scripts/segmented_qualification.py cache-get"
+        },
+        {
+          "env": {
+            "CACHE_OUTCOME": "${{ steps.cache_get.outcome }}"
+          },
+          "id": "after_cache",
+          "if": "${{ always() && steps.identity.outcome == 'success' }}",
+          "run": "python3 -B scripts/segmented_qualification.py capacity after_cache_expansion"
+        },
+        {
+          "id": "cleanup_compressed",
+          "run": "python3 -B scripts/segmented_qualification.py cleanup-compressed"
+        },
+        {
+          "id": "native_admission",
+          "run": "python3 -B scripts/segmented_qualification.py native-admission"
+        },
+        {
+          "env": {
+            "GH_TOKEN": "${{ secrets.GITHUB_TOKEN }}"
+          },
+          "id": "download",
+          "name": "Read exact current or explicitly bound prior-attempt artifacts",
+          "run": "python3 -B scripts/segmented_qualification.py download-prior\n"
+        },
+        {
+          "continue-on-error": true,
+          "env": {
+            "GH_TOKEN": "${{ github.token }}"
+          },
+          "id": "compile",
+          "name": "Sequential native Lean: gss_01",
+          "run": "python3 -B scripts/segmented_qualification.py stage gss_01",
+          "timeout-minutes": 300
+        },
+        {
+          "env": {
+            "CACHE_OUTCOME": "${{ steps.cache_get.outcome }}",
+            "COMPILE_OUTCOME": "${{ steps.compile.outcome }}",
+            "DOWNLOAD_OUTCOME": "${{ steps.download.outcome }}",
+            "FINAL_CHECKS_OUTCOME": "",
+            "IDENTITY_OUTCOME": "${{ steps.identity.outcome }}",
+            "RESOURCE_OUTCOME": "${{ steps.native_admission.outcome }}",
+            "SETUP_OUTCOME": "${{ steps.lean_setup.outcome }}"
+          },
+          "id": "collect",
+          "if": "${{ always() }}",
+          "run": "python3 -B scripts/segmented_qualification.py collect"
+        },
+        {
+          "id": "upload_guard",
+          "if": "${{ always() && steps.collect.outcome == 'success' }}",
+          "name": "Measure actual payload and cumulative storage bound",
+          "run": "python3 -B scripts/segmented_qualification.py upload-guard"
+        },
+        {
+          "id": "upload_evidence",
+          "if": "${{ always() && steps.upload_guard.outcome == 'success' }}",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "compression-level": 6,
+            "if-no-files-found": "error",
+            "include-hidden-files": true,
+            "name": "gss-gss_01-evidence-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "${{ runner.temp }}/gss-job-evidence",
+            "retention-days": 3
+          }
+        },
+        {
+          "id": "upload_b0",
+          "if": "${{ always() && steps.upload_guard.outcome == 'success' && contains(fromJSON(steps.upload_guard.outputs.bundles || '[]'), 'gss_01-b00') }}",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "compression-level": 6,
+            "if-no-files-found": "error",
+            "include-hidden-files": true,
+            "name": "gss-gss_01-b00-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "${{ runner.temp }}/gss-bundles/gss_01-b00",
+            "retention-days": 3
+          }
+        },
+        {
+          "id": "upload_b1",
+          "if": "${{ always() && steps.upload_guard.outcome == 'success' && contains(fromJSON(steps.upload_guard.outputs.bundles || '[]'), 'gss_01-b01') }}",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "compression-level": 6,
+            "if-no-files-found": "error",
+            "include-hidden-files": true,
+            "name": "gss-gss_01-b01-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "${{ runner.temp }}/gss-bundles/gss_01-b01",
+            "retention-days": 3
+          }
+        },
+        {
+          "id": "upload_b2",
+          "if": "${{ always() && steps.upload_guard.outcome == 'success' && contains(fromJSON(steps.upload_guard.outputs.bundles || '[]'), 'gss_01-b02') }}",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "compression-level": 6,
+            "if-no-files-found": "error",
+            "include-hidden-files": true,
+            "name": "gss-gss_01-b02-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "${{ runner.temp }}/gss-bundles/gss_01-b02",
+            "retention-days": 3
+          }
+        },
+        {
+          "id": "upload_b3",
+          "if": "${{ always() && steps.upload_guard.outcome == 'success' && contains(fromJSON(steps.upload_guard.outputs.bundles || '[]'), 'gss_01-b03') }}",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "compression-level": 6,
+            "if-no-files-found": "error",
+            "include-hidden-files": true,
+            "name": "gss-gss_01-b03-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "${{ runner.temp }}/gss-bundles/gss_01-b03",
+            "retention-days": 3
+          }
+        },
+        {
+          "id": "upload_b4",
+          "if": "${{ always() && steps.upload_guard.outcome == 'success' && contains(fromJSON(steps.upload_guard.outputs.bundles || '[]'), 'gss_01-b04') }}",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "compression-level": 6,
+            "if-no-files-found": "error",
+            "include-hidden-files": true,
+            "name": "gss-gss_01-b04-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "${{ runner.temp }}/gss-bundles/gss_01-b04",
+            "retention-days": 3
+          }
+        },
+        {
+          "id": "upload",
+          "if": "${{ always() && steps.upload_guard.outcome == 'success' }}",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "compression-level": 6,
+            "if-no-files-found": "error",
+            "include-hidden-files": true,
+            "name": "gss-gss_01-receipt-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "${{ runner.temp }}/gss-payload",
+            "retention-days": 3
+          }
+        },
+        {
+          "env": {
+            "UPLOAD_OUTCOME": "${{ steps.upload_evidence.outcome == 'success' && steps.upload_b0.outcome == 'success' && steps.upload_b1.outcome == 'success' && steps.upload_b2.outcome == 'success' && steps.upload_b3.outcome == 'success' && steps.upload_b4.outcome == 'success' && steps.upload.outcome == 'success' && 'success' || 'failure' }}"
+          },
+          "id": "require",
+          "if": "${{ always() }}",
+          "run": "python3 -B scripts/segmented_qualification.py require-stage"
+        },
+        {
+          "id": "diagnostic",
+          "if": "${{ always() && steps.identity.outcome == 'success' }}",
+          "name": "Bounded diagnostics independent of build reserve",
+          "run": "python3 -B scripts/segmented_qualification.py diagnostic"
+        },
+        {
+          "id": "diagnostic_upload",
+          "if": "${{ always() && steps.diagnostic.outcome == 'success' }}",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "compression-level": 6,
+            "if-no-files-found": "error",
+            "name": "gss-gss_01-diagnostic-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "${{ runner.temp }}/gss-diagnostic",
+            "retention-days": 3
+          }
+        }
+      ],
+      "timeout-minutes": 330
+    },
+    "gss_02": {
+      "defaults": {
+        "run": {
+          "shell": "bash"
+        }
+      },
+      "env": {
+        "EXPECTED_COMMIT": "${{ inputs.expected_commit }}",
+        "EXPECTED_MATHLIB": "${{ inputs.expected_mathlib }}",
+        "EXPECTED_TOOLCHAIN": "${{ inputs.expected_toolchain }}",
+        "EXPECTED_TREE": "${{ inputs.expected_tree }}",
+        "LAKE_ARTIFACT_CACHE": "false",
+        "LAKE_NO_CACHE": "true",
+        "QUALIFICATION_MODE": "BOOTSTRAP_SCOPED_LINUX",
+        "REPOSITORY_PRIVATE": "${{ github.event.repository.private }}",
+        "STAGE_NAME": "gss_02",
+        "WORKFLOW_SHA": "${{ github.workflow_sha }}"
+      },
+      "if": "${{ github.event_name == 'workflow_dispatch' && github.event.repository.private == true && github.repository_id == '1367564442' }}",
+      "name": "gss_02 dependency-scoped native qualification",
+      "needs": [
+        "base",
+        "gss_01"
+      ],
+      "runs-on": "ubuntu-24.04",
+      "steps": [
+        {
+          "id": "prepare_paths",
+          "name": "Define runner-local paths before identity checks",
+          "run": "set -euo pipefail\n: \"${RUNNER_TEMP:?RUNNER_TEMP must be provided by GitHub}\"\n: \"${GITHUB_ENV:?GITHUB_ENV must be provided by GitHub}\"\nprintf '%s\\n' \"INCOMING_DIR=$RUNNER_TEMP/gss-incoming\" \"PAYLOAD_DIR=$RUNNER_TEMP/gss-payload\" \"QUALIFICATION_DIR=$RUNNER_TEMP/gss-evidence\" >> \"$GITHUB_ENV\"\nprintf '%s\\n' \"MATHLIB_CACHE_DIR=$RUNNER_TEMP/gss-mathlib-compressed\" >> \"$GITHUB_ENV\"\n",
+          "shell": "bash"
+        },
+        {
+          "id": "checkout",
+          "uses": "actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5",
+          "with": {
+            "fetch-depth": 1,
+            "persist-credentials": false,
+            "ref": "${{ github.sha }}"
+          }
+        },
+        {
+          "id": "identity",
+          "name": "Bind exact candidate before setup",
+          "run": "python3 -B scripts/segmented_qualification.py identity"
+        },
+        {
+          "id": "before_setup",
+          "run": "python3 -B scripts/segmented_qualification.py capacity before_setup\npython3 -B scripts/segmented_qualification.py setup-admission"
+        },
+        {
+          "id": "lean_setup",
+          "uses": "leanprover/lean-action@50fcf42d2e460296f1a34b402e990d1b24f8b596",
+          "with": {
+            "auto-config": false,
+            "axiom-audit": false,
+            "build": false,
+            "check-reservoir-eligibility": false,
+            "lean4checker": false,
+            "leanchecker": false,
+            "lint": false,
+            "mk_all-check": false,
+            "nanoda": false,
+            "test": false,
+            "use-github-cache": false,
+            "use-mathlib-cache": false
+          }
+        },
+        {
+          "env": {
+            "SETUP_OUTCOME": "${{ steps.lean_setup.outcome }}"
+          },
+          "id": "after_toolchain",
+          "if": "${{ always() && steps.identity.outcome == 'success' }}",
+          "run": "python3 -B scripts/segmented_qualification.py capacity after_toolchain_setup"
+        },
+        {
+          "id": "cache_get",
+          "run": "python3 -B scripts/segmented_qualification.py cache-get"
+        },
+        {
+          "env": {
+            "CACHE_OUTCOME": "${{ steps.cache_get.outcome }}"
+          },
+          "id": "after_cache",
+          "if": "${{ always() && steps.identity.outcome == 'success' }}",
+          "run": "python3 -B scripts/segmented_qualification.py capacity after_cache_expansion"
+        },
+        {
+          "id": "cleanup_compressed",
+          "run": "python3 -B scripts/segmented_qualification.py cleanup-compressed"
+        },
+        {
+          "id": "native_admission",
+          "run": "python3 -B scripts/segmented_qualification.py native-admission"
+        },
+        {
+          "env": {
+            "GH_TOKEN": "${{ secrets.GITHUB_TOKEN }}"
+          },
+          "id": "download",
+          "name": "Read exact current or explicitly bound prior-attempt artifacts",
+          "run": "python3 -B scripts/segmented_qualification.py download-prior\n"
+        },
+        {
+          "continue-on-error": true,
+          "env": {
+            "GH_TOKEN": "${{ github.token }}"
+          },
+          "id": "compile",
+          "name": "Sequential native Lean: gss_02",
+          "run": "python3 -B scripts/segmented_qualification.py stage gss_02",
+          "timeout-minutes": 300
+        },
+        {
+          "env": {
+            "CACHE_OUTCOME": "${{ steps.cache_get.outcome }}",
+            "COMPILE_OUTCOME": "${{ steps.compile.outcome }}",
+            "DOWNLOAD_OUTCOME": "${{ steps.download.outcome }}",
+            "FINAL_CHECKS_OUTCOME": "",
+            "IDENTITY_OUTCOME": "${{ steps.identity.outcome }}",
+            "RESOURCE_OUTCOME": "${{ steps.native_admission.outcome }}",
+            "SETUP_OUTCOME": "${{ steps.lean_setup.outcome }}"
+          },
+          "id": "collect",
+          "if": "${{ always() }}",
+          "run": "python3 -B scripts/segmented_qualification.py collect"
+        },
+        {
+          "id": "upload_guard",
+          "if": "${{ always() && steps.collect.outcome == 'success' }}",
+          "name": "Measure actual payload and cumulative storage bound",
+          "run": "python3 -B scripts/segmented_qualification.py upload-guard"
+        },
+        {
+          "id": "upload_evidence",
+          "if": "${{ always() && steps.upload_guard.outcome == 'success' }}",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "compression-level": 6,
+            "if-no-files-found": "error",
+            "include-hidden-files": true,
+            "name": "gss-gss_02-evidence-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "${{ runner.temp }}/gss-job-evidence",
+            "retention-days": 3
+          }
+        },
+        {
+          "id": "upload_b0",
+          "if": "${{ always() && steps.upload_guard.outcome == 'success' && contains(fromJSON(steps.upload_guard.outputs.bundles || '[]'), 'gss_02-b00') }}",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "compression-level": 6,
+            "if-no-files-found": "error",
+            "include-hidden-files": true,
+            "name": "gss-gss_02-b00-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "${{ runner.temp }}/gss-bundles/gss_02-b00",
+            "retention-days": 3
+          }
+        },
+        {
+          "id": "upload_b1",
+          "if": "${{ always() && steps.upload_guard.outcome == 'success' && contains(fromJSON(steps.upload_guard.outputs.bundles || '[]'), 'gss_02-b01') }}",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "compression-level": 6,
+            "if-no-files-found": "error",
+            "include-hidden-files": true,
+            "name": "gss-gss_02-b01-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "${{ runner.temp }}/gss-bundles/gss_02-b01",
+            "retention-days": 3
+          }
+        },
+        {
+          "id": "upload_b2",
+          "if": "${{ always() && steps.upload_guard.outcome == 'success' && contains(fromJSON(steps.upload_guard.outputs.bundles || '[]'), 'gss_02-b02') }}",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "compression-level": 6,
+            "if-no-files-found": "error",
+            "include-hidden-files": true,
+            "name": "gss-gss_02-b02-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "${{ runner.temp }}/gss-bundles/gss_02-b02",
+            "retention-days": 3
+          }
+        },
+        {
+          "id": "upload_b3",
+          "if": "${{ always() && steps.upload_guard.outcome == 'success' && contains(fromJSON(steps.upload_guard.outputs.bundles || '[]'), 'gss_02-b03') }}",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "compression-level": 6,
+            "if-no-files-found": "error",
+            "include-hidden-files": true,
+            "name": "gss-gss_02-b03-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "${{ runner.temp }}/gss-bundles/gss_02-b03",
+            "retention-days": 3
+          }
+        },
+        {
+          "id": "upload_b4",
+          "if": "${{ always() && steps.upload_guard.outcome == 'success' && contains(fromJSON(steps.upload_guard.outputs.bundles || '[]'), 'gss_02-b04') }}",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "compression-level": 6,
+            "if-no-files-found": "error",
+            "include-hidden-files": true,
+            "name": "gss-gss_02-b04-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "${{ runner.temp }}/gss-bundles/gss_02-b04",
+            "retention-days": 3
+          }
+        },
+        {
+          "id": "upload_b5",
+          "if": "${{ always() && steps.upload_guard.outcome == 'success' && contains(fromJSON(steps.upload_guard.outputs.bundles || '[]'), 'gss_02-b05') }}",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "compression-level": 6,
+            "if-no-files-found": "error",
+            "include-hidden-files": true,
+            "name": "gss-gss_02-b05-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "${{ runner.temp }}/gss-bundles/gss_02-b05",
+            "retention-days": 3
+          }
+        },
+        {
+          "id": "upload_b6",
+          "if": "${{ always() && steps.upload_guard.outcome == 'success' && contains(fromJSON(steps.upload_guard.outputs.bundles || '[]'), 'gss_02-b06') }}",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "compression-level": 6,
+            "if-no-files-found": "error",
+            "include-hidden-files": true,
+            "name": "gss-gss_02-b06-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "${{ runner.temp }}/gss-bundles/gss_02-b06",
+            "retention-days": 3
+          }
+        },
+        {
+          "id": "upload",
+          "if": "${{ always() && steps.upload_guard.outcome == 'success' }}",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "compression-level": 6,
+            "if-no-files-found": "error",
+            "include-hidden-files": true,
+            "name": "gss-gss_02-receipt-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "${{ runner.temp }}/gss-payload",
+            "retention-days": 3
+          }
+        },
+        {
+          "env": {
+            "UPLOAD_OUTCOME": "${{ steps.upload_evidence.outcome == 'success' && steps.upload_b0.outcome == 'success' && steps.upload_b1.outcome == 'success' && steps.upload_b2.outcome == 'success' && steps.upload_b3.outcome == 'success' && steps.upload_b4.outcome == 'success' && steps.upload_b5.outcome == 'success' && steps.upload_b6.outcome == 'success' && steps.upload.outcome == 'success' && 'success' || 'failure' }}"
+          },
+          "id": "require",
+          "if": "${{ always() }}",
+          "run": "python3 -B scripts/segmented_qualification.py require-stage"
+        },
+        {
+          "id": "diagnostic",
+          "if": "${{ always() && steps.identity.outcome == 'success' }}",
+          "name": "Bounded diagnostics independent of build reserve",
+          "run": "python3 -B scripts/segmented_qualification.py diagnostic"
+        },
+        {
+          "id": "diagnostic_upload",
+          "if": "${{ always() && steps.diagnostic.outcome == 'success' }}",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "compression-level": 6,
+            "if-no-files-found": "error",
+            "name": "gss-gss_02-diagnostic-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "${{ runner.temp }}/gss-diagnostic",
+            "retention-days": 3
+          }
+        }
+      ],
+      "timeout-minutes": 330
+    },
+    "gss_03": {
+      "defaults": {
+        "run": {
+          "shell": "bash"
+        }
+      },
+      "env": {
+        "EXPECTED_COMMIT": "${{ inputs.expected_commit }}",
+        "EXPECTED_MATHLIB": "${{ inputs.expected_mathlib }}",
+        "EXPECTED_TOOLCHAIN": "${{ inputs.expected_toolchain }}",
+        "EXPECTED_TREE": "${{ inputs.expected_tree }}",
+        "LAKE_ARTIFACT_CACHE": "false",
+        "LAKE_NO_CACHE": "true",
+        "QUALIFICATION_MODE": "BOOTSTRAP_SCOPED_LINUX",
+        "REPOSITORY_PRIVATE": "${{ github.event.repository.private }}",
+        "STAGE_NAME": "gss_03",
+        "WORKFLOW_SHA": "${{ github.workflow_sha }}"
+      },
+      "if": "${{ github.event_name == 'workflow_dispatch' && github.event.repository.private == true && github.repository_id == '1367564442' }}",
+      "name": "gss_03 dependency-scoped native qualification",
+      "needs": [
+        "base",
+        "gss_01",
+        "gss_02"
+      ],
+      "runs-on": "ubuntu-24.04",
+      "steps": [
+        {
+          "id": "prepare_paths",
+          "name": "Define runner-local paths before identity checks",
+          "run": "set -euo pipefail\n: \"${RUNNER_TEMP:?RUNNER_TEMP must be provided by GitHub}\"\n: \"${GITHUB_ENV:?GITHUB_ENV must be provided by GitHub}\"\nprintf '%s\\n' \"INCOMING_DIR=$RUNNER_TEMP/gss-incoming\" \"PAYLOAD_DIR=$RUNNER_TEMP/gss-payload\" \"QUALIFICATION_DIR=$RUNNER_TEMP/gss-evidence\" >> \"$GITHUB_ENV\"\nprintf '%s\\n' \"MATHLIB_CACHE_DIR=$RUNNER_TEMP/gss-mathlib-compressed\" >> \"$GITHUB_ENV\"\n",
+          "shell": "bash"
+        },
+        {
+          "id": "checkout",
+          "uses": "actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5",
+          "with": {
+            "fetch-depth": 1,
+            "persist-credentials": false,
+            "ref": "${{ github.sha }}"
+          }
+        },
+        {
+          "id": "identity",
+          "name": "Bind exact candidate before setup",
+          "run": "python3 -B scripts/segmented_qualification.py identity"
+        },
+        {
+          "id": "before_setup",
+          "run": "python3 -B scripts/segmented_qualification.py capacity before_setup\npython3 -B scripts/segmented_qualification.py setup-admission"
+        },
+        {
+          "id": "lean_setup",
+          "uses": "leanprover/lean-action@50fcf42d2e460296f1a34b402e990d1b24f8b596",
+          "with": {
+            "auto-config": false,
+            "axiom-audit": false,
+            "build": false,
+            "check-reservoir-eligibility": false,
+            "lean4checker": false,
+            "leanchecker": false,
+            "lint": false,
+            "mk_all-check": false,
+            "nanoda": false,
+            "test": false,
+            "use-github-cache": false,
+            "use-mathlib-cache": false
+          }
+        },
+        {
+          "env": {
+            "SETUP_OUTCOME": "${{ steps.lean_setup.outcome }}"
+          },
+          "id": "after_toolchain",
+          "if": "${{ always() && steps.identity.outcome == 'success' }}",
+          "run": "python3 -B scripts/segmented_qualification.py capacity after_toolchain_setup"
+        },
+        {
+          "id": "cache_get",
+          "run": "python3 -B scripts/segmented_qualification.py cache-get"
+        },
+        {
+          "env": {
+            "CACHE_OUTCOME": "${{ steps.cache_get.outcome }}"
+          },
+          "id": "after_cache",
+          "if": "${{ always() && steps.identity.outcome == 'success' }}",
+          "run": "python3 -B scripts/segmented_qualification.py capacity after_cache_expansion"
+        },
+        {
+          "id": "cleanup_compressed",
+          "run": "python3 -B scripts/segmented_qualification.py cleanup-compressed"
+        },
+        {
+          "id": "native_admission",
+          "run": "python3 -B scripts/segmented_qualification.py native-admission"
+        },
+        {
+          "env": {
+            "GH_TOKEN": "${{ secrets.GITHUB_TOKEN }}"
+          },
+          "id": "download",
+          "name": "Read exact current or explicitly bound prior-attempt artifacts",
+          "run": "python3 -B scripts/segmented_qualification.py download-prior\n"
+        },
+        {
+          "continue-on-error": true,
+          "env": {
+            "GH_TOKEN": "${{ github.token }}"
+          },
+          "id": "compile",
+          "name": "Sequential native Lean: gss_03",
+          "run": "python3 -B scripts/segmented_qualification.py stage gss_03",
+          "timeout-minutes": 300
+        },
+        {
+          "env": {
+            "CACHE_OUTCOME": "${{ steps.cache_get.outcome }}",
+            "COMPILE_OUTCOME": "${{ steps.compile.outcome }}",
+            "DOWNLOAD_OUTCOME": "${{ steps.download.outcome }}",
+            "FINAL_CHECKS_OUTCOME": "",
+            "IDENTITY_OUTCOME": "${{ steps.identity.outcome }}",
+            "RESOURCE_OUTCOME": "${{ steps.native_admission.outcome }}",
+            "SETUP_OUTCOME": "${{ steps.lean_setup.outcome }}"
+          },
+          "id": "collect",
+          "if": "${{ always() }}",
+          "run": "python3 -B scripts/segmented_qualification.py collect"
+        },
+        {
+          "id": "upload_guard",
+          "if": "${{ always() && steps.collect.outcome == 'success' }}",
+          "name": "Measure actual payload and cumulative storage bound",
+          "run": "python3 -B scripts/segmented_qualification.py upload-guard"
+        },
+        {
+          "id": "upload_evidence",
+          "if": "${{ always() && steps.upload_guard.outcome == 'success' }}",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "compression-level": 6,
+            "if-no-files-found": "error",
+            "include-hidden-files": true,
+            "name": "gss-gss_03-evidence-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "${{ runner.temp }}/gss-job-evidence",
+            "retention-days": 3
+          }
+        },
+        {
+          "id": "upload_b0",
+          "if": "${{ always() && steps.upload_guard.outcome == 'success' && contains(fromJSON(steps.upload_guard.outputs.bundles || '[]'), 'gss_03-b00') }}",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "compression-level": 6,
+            "if-no-files-found": "error",
+            "include-hidden-files": true,
+            "name": "gss-gss_03-b00-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "${{ runner.temp }}/gss-bundles/gss_03-b00",
+            "retention-days": 3
+          }
+        },
+        {
+          "id": "upload_b1",
+          "if": "${{ always() && steps.upload_guard.outcome == 'success' && contains(fromJSON(steps.upload_guard.outputs.bundles || '[]'), 'gss_03-b01') }}",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "compression-level": 6,
+            "if-no-files-found": "error",
+            "include-hidden-files": true,
+            "name": "gss-gss_03-b01-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "${{ runner.temp }}/gss-bundles/gss_03-b01",
+            "retention-days": 3
+          }
+        },
+        {
+          "id": "upload",
+          "if": "${{ always() && steps.upload_guard.outcome == 'success' }}",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "compression-level": 6,
+            "if-no-files-found": "error",
+            "include-hidden-files": true,
+            "name": "gss-gss_03-receipt-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "${{ runner.temp }}/gss-payload",
+            "retention-days": 3
+          }
+        },
+        {
+          "env": {
+            "UPLOAD_OUTCOME": "${{ steps.upload_evidence.outcome == 'success' && steps.upload_b0.outcome == 'success' && steps.upload_b1.outcome == 'success' && steps.upload.outcome == 'success' && 'success' || 'failure' }}"
+          },
+          "id": "require",
+          "if": "${{ always() }}",
+          "run": "python3 -B scripts/segmented_qualification.py require-stage"
+        },
+        {
+          "id": "diagnostic",
+          "if": "${{ always() && steps.identity.outcome == 'success' }}",
+          "name": "Bounded diagnostics independent of build reserve",
+          "run": "python3 -B scripts/segmented_qualification.py diagnostic"
+        },
+        {
+          "id": "diagnostic_upload",
+          "if": "${{ always() && steps.diagnostic.outcome == 'success' }}",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "compression-level": 6,
+            "if-no-files-found": "error",
+            "name": "gss-gss_03-diagnostic-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "${{ runner.temp }}/gss-diagnostic",
+            "retention-days": 3
+          }
+        }
+      ],
+      "timeout-minutes": 330
+    },
+    "gss_04": {
+      "defaults": {
+        "run": {
+          "shell": "bash"
+        }
+      },
+      "env": {
+        "EXPECTED_COMMIT": "${{ inputs.expected_commit }}",
+        "EXPECTED_MATHLIB": "${{ inputs.expected_mathlib }}",
+        "EXPECTED_TOOLCHAIN": "${{ inputs.expected_toolchain }}",
+        "EXPECTED_TREE": "${{ inputs.expected_tree }}",
+        "LAKE_ARTIFACT_CACHE": "false",
+        "LAKE_NO_CACHE": "true",
+        "QUALIFICATION_MODE": "BOOTSTRAP_SCOPED_LINUX",
+        "REPOSITORY_PRIVATE": "${{ github.event.repository.private }}",
+        "STAGE_NAME": "gss_04",
+        "WORKFLOW_SHA": "${{ github.workflow_sha }}"
+      },
+      "if": "${{ github.event_name == 'workflow_dispatch' && github.event.repository.private == true && github.repository_id == '1367564442' }}",
+      "name": "gss_04 dependency-scoped native qualification",
+      "needs": [
+        "base",
+        "gss_01",
+        "gss_02",
+        "gss_03"
+      ],
+      "runs-on": "ubuntu-24.04",
+      "steps": [
+        {
+          "id": "prepare_paths",
+          "name": "Define runner-local paths before identity checks",
+          "run": "set -euo pipefail\n: \"${RUNNER_TEMP:?RUNNER_TEMP must be provided by GitHub}\"\n: \"${GITHUB_ENV:?GITHUB_ENV must be provided by GitHub}\"\nprintf '%s\\n' \"INCOMING_DIR=$RUNNER_TEMP/gss-incoming\" \"PAYLOAD_DIR=$RUNNER_TEMP/gss-payload\" \"QUALIFICATION_DIR=$RUNNER_TEMP/gss-evidence\" >> \"$GITHUB_ENV\"\nprintf '%s\\n' \"MATHLIB_CACHE_DIR=$RUNNER_TEMP/gss-mathlib-compressed\" >> \"$GITHUB_ENV\"\n",
+          "shell": "bash"
+        },
+        {
+          "id": "checkout",
+          "uses": "actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5",
+          "with": {
+            "fetch-depth": 1,
+            "persist-credentials": false,
+            "ref": "${{ github.sha }}"
+          }
+        },
+        {
+          "id": "identity",
+          "name": "Bind exact candidate before setup",
+          "run": "python3 -B scripts/segmented_qualification.py identity"
+        },
+        {
+          "id": "before_setup",
+          "run": "python3 -B scripts/segmented_qualification.py capacity before_setup\npython3 -B scripts/segmented_qualification.py setup-admission"
+        },
+        {
+          "id": "lean_setup",
+          "uses": "leanprover/lean-action@50fcf42d2e460296f1a34b402e990d1b24f8b596",
+          "with": {
+            "auto-config": false,
+            "axiom-audit": false,
+            "build": false,
+            "check-reservoir-eligibility": false,
+            "lean4checker": false,
+            "leanchecker": false,
+            "lint": false,
+            "mk_all-check": false,
+            "nanoda": false,
+            "test": false,
+            "use-github-cache": false,
+            "use-mathlib-cache": false
+          }
+        },
+        {
+          "env": {
+            "SETUP_OUTCOME": "${{ steps.lean_setup.outcome }}"
+          },
+          "id": "after_toolchain",
+          "if": "${{ always() && steps.identity.outcome == 'success' }}",
+          "run": "python3 -B scripts/segmented_qualification.py capacity after_toolchain_setup"
+        },
+        {
+          "id": "cache_get",
+          "run": "python3 -B scripts/segmented_qualification.py cache-get"
+        },
+        {
+          "env": {
+            "CACHE_OUTCOME": "${{ steps.cache_get.outcome }}"
+          },
+          "id": "after_cache",
+          "if": "${{ always() && steps.identity.outcome == 'success' }}",
+          "run": "python3 -B scripts/segmented_qualification.py capacity after_cache_expansion"
+        },
+        {
+          "id": "cleanup_compressed",
+          "run": "python3 -B scripts/segmented_qualification.py cleanup-compressed"
+        },
+        {
+          "id": "native_admission",
+          "run": "python3 -B scripts/segmented_qualification.py native-admission"
+        },
+        {
+          "env": {
+            "GH_TOKEN": "${{ secrets.GITHUB_TOKEN }}"
+          },
+          "id": "download",
+          "name": "Read exact current or explicitly bound prior-attempt artifacts",
+          "run": "python3 -B scripts/segmented_qualification.py download-prior\n"
+        },
+        {
+          "continue-on-error": true,
+          "env": {
+            "GH_TOKEN": "${{ github.token }}"
+          },
+          "id": "compile",
+          "name": "Sequential native Lean: gss_04",
+          "run": "python3 -B scripts/segmented_qualification.py stage gss_04",
+          "timeout-minutes": 300
+        },
+        {
+          "env": {
+            "CACHE_OUTCOME": "${{ steps.cache_get.outcome }}",
+            "COMPILE_OUTCOME": "${{ steps.compile.outcome }}",
+            "DOWNLOAD_OUTCOME": "${{ steps.download.outcome }}",
+            "FINAL_CHECKS_OUTCOME": "",
+            "IDENTITY_OUTCOME": "${{ steps.identity.outcome }}",
+            "RESOURCE_OUTCOME": "${{ steps.native_admission.outcome }}",
+            "SETUP_OUTCOME": "${{ steps.lean_setup.outcome }}"
+          },
+          "id": "collect",
+          "if": "${{ always() }}",
+          "run": "python3 -B scripts/segmented_qualification.py collect"
+        },
+        {
+          "id": "upload_guard",
+          "if": "${{ always() && steps.collect.outcome == 'success' }}",
+          "name": "Measure actual payload and cumulative storage bound",
+          "run": "python3 -B scripts/segmented_qualification.py upload-guard"
+        },
+        {
+          "id": "upload_evidence",
+          "if": "${{ always() && steps.upload_guard.outcome == 'success' }}",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "compression-level": 6,
+            "if-no-files-found": "error",
+            "include-hidden-files": true,
+            "name": "gss-gss_04-evidence-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "${{ runner.temp }}/gss-job-evidence",
+            "retention-days": 3
+          }
+        },
+        {
+          "id": "upload_b0",
+          "if": "${{ always() && steps.upload_guard.outcome == 'success' && contains(fromJSON(steps.upload_guard.outputs.bundles || '[]'), 'gss_04-b00') }}",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "compression-level": 6,
+            "if-no-files-found": "error",
+            "include-hidden-files": true,
+            "name": "gss-gss_04-b00-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "${{ runner.temp }}/gss-bundles/gss_04-b00",
+            "retention-days": 3
+          }
+        },
+        {
+          "id": "upload_b1",
+          "if": "${{ always() && steps.upload_guard.outcome == 'success' && contains(fromJSON(steps.upload_guard.outputs.bundles || '[]'), 'gss_04-b01') }}",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "compression-level": 6,
+            "if-no-files-found": "error",
+            "include-hidden-files": true,
+            "name": "gss-gss_04-b01-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "${{ runner.temp }}/gss-bundles/gss_04-b01",
+            "retention-days": 3
+          }
+        },
+        {
+          "id": "upload",
+          "if": "${{ always() && steps.upload_guard.outcome == 'success' }}",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "compression-level": 6,
+            "if-no-files-found": "error",
+            "include-hidden-files": true,
+            "name": "gss-gss_04-receipt-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "${{ runner.temp }}/gss-payload",
+            "retention-days": 3
+          }
+        },
+        {
+          "env": {
+            "UPLOAD_OUTCOME": "${{ steps.upload_evidence.outcome == 'success' && steps.upload_b0.outcome == 'success' && steps.upload_b1.outcome == 'success' && steps.upload.outcome == 'success' && 'success' || 'failure' }}"
+          },
+          "id": "require",
+          "if": "${{ always() }}",
+          "run": "python3 -B scripts/segmented_qualification.py require-stage"
+        },
+        {
+          "id": "diagnostic",
+          "if": "${{ always() && steps.identity.outcome == 'success' }}",
+          "name": "Bounded diagnostics independent of build reserve",
+          "run": "python3 -B scripts/segmented_qualification.py diagnostic"
+        },
+        {
+          "id": "diagnostic_upload",
+          "if": "${{ always() && steps.diagnostic.outcome == 'success' }}",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "compression-level": 6,
+            "if-no-files-found": "error",
+            "name": "gss-gss_04-diagnostic-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "${{ runner.temp }}/gss-diagnostic",
+            "retention-days": 3
+          }
+        }
+      ],
+      "timeout-minutes": 330
+    },
+    "gss_05": {
+      "defaults": {
+        "run": {
+          "shell": "bash"
+        }
+      },
+      "env": {
+        "EXPECTED_COMMIT": "${{ inputs.expected_commit }}",
+        "EXPECTED_MATHLIB": "${{ inputs.expected_mathlib }}",
+        "EXPECTED_TOOLCHAIN": "${{ inputs.expected_toolchain }}",
+        "EXPECTED_TREE": "${{ inputs.expected_tree }}",
+        "LAKE_ARTIFACT_CACHE": "false",
+        "LAKE_NO_CACHE": "true",
+        "QUALIFICATION_MODE": "BOOTSTRAP_SCOPED_LINUX",
+        "REPOSITORY_PRIVATE": "${{ github.event.repository.private }}",
+        "STAGE_NAME": "gss_05",
+        "WORKFLOW_SHA": "${{ github.workflow_sha }}"
+      },
+      "if": "${{ github.event_name == 'workflow_dispatch' && github.event.repository.private == true && github.repository_id == '1367564442' }}",
+      "name": "gss_05 dependency-scoped native qualification",
+      "needs": [
+        "base",
+        "gss_01",
+        "gss_02",
+        "gss_03",
+        "gss_04"
+      ],
+      "runs-on": "ubuntu-24.04",
+      "steps": [
+        {
+          "id": "prepare_paths",
+          "name": "Define runner-local paths before identity checks",
+          "run": "set -euo pipefail\n: \"${RUNNER_TEMP:?RUNNER_TEMP must be provided by GitHub}\"\n: \"${GITHUB_ENV:?GITHUB_ENV must be provided by GitHub}\"\nprintf '%s\\n' \"INCOMING_DIR=$RUNNER_TEMP/gss-incoming\" \"PAYLOAD_DIR=$RUNNER_TEMP/gss-payload\" \"QUALIFICATION_DIR=$RUNNER_TEMP/gss-evidence\" >> \"$GITHUB_ENV\"\nprintf '%s\\n' \"MATHLIB_CACHE_DIR=$RUNNER_TEMP/gss-mathlib-compressed\" >> \"$GITHUB_ENV\"\n",
+          "shell": "bash"
+        },
+        {
+          "id": "checkout",
+          "uses": "actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5",
+          "with": {
+            "fetch-depth": 1,
+            "persist-credentials": false,
+            "ref": "${{ github.sha }}"
+          }
+        },
+        {
+          "id": "identity",
+          "name": "Bind exact candidate before setup",
+          "run": "python3 -B scripts/segmented_qualification.py identity"
+        },
+        {
+          "id": "before_setup",
+          "run": "python3 -B scripts/segmented_qualification.py capacity before_setup\npython3 -B scripts/segmented_qualification.py setup-admission"
+        },
+        {
+          "id": "lean_setup",
+          "uses": "leanprover/lean-action@50fcf42d2e460296f1a34b402e990d1b24f8b596",
+          "with": {
+            "auto-config": false,
+            "axiom-audit": false,
+            "build": false,
+            "check-reservoir-eligibility": false,
+            "lean4checker": false,
+            "leanchecker": false,
+            "lint": false,
+            "mk_all-check": false,
+            "nanoda": false,
+            "test": false,
+            "use-github-cache": false,
+            "use-mathlib-cache": false
+          }
+        },
+        {
+          "env": {
+            "SETUP_OUTCOME": "${{ steps.lean_setup.outcome }}"
+          },
+          "id": "after_toolchain",
+          "if": "${{ always() && steps.identity.outcome == 'success' }}",
+          "run": "python3 -B scripts/segmented_qualification.py capacity after_toolchain_setup"
+        },
+        {
+          "id": "cache_get",
+          "run": "python3 -B scripts/segmented_qualification.py cache-get"
+        },
+        {
+          "env": {
+            "CACHE_OUTCOME": "${{ steps.cache_get.outcome }}"
+          },
+          "id": "after_cache",
+          "if": "${{ always() && steps.identity.outcome == 'success' }}",
+          "run": "python3 -B scripts/segmented_qualification.py capacity after_cache_expansion"
+        },
+        {
+          "id": "cleanup_compressed",
+          "run": "python3 -B scripts/segmented_qualification.py cleanup-compressed"
+        },
+        {
+          "id": "native_admission",
+          "run": "python3 -B scripts/segmented_qualification.py native-admission"
+        },
+        {
+          "env": {
+            "GH_TOKEN": "${{ secrets.GITHUB_TOKEN }}"
+          },
+          "id": "download",
+          "name": "Read exact current or explicitly bound prior-attempt artifacts",
+          "run": "python3 -B scripts/segmented_qualification.py download-prior\n"
+        },
+        {
+          "continue-on-error": true,
+          "env": {
+            "GH_TOKEN": "${{ github.token }}"
+          },
+          "id": "compile",
+          "name": "Sequential native Lean: gss_05",
+          "run": "python3 -B scripts/segmented_qualification.py stage gss_05",
+          "timeout-minutes": 300
+        },
+        {
+          "env": {
+            "CACHE_OUTCOME": "${{ steps.cache_get.outcome }}",
+            "COMPILE_OUTCOME": "${{ steps.compile.outcome }}",
+            "DOWNLOAD_OUTCOME": "${{ steps.download.outcome }}",
+            "FINAL_CHECKS_OUTCOME": "",
+            "IDENTITY_OUTCOME": "${{ steps.identity.outcome }}",
+            "RESOURCE_OUTCOME": "${{ steps.native_admission.outcome }}",
+            "SETUP_OUTCOME": "${{ steps.lean_setup.outcome }}"
+          },
+          "id": "collect",
+          "if": "${{ always() }}",
+          "run": "python3 -B scripts/segmented_qualification.py collect"
+        },
+        {
+          "id": "upload_guard",
+          "if": "${{ always() && steps.collect.outcome == 'success' }}",
+          "name": "Measure actual payload and cumulative storage bound",
+          "run": "python3 -B scripts/segmented_qualification.py upload-guard"
+        },
+        {
+          "id": "upload_evidence",
+          "if": "${{ always() && steps.upload_guard.outcome == 'success' }}",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "compression-level": 6,
+            "if-no-files-found": "error",
+            "include-hidden-files": true,
+            "name": "gss-gss_05-evidence-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "${{ runner.temp }}/gss-job-evidence",
+            "retention-days": 3
+          }
+        },
+        {
+          "id": "upload_b0",
+          "if": "${{ always() && steps.upload_guard.outcome == 'success' && contains(fromJSON(steps.upload_guard.outputs.bundles || '[]'), 'gss_05-b00') }}",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "compression-level": 6,
+            "if-no-files-found": "error",
+            "include-hidden-files": true,
+            "name": "gss-gss_05-b00-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "${{ runner.temp }}/gss-bundles/gss_05-b00",
+            "retention-days": 3
+          }
+        },
+        {
+          "id": "upload_b1",
+          "if": "${{ always() && steps.upload_guard.outcome == 'success' && contains(fromJSON(steps.upload_guard.outputs.bundles || '[]'), 'gss_05-b01') }}",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "compression-level": 6,
+            "if-no-files-found": "error",
+            "include-hidden-files": true,
+            "name": "gss-gss_05-b01-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "${{ runner.temp }}/gss-bundles/gss_05-b01",
+            "retention-days": 3
+          }
+        },
+        {
+          "id": "upload_b2",
+          "if": "${{ always() && steps.upload_guard.outcome == 'success' && contains(fromJSON(steps.upload_guard.outputs.bundles || '[]'), 'gss_05-b02') }}",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "compression-level": 6,
+            "if-no-files-found": "error",
+            "include-hidden-files": true,
+            "name": "gss-gss_05-b02-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "${{ runner.temp }}/gss-bundles/gss_05-b02",
+            "retention-days": 3
+          }
+        },
+        {
+          "id": "upload",
+          "if": "${{ always() && steps.upload_guard.outcome == 'success' }}",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "compression-level": 6,
+            "if-no-files-found": "error",
+            "include-hidden-files": true,
+            "name": "gss-gss_05-receipt-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "${{ runner.temp }}/gss-payload",
+            "retention-days": 3
+          }
+        },
+        {
+          "env": {
+            "UPLOAD_OUTCOME": "${{ steps.upload_evidence.outcome == 'success' && steps.upload_b0.outcome == 'success' && steps.upload_b1.outcome == 'success' && steps.upload_b2.outcome == 'success' && steps.upload.outcome == 'success' && 'success' || 'failure' }}"
+          },
+          "id": "require",
+          "if": "${{ always() }}",
+          "run": "python3 -B scripts/segmented_qualification.py require-stage"
+        },
+        {
+          "id": "diagnostic",
+          "if": "${{ always() && steps.identity.outcome == 'success' }}",
+          "name": "Bounded diagnostics independent of build reserve",
+          "run": "python3 -B scripts/segmented_qualification.py diagnostic"
+        },
+        {
+          "id": "diagnostic_upload",
+          "if": "${{ always() && steps.diagnostic.outcome == 'success' }}",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "compression-level": 6,
+            "if-no-files-found": "error",
+            "name": "gss-gss_05-diagnostic-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "${{ runner.temp }}/gss-diagnostic",
+            "retention-days": 3
+          }
+        }
+      ],
+      "timeout-minutes": 330
+    },
+    "gss_06": {
+      "defaults": {
+        "run": {
+          "shell": "bash"
+        }
+      },
+      "env": {
+        "EXPECTED_COMMIT": "${{ inputs.expected_commit }}",
+        "EXPECTED_MATHLIB": "${{ inputs.expected_mathlib }}",
+        "EXPECTED_TOOLCHAIN": "${{ inputs.expected_toolchain }}",
+        "EXPECTED_TREE": "${{ inputs.expected_tree }}",
+        "LAKE_ARTIFACT_CACHE": "false",
+        "LAKE_NO_CACHE": "true",
+        "QUALIFICATION_MODE": "BOOTSTRAP_SCOPED_LINUX",
+        "REPOSITORY_PRIVATE": "${{ github.event.repository.private }}",
+        "STAGE_NAME": "gss_06",
+        "WORKFLOW_SHA": "${{ github.workflow_sha }}"
+      },
+      "if": "${{ github.event_name == 'workflow_dispatch' && github.event.repository.private == true && github.repository_id == '1367564442' }}",
+      "name": "gss_06 dependency-scoped native qualification",
+      "needs": [
+        "base",
+        "gss_01",
+        "gss_02",
+        "gss_03",
+        "gss_04",
+        "gss_05"
+      ],
+      "runs-on": "ubuntu-24.04",
+      "steps": [
+        {
+          "id": "prepare_paths",
+          "name": "Define runner-local paths before identity checks",
+          "run": "set -euo pipefail\n: \"${RUNNER_TEMP:?RUNNER_TEMP must be provided by GitHub}\"\n: \"${GITHUB_ENV:?GITHUB_ENV must be provided by GitHub}\"\nprintf '%s\\n' \"INCOMING_DIR=$RUNNER_TEMP/gss-incoming\" \"PAYLOAD_DIR=$RUNNER_TEMP/gss-payload\" \"QUALIFICATION_DIR=$RUNNER_TEMP/gss-evidence\" >> \"$GITHUB_ENV\"\nprintf '%s\\n' \"MATHLIB_CACHE_DIR=$RUNNER_TEMP/gss-mathlib-compressed\" >> \"$GITHUB_ENV\"\n",
+          "shell": "bash"
+        },
+        {
+          "id": "checkout",
+          "uses": "actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5",
+          "with": {
+            "fetch-depth": 1,
+            "persist-credentials": false,
+            "ref": "${{ github.sha }}"
+          }
+        },
+        {
+          "id": "identity",
+          "name": "Bind exact candidate before setup",
+          "run": "python3 -B scripts/segmented_qualification.py identity"
+        },
+        {
+          "id": "before_setup",
+          "run": "python3 -B scripts/segmented_qualification.py capacity before_setup\npython3 -B scripts/segmented_qualification.py setup-admission"
+        },
+        {
+          "id": "lean_setup",
+          "uses": "leanprover/lean-action@50fcf42d2e460296f1a34b402e990d1b24f8b596",
+          "with": {
+            "auto-config": false,
+            "axiom-audit": false,
+            "build": false,
+            "check-reservoir-eligibility": false,
+            "lean4checker": false,
+            "leanchecker": false,
+            "lint": false,
+            "mk_all-check": false,
+            "nanoda": false,
+            "test": false,
+            "use-github-cache": false,
+            "use-mathlib-cache": false
+          }
+        },
+        {
+          "env": {
+            "SETUP_OUTCOME": "${{ steps.lean_setup.outcome }}"
+          },
+          "id": "after_toolchain",
+          "if": "${{ always() && steps.identity.outcome == 'success' }}",
+          "run": "python3 -B scripts/segmented_qualification.py capacity after_toolchain_setup"
+        },
+        {
+          "id": "cache_get",
+          "run": "python3 -B scripts/segmented_qualification.py cache-get"
+        },
+        {
+          "env": {
+            "CACHE_OUTCOME": "${{ steps.cache_get.outcome }}"
+          },
+          "id": "after_cache",
+          "if": "${{ always() && steps.identity.outcome == 'success' }}",
+          "run": "python3 -B scripts/segmented_qualification.py capacity after_cache_expansion"
+        },
+        {
+          "id": "cleanup_compressed",
+          "run": "python3 -B scripts/segmented_qualification.py cleanup-compressed"
+        },
+        {
+          "id": "native_admission",
+          "run": "python3 -B scripts/segmented_qualification.py native-admission"
+        },
+        {
+          "env": {
+            "GH_TOKEN": "${{ secrets.GITHUB_TOKEN }}"
+          },
+          "id": "download",
+          "name": "Read exact current or explicitly bound prior-attempt artifacts",
+          "run": "python3 -B scripts/segmented_qualification.py download-prior\n"
+        },
+        {
+          "continue-on-error": true,
+          "env": {
+            "GH_TOKEN": "${{ github.token }}"
+          },
+          "id": "compile",
+          "name": "Sequential native Lean: gss_06",
+          "run": "python3 -B scripts/segmented_qualification.py stage gss_06",
+          "timeout-minutes": 300
+        },
+        {
+          "env": {
+            "CACHE_OUTCOME": "${{ steps.cache_get.outcome }}",
+            "COMPILE_OUTCOME": "${{ steps.compile.outcome }}",
+            "DOWNLOAD_OUTCOME": "${{ steps.download.outcome }}",
+            "FINAL_CHECKS_OUTCOME": "",
+            "IDENTITY_OUTCOME": "${{ steps.identity.outcome }}",
+            "RESOURCE_OUTCOME": "${{ steps.native_admission.outcome }}",
+            "SETUP_OUTCOME": "${{ steps.lean_setup.outcome }}"
+          },
+          "id": "collect",
+          "if": "${{ always() }}",
+          "run": "python3 -B scripts/segmented_qualification.py collect"
+        },
+        {
+          "id": "upload_guard",
+          "if": "${{ always() && steps.collect.outcome == 'success' }}",
+          "name": "Measure actual payload and cumulative storage bound",
+          "run": "python3 -B scripts/segmented_qualification.py upload-guard"
+        },
+        {
+          "id": "upload_evidence",
+          "if": "${{ always() && steps.upload_guard.outcome == 'success' }}",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "compression-level": 6,
+            "if-no-files-found": "error",
+            "include-hidden-files": true,
+            "name": "gss-gss_06-evidence-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "${{ runner.temp }}/gss-job-evidence",
+            "retention-days": 3
+          }
+        },
+        {
+          "id": "upload_b0",
+          "if": "${{ always() && steps.upload_guard.outcome == 'success' && contains(fromJSON(steps.upload_guard.outputs.bundles || '[]'), 'gss_06-b00') }}",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "compression-level": 6,
+            "if-no-files-found": "error",
+            "include-hidden-files": true,
+            "name": "gss-gss_06-b00-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "${{ runner.temp }}/gss-bundles/gss_06-b00",
+            "retention-days": 3
+          }
+        },
+        {
+          "id": "upload",
+          "if": "${{ always() && steps.upload_guard.outcome == 'success' }}",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "compression-level": 6,
+            "if-no-files-found": "error",
+            "include-hidden-files": true,
+            "name": "gss-gss_06-receipt-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "${{ runner.temp }}/gss-payload",
+            "retention-days": 3
+          }
+        },
+        {
+          "env": {
+            "UPLOAD_OUTCOME": "${{ steps.upload_evidence.outcome == 'success' && steps.upload_b0.outcome == 'success' && steps.upload.outcome == 'success' && 'success' || 'failure' }}"
+          },
+          "id": "require",
+          "if": "${{ always() }}",
+          "run": "python3 -B scripts/segmented_qualification.py require-stage"
+        },
+        {
+          "id": "diagnostic",
+          "if": "${{ always() && steps.identity.outcome == 'success' }}",
+          "name": "Bounded diagnostics independent of build reserve",
+          "run": "python3 -B scripts/segmented_qualification.py diagnostic"
+        },
+        {
+          "id": "diagnostic_upload",
+          "if": "${{ always() && steps.diagnostic.outcome == 'success' }}",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "compression-level": 6,
+            "if-no-files-found": "error",
+            "name": "gss-gss_06-diagnostic-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "${{ runner.temp }}/gss-diagnostic",
+            "retention-days": 3
+          }
+        }
+      ],
+      "timeout-minutes": 330
+    },
+    "gss_07": {
+      "defaults": {
+        "run": {
+          "shell": "bash"
+        }
+      },
+      "env": {
+        "EXPECTED_COMMIT": "${{ inputs.expected_commit }}",
+        "EXPECTED_MATHLIB": "${{ inputs.expected_mathlib }}",
+        "EXPECTED_TOOLCHAIN": "${{ inputs.expected_toolchain }}",
+        "EXPECTED_TREE": "${{ inputs.expected_tree }}",
+        "LAKE_ARTIFACT_CACHE": "false",
+        "LAKE_NO_CACHE": "true",
+        "QUALIFICATION_MODE": "BOOTSTRAP_SCOPED_LINUX",
+        "REPOSITORY_PRIVATE": "${{ github.event.repository.private }}",
+        "STAGE_NAME": "gss_07",
+        "WORKFLOW_SHA": "${{ github.workflow_sha }}"
+      },
+      "if": "${{ github.event_name == 'workflow_dispatch' && github.event.repository.private == true && github.repository_id == '1367564442' }}",
+      "name": "gss_07 dependency-scoped native qualification",
+      "needs": [
+        "base",
+        "gss_01",
+        "gss_02",
+        "gss_03",
+        "gss_04",
+        "gss_05",
+        "gss_06"
+      ],
+      "runs-on": "ubuntu-24.04",
+      "steps": [
+        {
+          "id": "prepare_paths",
+          "name": "Define runner-local paths before identity checks",
+          "run": "set -euo pipefail\n: \"${RUNNER_TEMP:?RUNNER_TEMP must be provided by GitHub}\"\n: \"${GITHUB_ENV:?GITHUB_ENV must be provided by GitHub}\"\nprintf '%s\\n' \"INCOMING_DIR=$RUNNER_TEMP/gss-incoming\" \"PAYLOAD_DIR=$RUNNER_TEMP/gss-payload\" \"QUALIFICATION_DIR=$RUNNER_TEMP/gss-evidence\" >> \"$GITHUB_ENV\"\nprintf '%s\\n' \"MATHLIB_CACHE_DIR=$RUNNER_TEMP/gss-mathlib-compressed\" >> \"$GITHUB_ENV\"\n",
+          "shell": "bash"
+        },
+        {
+          "id": "checkout",
+          "uses": "actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5",
+          "with": {
+            "fetch-depth": 1,
+            "persist-credentials": false,
+            "ref": "${{ github.sha }}"
+          }
+        },
+        {
+          "id": "identity",
+          "name": "Bind exact candidate before setup",
+          "run": "python3 -B scripts/segmented_qualification.py identity"
+        },
+        {
+          "id": "before_setup",
+          "run": "python3 -B scripts/segmented_qualification.py capacity before_setup\npython3 -B scripts/segmented_qualification.py setup-admission"
+        },
+        {
+          "id": "lean_setup",
+          "uses": "leanprover/lean-action@50fcf42d2e460296f1a34b402e990d1b24f8b596",
+          "with": {
+            "auto-config": false,
+            "axiom-audit": false,
+            "build": false,
+            "check-reservoir-eligibility": false,
+            "lean4checker": false,
+            "leanchecker": false,
+            "lint": false,
+            "mk_all-check": false,
+            "nanoda": false,
+            "test": false,
+            "use-github-cache": false,
+            "use-mathlib-cache": false
+          }
+        },
+        {
+          "env": {
+            "SETUP_OUTCOME": "${{ steps.lean_setup.outcome }}"
+          },
+          "id": "after_toolchain",
+          "if": "${{ always() && steps.identity.outcome == 'success' }}",
+          "run": "python3 -B scripts/segmented_qualification.py capacity after_toolchain_setup"
+        },
+        {
+          "id": "cache_get",
+          "run": "python3 -B scripts/segmented_qualification.py cache-get"
+        },
+        {
+          "env": {
+            "CACHE_OUTCOME": "${{ steps.cache_get.outcome }}"
+          },
+          "id": "after_cache",
+          "if": "${{ always() && steps.identity.outcome == 'success' }}",
+          "run": "python3 -B scripts/segmented_qualification.py capacity after_cache_expansion"
+        },
+        {
+          "id": "cleanup_compressed",
+          "run": "python3 -B scripts/segmented_qualification.py cleanup-compressed"
+        },
+        {
+          "id": "native_admission",
+          "run": "python3 -B scripts/segmented_qualification.py native-admission"
+        },
+        {
+          "env": {
+            "GH_TOKEN": "${{ secrets.GITHUB_TOKEN }}"
+          },
+          "id": "download",
+          "name": "Read exact current or explicitly bound prior-attempt artifacts",
+          "run": "python3 -B scripts/segmented_qualification.py download-prior\n"
+        },
+        {
+          "continue-on-error": true,
+          "env": {
+            "GH_TOKEN": "${{ github.token }}"
+          },
+          "id": "compile",
+          "name": "Sequential native Lean: gss_07",
+          "run": "python3 -B scripts/segmented_qualification.py stage gss_07",
+          "timeout-minutes": 300
+        },
+        {
+          "env": {
+            "CACHE_OUTCOME": "${{ steps.cache_get.outcome }}",
+            "COMPILE_OUTCOME": "${{ steps.compile.outcome }}",
+            "DOWNLOAD_OUTCOME": "${{ steps.download.outcome }}",
+            "FINAL_CHECKS_OUTCOME": "",
+            "IDENTITY_OUTCOME": "${{ steps.identity.outcome }}",
+            "RESOURCE_OUTCOME": "${{ steps.native_admission.outcome }}",
+            "SETUP_OUTCOME": "${{ steps.lean_setup.outcome }}"
+          },
+          "id": "collect",
+          "if": "${{ always() }}",
+          "run": "python3 -B scripts/segmented_qualification.py collect"
+        },
+        {
+          "id": "upload_guard",
+          "if": "${{ always() && steps.collect.outcome == 'success' }}",
+          "name": "Measure actual payload and cumulative storage bound",
+          "run": "python3 -B scripts/segmented_qualification.py upload-guard"
+        },
+        {
+          "id": "upload_evidence",
+          "if": "${{ always() && steps.upload_guard.outcome == 'success' }}",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "compression-level": 6,
+            "if-no-files-found": "error",
+            "include-hidden-files": true,
+            "name": "gss-gss_07-evidence-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "${{ runner.temp }}/gss-job-evidence",
+            "retention-days": 3
+          }
+        },
+        {
+          "id": "upload_b0",
+          "if": "${{ always() && steps.upload_guard.outcome == 'success' && contains(fromJSON(steps.upload_guard.outputs.bundles || '[]'), 'gss_07-b00') }}",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "compression-level": 6,
+            "if-no-files-found": "error",
+            "include-hidden-files": true,
+            "name": "gss-gss_07-b00-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "${{ runner.temp }}/gss-bundles/gss_07-b00",
+            "retention-days": 3
+          }
+        },
+        {
+          "id": "upload",
+          "if": "${{ always() && steps.upload_guard.outcome == 'success' }}",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "compression-level": 6,
+            "if-no-files-found": "error",
+            "include-hidden-files": true,
+            "name": "gss-gss_07-receipt-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "${{ runner.temp }}/gss-payload",
+            "retention-days": 3
+          }
+        },
+        {
+          "env": {
+            "UPLOAD_OUTCOME": "${{ steps.upload_evidence.outcome == 'success' && steps.upload_b0.outcome == 'success' && steps.upload.outcome == 'success' && 'success' || 'failure' }}"
+          },
+          "id": "require",
+          "if": "${{ always() }}",
+          "run": "python3 -B scripts/segmented_qualification.py require-stage"
+        },
+        {
+          "id": "diagnostic",
+          "if": "${{ always() && steps.identity.outcome == 'success' }}",
+          "name": "Bounded diagnostics independent of build reserve",
+          "run": "python3 -B scripts/segmented_qualification.py diagnostic"
+        },
+        {
+          "id": "diagnostic_upload",
+          "if": "${{ always() && steps.diagnostic.outcome == 'success' }}",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "compression-level": 6,
+            "if-no-files-found": "error",
+            "name": "gss-gss_07-diagnostic-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "${{ runner.temp }}/gss-diagnostic",
+            "retention-days": 3
+          }
+        }
+      ],
+      "timeout-minutes": 330
+    },
+    "other": {
+      "defaults": {
+        "run": {
+          "shell": "bash"
+        }
+      },
+      "env": {
+        "EXPECTED_COMMIT": "${{ inputs.expected_commit }}",
+        "EXPECTED_MATHLIB": "${{ inputs.expected_mathlib }}",
+        "EXPECTED_TOOLCHAIN": "${{ inputs.expected_toolchain }}",
+        "EXPECTED_TREE": "${{ inputs.expected_tree }}",
+        "LAKE_ARTIFACT_CACHE": "false",
+        "LAKE_NO_CACHE": "true",
+        "QUALIFICATION_MODE": "BOOTSTRAP_SCOPED_LINUX",
+        "REPOSITORY_PRIVATE": "${{ github.event.repository.private }}",
+        "STAGE_NAME": "other",
+        "WORKFLOW_SHA": "${{ github.workflow_sha }}"
+      },
+      "if": "${{ github.event_name == 'workflow_dispatch' && github.event.repository.private == true && github.repository_id == '1367564442' }}",
+      "name": "other dependency-scoped native qualification",
+      "needs": [
+        "base",
+        "gss_01",
+        "gss_02",
+        "gss_03",
+        "gss_04",
+        "gss_05",
+        "gss_06",
+        "gss_07"
+      ],
+      "runs-on": "ubuntu-24.04",
+      "steps": [
+        {
+          "id": "prepare_paths",
+          "name": "Define runner-local paths before identity checks",
+          "run": "set -euo pipefail\n: \"${RUNNER_TEMP:?RUNNER_TEMP must be provided by GitHub}\"\n: \"${GITHUB_ENV:?GITHUB_ENV must be provided by GitHub}\"\nprintf '%s\\n' \"INCOMING_DIR=$RUNNER_TEMP/gss-incoming\" \"PAYLOAD_DIR=$RUNNER_TEMP/gss-payload\" \"QUALIFICATION_DIR=$RUNNER_TEMP/gss-evidence\" >> \"$GITHUB_ENV\"\nprintf '%s\\n' \"MATHLIB_CACHE_DIR=$RUNNER_TEMP/gss-mathlib-compressed\" >> \"$GITHUB_ENV\"\n",
+          "shell": "bash"
+        },
+        {
+          "id": "checkout",
+          "uses": "actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5",
+          "with": {
+            "fetch-depth": 1,
+            "persist-credentials": false,
+            "ref": "${{ github.sha }}"
+          }
+        },
+        {
+          "id": "identity",
+          "name": "Bind exact candidate before setup",
+          "run": "python3 -B scripts/segmented_qualification.py identity"
+        },
+        {
+          "id": "before_setup",
+          "run": "python3 -B scripts/segmented_qualification.py capacity before_setup\npython3 -B scripts/segmented_qualification.py setup-admission"
+        },
+        {
+          "id": "lean_setup",
+          "uses": "leanprover/lean-action@50fcf42d2e460296f1a34b402e990d1b24f8b596",
+          "with": {
+            "auto-config": false,
+            "axiom-audit": false,
+            "build": false,
+            "check-reservoir-eligibility": false,
+            "lean4checker": false,
+            "leanchecker": false,
+            "lint": false,
+            "mk_all-check": false,
+            "nanoda": false,
+            "test": false,
+            "use-github-cache": false,
+            "use-mathlib-cache": false
+          }
+        },
+        {
+          "env": {
+            "SETUP_OUTCOME": "${{ steps.lean_setup.outcome }}"
+          },
+          "id": "after_toolchain",
+          "if": "${{ always() && steps.identity.outcome == 'success' }}",
+          "run": "python3 -B scripts/segmented_qualification.py capacity after_toolchain_setup"
+        },
+        {
+          "id": "cache_get",
+          "run": "python3 -B scripts/segmented_qualification.py cache-get"
+        },
+        {
+          "env": {
+            "CACHE_OUTCOME": "${{ steps.cache_get.outcome }}"
+          },
+          "id": "after_cache",
+          "if": "${{ always() && steps.identity.outcome == 'success' }}",
+          "run": "python3 -B scripts/segmented_qualification.py capacity after_cache_expansion"
+        },
+        {
+          "id": "cleanup_compressed",
+          "run": "python3 -B scripts/segmented_qualification.py cleanup-compressed"
+        },
+        {
+          "id": "native_admission",
+          "run": "python3 -B scripts/segmented_qualification.py native-admission"
+        },
+        {
+          "env": {
+            "GH_TOKEN": "${{ secrets.GITHUB_TOKEN }}"
+          },
+          "id": "download",
+          "name": "Read exact current or explicitly bound prior-attempt artifacts",
+          "run": "python3 -B scripts/segmented_qualification.py download-prior\n"
+        },
+        {
+          "continue-on-error": true,
+          "env": {
+            "GH_TOKEN": "${{ github.token }}"
+          },
+          "id": "compile",
+          "name": "Sequential native Lean: other",
+          "run": "python3 -B scripts/segmented_qualification.py stage other",
+          "timeout-minutes": 300
+        },
+        {
+          "env": {
+            "CACHE_OUTCOME": "${{ steps.cache_get.outcome }}",
+            "COMPILE_OUTCOME": "${{ steps.compile.outcome }}",
+            "DOWNLOAD_OUTCOME": "${{ steps.download.outcome }}",
+            "FINAL_CHECKS_OUTCOME": "",
+            "IDENTITY_OUTCOME": "${{ steps.identity.outcome }}",
+            "RESOURCE_OUTCOME": "${{ steps.native_admission.outcome }}",
+            "SETUP_OUTCOME": "${{ steps.lean_setup.outcome }}"
+          },
+          "id": "collect",
+          "if": "${{ always() }}",
+          "run": "python3 -B scripts/segmented_qualification.py collect"
+        },
+        {
+          "id": "upload_guard",
+          "if": "${{ always() && steps.collect.outcome == 'success' }}",
+          "name": "Measure actual payload and cumulative storage bound",
+          "run": "python3 -B scripts/segmented_qualification.py upload-guard"
+        },
+        {
+          "id": "upload_evidence",
+          "if": "${{ always() && steps.upload_guard.outcome == 'success' }}",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "compression-level": 6,
+            "if-no-files-found": "error",
+            "include-hidden-files": true,
+            "name": "gss-other-evidence-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "${{ runner.temp }}/gss-job-evidence",
+            "retention-days": 3
+          }
+        },
+        {
+          "id": "upload_b0",
+          "if": "${{ always() && steps.upload_guard.outcome == 'success' && contains(fromJSON(steps.upload_guard.outputs.bundles || '[]'), 'other-b00') }}",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "compression-level": 6,
+            "if-no-files-found": "error",
+            "include-hidden-files": true,
+            "name": "gss-other-b00-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "${{ runner.temp }}/gss-bundles/other-b00",
+            "retention-days": 3
+          }
+        },
+        {
+          "id": "upload",
+          "if": "${{ always() && steps.upload_guard.outcome == 'success' }}",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "compression-level": 6,
+            "if-no-files-found": "error",
+            "include-hidden-files": true,
+            "name": "gss-other-receipt-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "${{ runner.temp }}/gss-payload",
+            "retention-days": 3
+          }
+        },
+        {
+          "env": {
+            "UPLOAD_OUTCOME": "${{ steps.upload_evidence.outcome == 'success' && steps.upload_b0.outcome == 'success' && steps.upload.outcome == 'success' && 'success' || 'failure' }}"
+          },
+          "id": "require",
+          "if": "${{ always() }}",
+          "run": "python3 -B scripts/segmented_qualification.py require-stage"
+        },
+        {
+          "id": "diagnostic",
+          "if": "${{ always() && steps.identity.outcome == 'success' }}",
+          "name": "Bounded diagnostics independent of build reserve",
+          "run": "python3 -B scripts/segmented_qualification.py diagnostic"
+        },
+        {
+          "id": "diagnostic_upload",
+          "if": "${{ always() && steps.diagnostic.outcome == 'success' }}",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "compression-level": 6,
+            "if-no-files-found": "error",
+            "name": "gss-other-diagnostic-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "${{ runner.temp }}/gss-diagnostic",
+            "retention-days": 3
+          }
+        }
+      ],
+      "timeout-minutes": 330
+    }
+  },
+  "name": "Frozen GSS segmented qualification",
+  "on": {
+    "workflow_dispatch": {
+      "inputs": {
+        "expected_commit": {
+          "description": "Exact frozen private release commit (40 hex)",
+          "required": true,
+          "type": "string"
+        },
+        "expected_mathlib": {
+          "default": "360da6fa66c1273b76b6b2d8c5666fd5ac2e3b56",
+          "description": "Exact Mathlib commit",
+          "required": true,
+          "type": "string"
+        },
+        "expected_toolchain": {
+          "default": "leanprover/lean4:v4.32.0-rc1",
+          "description": "Exact Lean release toolchain",
+          "required": true,
+          "type": "string"
+        },
+        "expected_tree": {
+          "description": "Exact frozen private release tree (40 hex)",
+          "required": true,
+          "type": "string"
+        }
+      }
+    }
+  },
+  "permissions": {
+    "actions": "read",
+    "contents": "read"
+  }
+}
