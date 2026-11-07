@@ -78,7 +78,10 @@ theorem compactC0SumHom_apply (x : CompactOperatorC0Sum H) :
 @[simp]
 theorem norm_compactC0SumHom (x : CompactOperatorC0Sum H) :
     ‖compactC0SumHom J hJ H E x‖ = ‖x‖ := by
-  rw [compactC0SumHom_apply, norm_c0SumHom, C0DirectSum.norm_equiv_symm_apply]
+  rw [compactC0SumHom_apply, norm_c0SumHom]
+  exact C0DirectSum.norm_equiv_symm_apply (Fiber J)
+    (fun i => ContinuousLinearMap.compactOperatorStarSubalgebra ℂ (H i))
+    (Equiv.refl ι) E x
 
 /-- The compact-fiber sum map is an isometry, even when its range is proper. -/
 theorem isometry_compactC0SumHom : Isometry (compactC0SumHom J hJ H E) := by

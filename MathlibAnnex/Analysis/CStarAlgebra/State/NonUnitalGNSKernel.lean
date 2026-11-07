@@ -100,7 +100,8 @@ private theorem unitized_gns_apply_toPreGNS
       (f.toPreGNS (z.fst • b + z.snd * b) : f.GNS) := by
   induction z using Unitization.ind with
   | inl_add_inr c a =>
-    simp [NonUnitalCStarRepresentation.unitization, nonUnital_gns_apply_toPreGNS,
+    simp [NonUnitalCStarRepresentation.unitization, Unitization.starLift,
+      Unitization.lift, NonUnitalAlgHom.toAlgHom, nonUnital_gns_apply_toPreGNS,
       map_add, map_smul, UniformSpace.Completion.coe_add,
       UniformSpace.Completion.coe_smul]
 

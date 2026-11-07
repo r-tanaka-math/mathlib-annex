@@ -116,8 +116,8 @@ theorem singletonImageNormalPartHomeomorph_symm_preimage
     (I : NormedSpace.GeometricStructureSpace ℂ A) :
     (NonUnitalStarAlgHom.rangeRestrict pi) ⁻¹'
         ((singletonImageNormalPartHomeomorph hsingle pi hpi).toEquiv.symm I).val.val = I.val := by
-  rw [← singletonImageNormalPartHomeomorph_val hsingle pi hpi,
-    Equiv.apply_symm_apply]
+  exact congrArg (fun J : NormedSpace.GeometricStructureSpace ℂ A => J.val)
+    ((singletonImageNormalPartHomeomorph hsingle pi hpi).toEquiv.apply_symm_apply I)
 
 /-- The two ends of the target change have the same class-relative property. -/
 theorem singleton_component_hasContinuousFiniteConjugation_iff

@@ -38,6 +38,32 @@ variable {ι : Type uI} {κ : Type uJ}
 attribute [local instance] HomKernelQuotient.imageCStarAlgebra
   HomKernelQuotient.isClosed_image
 
+/-- Package the faithful GNS image and its normal-part homeomorphism
+while the target algebra is still abstract. -/
+private theorem exists_normalPart_image_for_dimension
+    {B : Type v} [NonUnitalCStarAlgebra B] [PartialOrder B] [StarOrderedRing B]
+    (S : NonUnitalStarSubalgebra ℂ (H →L[ℂ] H))
+    [IsClosed (S : Set (H →L[ℂ] H))]
+    (hS : NonUnitalCStarRepresentation.IsIrreducible
+      (NonUnitalStarSubalgebraClass.subtype S))
+    (e : ClosureSpace.Homeomorph (NormedSpace.geometricStructureClosure ℂ S)
+      (NormedSpace.geometricStructureClosure ℂ B)) :
+    ∃ (G : Type v) (_ : NormedAddCommGroup G) (_ : InnerProductSpace ℂ G)
+      (_ : CompleteSpace G) (rho : NonUnitalCStarRepresentation B G),
+      Function.Injective rho ∧ rho.IsIrreducible ∧
+        Nonempty (ClosureSpace.Homeomorph
+          ((NormedSpace.geometricStructureClosure ℂ S).subspace (normalPart S))
+          ((NormedSpace.geometricStructureClosure ℂ (NonUnitalStarAlgHom.range rho)).subspace
+            (normalPart (NonUnitalStarAlgHom.range rho)))) := by
+  obtain ⟨phi, hfaith, r, _hpre, _hinv, himage⟩ :=
+    exists_faithful_normalPart_transport S hS e
+  refine ⟨phi.GNS, inferInstance, inferInstance, inferInstance,
+    phi.gnsRepresentation, hfaith, phi.isIrreducible_gnsRepresentation, ?_⟩
+  exact ⟨normalPartHomeomorphOfImage
+    (H := H) (K := phi.GNS) (S := S)
+    (T := NonUnitalStarAlgHom.range phi.gnsRepresentation) (e.trans r.symm) himage⟩
+
+
 variable (S : NonUnitalStarSubalgebra ℂ (H →L[ℂ] H))
 variable (T : NonUnitalStarSubalgebra ℂ (K →L[ℂ] K))
 variable [IsClosed (S : Set (H →L[ℂ] H))] [IsClosed (T : Set (K →L[ℂ] K))]
@@ -53,6 +79,59 @@ local instance : NonUnitalCStarAlgebra T :=
 local instance : PartialOrder T := _root_.CStarAlgebra.spectralOrder T
 local instance : StarOrderedRing T := _root_.CStarAlgebra.spectralOrderedRing T
 
+include hS hT in
+/-- Compare the two original Hilbert bases through one fixed faithful image,
+with its Hilbert carrier kept abstract throughout the comparison. -/
+private theorem hilbertBasis_lift_mk_eq_of_faithful_image
+    {G : Type v} [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
+    (rho : NonUnitalCStarRepresentation T G) (hrho : rho.IsIrreducible)
+    (hfaith : Function.Injective rho)
+    (f : ClosureSpace.Homeomorph
+      ((NormedSpace.geometricStructureClosure ℂ S).subspace (normalPart S))
+      ((NormedSpace.geometricStructureClosure ℂ (NonUnitalStarAlgHom.range rho)).subspace
+        (normalPart (NonUnitalStarAlgHom.range rho))))
+    (hcompact : ContinuousLinearMap.compactOperatorStarSubalgebra ℂ H ≤ S ∨
+      ContinuousLinearMap.compactOperatorStarSubalgebra ℂ K ≤ T)
+    (b : HilbertBasis ι ℂ H) (c : HilbertBasis κ ℂ K) :
+    Cardinal.lift.{uJ} (#ι) = Cardinal.lift.{uI} (#κ) := by
+  classical
+  have hR : NonUnitalCStarRepresentation.IsIrreducible (NonUnitalStarSubalgebraClass.subtype
+      (NonUnitalStarAlgHom.range rho)) :=
+    (NonUnitalCStarRepresentation.isIrreducible_imageRepresentation_iff
+      rho).2 hrho
+  have hSR := compactOperatorStarSubalgebra_le_iff_of_normalPart_homeomorph
+    S (NonUnitalStarAlgHom.range rho) hS hR f
+  have hTR := compactOperatorStarSubalgebra_le_iff_range_of_injective
+    (hclosedT := by infer_instance) T hT rho
+      hrho hfaith
+  have htransport :
+      ContinuousLinearMap.compactOperatorStarSubalgebra ℂ H ≤ S ↔
+        ContinuousLinearMap.compactOperatorStarSubalgebra ℂ K ≤ T :=
+    hSR.trans hTR.symm
+  have hScompact : ContinuousLinearMap.compactOperatorStarSubalgebra ℂ H ≤ S :=
+    hcompact.elim (fun h => h) htransport.mpr
+  have hTcompact : ContinuousLinearMap.compactOperatorStarSubalgebra ℂ K ≤ T :=
+    htransport.mp hScompact
+  obtain ⟨basisIndex, d, _hd⟩ := exists_hilbertBasis ℂ G
+  have hHL : Nonempty (ι ≃ basisIndex) :=
+    nonempty_hilbertBasis_index_equiv_of_normalPart_continuous
+      S (NonUnitalStarAlgHom.range rho) hS hR f.toFiniteHomeomorph
+        f.continuous_toFun b d
+  letI : Nontrivial K :=
+    NonUnitalCStarRepresentation.nontrivial_of_isNonzero
+      (NonUnitalStarSubalgebraClass.subtype T) hT.1
+  obtain ⟨U, _hU⟩ := unitaryEquivalent_inclusion_of_injective
+    T (by infer_instance) hTcompact rho
+      hrho hfaith
+  have hKL : Nonempty (κ ≃ basisIndex) :=
+    Cardinal.lift_mk_eq'.mp
+      (c.lift_mk_eq_of_continuous_linear_equiv d U.toContinuousLinearEquiv)
+  obtain ⟨q⟩ := hHL
+  obtain ⟨rι⟩ := hKL
+  exact Cardinal.lift_mk_eq'.mpr ⟨q.trans rι.symm⟩
+
+set_option maxHeartbeats 1000000 in
+set_option synthInstance.maxHeartbeats 100000 in
 include hS hT e in
 /-- If either concrete algebra contains every compact operator, then arbitrary
 Hilbert bases of the two original Hilbert spaces have the same lifted
@@ -65,42 +144,12 @@ theorem hilbertBasis_lift_mk_eq_of_geometricStructure_homeomorph_of_compact_le
     (b : HilbertBasis ι ℂ H) (c : HilbertBasis κ ℂ K) :
     Cardinal.lift.{uJ} (#ι) = Cardinal.lift.{uI} (#κ) := by
   classical
-  obtain ⟨phi, hfaith, r, _hpre, _hinv, himage⟩ :=
-    exists_faithful_normalPart_transport S hS e
-  let f := normalPartHomeomorphOfImage (e.trans r.symm) himage
-  have hR : NonUnitalCStarRepresentation.IsIrreducible (NonUnitalStarSubalgebraClass.subtype
-      (NonUnitalStarAlgHom.range phi.gnsRepresentation)) :=
-    (NonUnitalCStarRepresentation.isIrreducible_imageRepresentation_iff
-      phi.gnsRepresentation).2 phi.isIrreducible_gnsRepresentation
-  have hSR := compactOperatorStarSubalgebra_le_iff_of_normalPart_homeomorph
-    S (NonUnitalStarAlgHom.range phi.gnsRepresentation) hS hR f
-  have hTR := compactOperatorStarSubalgebra_le_iff_range_of_injective
-    (hclosedT := by infer_instance) T hT phi.gnsRepresentation
-      phi.isIrreducible_gnsRepresentation hfaith
-  have htransport :
-      ContinuousLinearMap.compactOperatorStarSubalgebra ℂ H ≤ S ↔
-        ContinuousLinearMap.compactOperatorStarSubalgebra ℂ K ≤ T :=
-    hSR.trans hTR.symm
-  have hScompact : ContinuousLinearMap.compactOperatorStarSubalgebra ℂ H ≤ S :=
-    hcompact.elim (fun h => h) htransport.mpr
-  have hTcompact : ContinuousLinearMap.compactOperatorStarSubalgebra ℂ K ≤ T :=
-    htransport.mp hScompact
-  obtain ⟨basisIndex, d, _hd⟩ := exists_hilbertBasis ℂ phi.GNS
-  have hHL : Nonempty (ι ≃ basisIndex) :=
-    nonempty_hilbertBasis_index_equiv_of_normalPart_continuous
-      S (NonUnitalStarAlgHom.range phi.gnsRepresentation) hS hR f.toFiniteHomeomorph
-        f.continuous_toFun b d
-  letI : Nontrivial K :=
-    NonUnitalCStarRepresentation.nontrivial_of_isNonzero
-      (NonUnitalStarSubalgebraClass.subtype T) hT.1
-  obtain ⟨U, _hU⟩ := unitaryEquivalent_inclusion_of_injective
-    T (by infer_instance) hTcompact phi.gnsRepresentation
-      phi.isIrreducible_gnsRepresentation hfaith
-  have hKL : Nonempty (κ ≃ basisIndex) :=
-    Cardinal.lift_mk_eq'.mp
-      (c.lift_mk_eq_of_continuous_linear_equiv d U.toContinuousLinearEquiv)
-  obtain ⟨q⟩ := hHL
-  obtain ⟨rι⟩ := hKL
-  exact Cardinal.lift_mk_eq'.mpr ⟨q.trans rι.symm⟩
+  obtain ⟨G, nG, iG, cG, rho, hfaith, hrho, ⟨f⟩⟩ :=
+    exists_normalPart_image_for_dimension (H := H) (B := T) S hS e
+  letI := nG
+  letI := iG
+  letI := cG
+  exact hilbertBasis_lift_mk_eq_of_faithful_image S T hS hT
+    rho hrho hfaith f hcompact b c
 
 end MathlibAnnex.Analysis.CStarAlgebra

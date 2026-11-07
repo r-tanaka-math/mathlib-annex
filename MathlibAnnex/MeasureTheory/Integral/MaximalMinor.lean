@@ -85,11 +85,15 @@ theorem tendsto_integral_maximalMinor_mollify
   have hQ := lipschitz_fderiv_memLpOn_compact hf hK
   apply MathlibAnnex.MeasureTheory.tendsto_integral_det_of_strongLn (Nat.succ_pos m)
   · constructor
-    · apply tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds hstrong.1
-      · intro ε; exact bot_le
-      · intro ε
+    · apply tendsto_of_tendsto_of_tendsto_of_le_of_le' tendsto_const_nhds hstrong.1
+      · exact Eventually.of_forall fun ε => bot_le
+      · filter_upwards [hstrong.2] with ε hε
         apply eLpNorm_mono
+          ((hε.continuousLinearMap_comp (ContinuousLinearMap.selectedSquareCLM s)).aestronglyMeasurable.sub
+            (hQ.continuousLinearMap_comp (ContinuousLinearMap.selectedSquareCLM s)).aestronglyMeasurable)
         intro x
+        change ‖ContinuousLinearMap.selectedSquare s (fderiv ℝ (mollify ε f) x) -
+          ContinuousLinearMap.selectedSquare s (fderiv ℝ f x)‖ ≤ _
         rw [← ContinuousLinearMap.selectedSquare_sub]
         exact ContinuousLinearMap.norm_selectedSquare_le s _
     · filter_upwards [hstrong.2] with ε hε
@@ -117,7 +121,7 @@ theorem integrableOn_maximalMinor_fderiv_of_lipschitzWith
     have h := MathlibAnnex.ContinuousLinearMap.norm_det_sub_le (Q x) 0
     simpa [hzero, pow_succ, mul_assoc] using h
   exact ((hQ.integrable_norm_pow (Nat.succ_ne_zero m)).const_mul (m + 1 : ℕ)).mono'
-    (ContinuousLinearMap.continuous_det.comp_aestronglyMeasurable hQ.1)
+    (ContinuousLinearMap.continuous_det.comp_aestronglyMeasurable hQ.aestronglyMeasurable)
     (ae_of_all _ hb)
 
 theorem topMinor_difference_eq_zero_of_not_mem_tsupport

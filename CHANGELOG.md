@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.6.0 — Lipschitz Homeomorphic Banach Spaces
+
+Adds the Lip Project, its 166 production modules and its validation sources. The package uses Lean 4.35.0 and Mathlib at revision 56a005855ea17e0b0958f73ec801ae140b0a1679. Owner-final qualification covered seven Project entries and 928 targets.
+
 ## v0.5.0 — GSS source release (2026-10-11)
 
 - Add 328 reusable GSS modules and one imports-only facade; retain all existing

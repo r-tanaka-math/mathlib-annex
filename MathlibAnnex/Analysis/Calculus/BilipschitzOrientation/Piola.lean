@@ -110,9 +110,9 @@ private theorem clmMatrix_one_add_coordinateProjector_comp {n : ℕ}
   by_cases hri : r = i
   · subst r
     simp [oneRowPerturbationMatrix, coordinateProjector, basisVector,
-      clmMatrix, Matrix.updateRow, Matrix.one_apply, Pi.single_apply]
+      clmMatrix, Matrix.updateRow_apply, Matrix.one_apply, Pi.single_apply]
   · simp [oneRowPerturbationMatrix, coordinateProjector, basisVector,
-      clmMatrix, Matrix.updateRow, Matrix.one_apply, Pi.single_apply, hri]
+      clmMatrix, Matrix.updateRow_apply, Matrix.one_apply, Pi.single_apply, hri]
 
 private theorem coordDet_one_add_coordinateProjector_comp {n : ℕ}
     (i : Fin n) (B : (Fin n → ℝ) →L[ℝ] (Fin n → ℝ)) :

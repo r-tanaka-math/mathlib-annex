@@ -1,1 +1,72 @@
-{"current_qualification":{"checks":{"build":"PASS","cleanliness":"PASS","compiled_axiom_audit":"PASS","complete_source_coverage":"PASS","downstream_import":"PASS","gss_project_entry_import":"PASS","gss_public_census":"PASS","identity":"PASS","naimark_entry_import":"PASS","project_entry_import":"PASS","project_entry_parser":"PASS","pure_state_homogeneity_entry_import":"PASS","rosenberg_entry_import":"PASS","sphere_rigidity_entry_import":"PASS"},"independent_clean_single_runner":"NOT_RUN","public_source_mapping":"METADATA_ONLY; exact public commit/tree and asset identities in external PUBLICATION_RECORD.json","publication_record_url":"https://github.com/r-tanaka-math/mathlib-annex/releases/download/v0.5.0/PUBLICATION_RECORD.json","qualification_mode":"CHECKPOINT_ASSISTED_BOOTSTRAP","qualification_receipt_sha256":"a3825515082c09fa5b757f848691776087e8096114ada421ea589b76369a824f","qualification_receipt_url":"https://github.com/r-tanaka-math/mathlib-annex/releases/download/v0.5.0/GITHUB_QUALIFICATION_RECEIPT.json","qualified_commit":"4d4cfc1b2b5a2642a6a90d3fc5c4e6f4f8abdfa4","qualified_tree":"2df11956be5a3b1c55827c291d74bfc03cd6727c","run_attempt":1,"run_id":38063627833,"source_exposition_review":"NOT_RUN"},"projects":[{"bytes":166917,"path":"docs/projects/geometric-structure-spaces.json","sha256":"86c36c1c0a6d8b24a295029b90cc8e592fce80831f908d1a9140cb6f320840eb"},{"bytes":10109,"path":"docs/projects/mankiewicz.json","sha256":"9ab12ef4b1f9572f0cea9b7bfe257639d8366218740b13eae6bfee573cc8f3e1"},{"bytes":145238,"path":"docs/projects/naimark.json","sha256":"fd97e76713574fabe95d4126d1436eef27e922d940339a5ce3b0e3035f909313"},{"bytes":100214,"path":"docs/projects/pure-state-homogeneity.json","sha256":"86e402372d7262306cbb1da599af09d431217a68d176316a5dd50b8c1ff4c2af"},{"bytes":36597,"path":"docs/projects/rosenberg.json","sha256":"6a00f8748bf9709c065277ca7a5becd5671120219f2277d9a7f8992969766588"},{"bytes":25477,"path":"docs/projects/sphere-rigidity.json","sha256":"9703dcb2a2fb94551a86c6a8018312db1a5a2ac5a6fefae84cac911cacbb58ba"}],"publication_state":"V0_5_0_SOURCE_RELEASE_WITH_EXTERNAL_PUBLICATION_RECORD","record_type":"MATHLIBANNEX_PROJECT_SOURCE_MANIFEST_INDEX","version":"0.5.0"}
+{
+  "current_qualification": {
+    "attempt": 1,
+    "census_modules": 918,
+    "checks": {
+      "build": "PASS",
+      "cleanliness": "PASS",
+      "compiled_axiom_audit": "PASS",
+      "complete_source_coverage": "PASS",
+      "downstream_import": "PASS",
+      "gss_project_entry_import": "PASS",
+      "gss_public_census": "PASS",
+      "identity": "PASS",
+      "lip_project_entry_import": "PASS",
+      "lip_public_census": "PASS",
+      "naimark_entry_import": "PASS",
+      "project_entry_import": "PASS",
+      "project_entry_parser": "PASS",
+      "pure_state_homogeneity_entry_import": "PASS",
+      "rosenberg_entry_import": "PASS",
+      "sphere_rigidity_entry_import": "PASS",
+      "validation_consumer_import": "PASS"
+    },
+    "commit": "a533e6221d89d93147862cefec1de684de02b296",
+    "declaration_count": 18448,
+    "forbidden_axiom_count": 0,
+    "job_id": 127970114430,
+    "module_count": 928,
+    "receipt_file_sha256": "5cdb28090aa7be92e541ba1ac0db51062830dfa3b1b5dc96caaf18f664b7375c",
+    "run_id": "42240755323",
+    "terminal_gate": "PASS_FINALIZED",
+    "tree": "24f3c06d0872d1de99d1a67cc8c3e0c941608781"
+  },
+  "projects": [
+    {
+      "bytes": 185381,
+      "path": "docs/projects/geometric-structure-spaces.json",
+      "sha256": "1383d3a00b7aa401f324fa69d2024733e5225098c8d16e8c4fa119c229323706"
+    },
+    {
+      "bytes": 67535,
+      "path": "docs/projects/lipschitz-homeomorphic-banach-spaces.json",
+      "sha256": "97f707df4667edbefa1b10ddc65ff6413748db550a4d1f90aee0bd6f14678817"
+    },
+    {
+      "bytes": 5430,
+      "path": "docs/projects/mankiewicz.json",
+      "sha256": "ae5f8f7f18ca8543a01f81ac4a50a70c03dea9f28f9397f7d389581e9fc32f24"
+    },
+    {
+      "bytes": 161202,
+      "path": "docs/projects/naimark.json",
+      "sha256": "5101d97e4c084dbf3132906c390c3447e96d0e85f2f3bdb14c2f13afe7032f5a"
+    },
+    {
+      "bytes": 109786,
+      "path": "docs/projects/pure-state-homogeneity.json",
+      "sha256": "4a78760aa88cbad6c9755c64803854e5c9c963af2029ed7c6e06058aaff78f16"
+    },
+    {
+      "bytes": 36051,
+      "path": "docs/projects/rosenberg.json",
+      "sha256": "ec46268f652716e42e099a0938ecce258cefa80459a90d200d0a6a9e6c9b19cc"
+    },
+    {
+      "bytes": 23690,
+      "path": "docs/projects/sphere-rigidity.json",
+      "sha256": "420b904ca201f043a70a288dc39534233b5b510ebc7a37b829e7f593d101402d"
+    }
+  ],
+  "record_type": "MATHLIBANNEX_PROJECT_SOURCE_MANIFESTS"
+}

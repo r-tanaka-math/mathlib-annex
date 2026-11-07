@@ -7,6 +7,8 @@ module
 
 public import Mathlib.Analysis.Normed.Module.Dual
 
+import Mathlib.Analysis.Normed.Module.HahnBanach
+
 /-!
 # Supporting functionals and unions of kernels
 

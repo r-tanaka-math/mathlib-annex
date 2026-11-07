@@ -39,7 +39,8 @@ theorem denseRange_apply_of_isIrreducible_of_apply_ne_zero
   induction z using Unitization.ind with
   | inl_add_inr c b =>
       refine ⟨c • a + b * a, ?_⟩
-      simpa [unitization, map_add, map_smul, map_mul, mul_apply_eq_comp] using hz
+      simpa [unitization, Unitization.starLift, Unitization.lift,
+        NonUnitalAlgHom.toAlgHom, map_add, map_smul, map_mul, mul_apply_eq_comp] using hz
 
 /-- Every nonzero irreducible representation has a dense orbit of the
 original nonunital algebra. -/

@@ -41,7 +41,7 @@ private instance {R : Type*} [SMul R (StrongDual 𝕜 (StrongDual 𝕜 X))] :
 private instance {R : Type*} [Semiring R]
     [Module R (StrongDual 𝕜 (StrongDual 𝕜 X))] :
     Module R (WeakStarModel 𝕜 X) :=
-  (weakStarModelEquiv (𝕜 := 𝕜) (X := X)).module R
+  (weakStarModelEquiv (𝕜 := 𝕜) (X := X)).addEquiv.module R
 
 private instance : IsScalarTower ℝ 𝕜 (WeakStarModel 𝕜 X) :=
   ⟨by
@@ -80,6 +80,7 @@ private theorem phase_mul {z : 𝕜} (hz : z ≠ 0) :
     phase z * z = (‖z‖ : 𝕜) := by
   simp [phase, hz]
 
+set_option backward.isDefEq.respectTransparency false in
 /-- **Goldstine's theorem.**  The canonical image of the closed unit ball is
 weak-star dense in the closed unit ball of the bidual. -/
 theorem closedBall_subset_closure_weakStarCanonicalImage :

@@ -39,7 +39,7 @@ theorem exists_weakState_apply_eq_norm_of_nonneg [Nontrivial A]
     ∃ phi ∈ weakStateSpace A, phi a = (‖a‖ : ℂ) := by
   letI : IsStarNormal a := ha.isSelfAdjoint.isStarNormal
   let lam : spectrum ℂ a :=
-    ⟨(‖a‖ : ℂ), CStarAlgebra.norm_mem_spectrum_of_nonneg ha⟩
+    ⟨(‖a‖ : ℂ), CStarAlgebra.norm_mem_spectrum_of_nonneg a ha⟩
   let chi : WeakDual.characterSpace ℂ (elemental ℂ a) :=
     (characterSpaceHomeo a).symm lam
   letI : IsClosed ((elemental ℂ a : StarSubalgebra ℂ A) : Set A) :=

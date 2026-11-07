@@ -102,6 +102,8 @@ noncomputable instance instHasOrthogonalProjectionRepresentedFinalFlag
   change (representedRootFlag n).HasOrthogonalProjection
   infer_instance
 
+set_option synthInstance.maxHeartbeats 100000 in
+set_option backward.isDefEq.respectTransparency false in
 noncomputable instance instHasOrthogonalProjectionIInfRepresentedInitialFlag
     (family : RepresentativeShellFamily) (i : MathlibAnnex.CStarAlgebra.PureState.GNSClass Limit) :
     (⨅ n, representedInitialFlag family i n).HasOrthogonalProjection := by
@@ -138,6 +140,8 @@ noncomputable def representedShellLink (family : RepresentativeShellFamily)
       MathlibAnnex.CStarAlgebra.PureState.SelectedAtomicHilbert completedRootPureState :=
   selectedAtomicRepresentation ((representativeShellData family i).link n)
 
+set_option synthInstance.maxHeartbeats 100000 in
+set_option backward.isDefEq.respectTransparency false in
 /-- Actual completed-CAR source data produces a faithful irreducible concrete
 atomic model.  All projection flags, support identities, and rank-one limiting
 defects are supplied by proved CAR/GNS facts.  At the distinguished root the

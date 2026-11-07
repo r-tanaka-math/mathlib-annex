@@ -21,6 +21,26 @@ universe v w
 variable {H : Type v} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
 variable {K : Type w} [NormedAddCommGroup K] [InnerProductSpace ℂ K] [CompleteSpace K]
 
+/-- Identify the strong limits on a top subspace before specializing the source algebra. -/
+private theorem strongLimits_of_sums_on_top_subspace
+    (M : Submodule ℂ H) (A B : ℕ → H →L[ℂ] H) (U V : H →L[ℂ] H)
+    (hsums : ∃ S T : H →L[ℂ] H,
+      ContinuousLinearMap.StronglyConverges (ContinuousLinearMap.partialSum A) atTop S ∧
+      ContinuousLinearMap.StronglyConverges (ContinuousLinearMap.partialSum B) atTop T ∧
+      ‖S‖ ≤ 1 ∧ ‖T‖ ≤ 1 ∧ T = S† ∧
+      ∀ x ∈ M, U x = S x ∧ V x = T x)
+    (htop : M = ⊤) :
+    ContinuousLinearMap.StronglyConverges (ContinuousLinearMap.partialSum A) atTop U ∧
+      ContinuousLinearMap.StronglyConverges (ContinuousLinearMap.partialSum B) atTop V := by
+  obtain ⟨S, T, hS, hT, _, _, _, heq⟩ := hsums
+  have hall (x : H) : U x = S x ∧ V x = T x := by
+    apply heq x
+    rw [htop]
+    trivial
+  have hS_eq : S = U := ContinuousLinearMap.ext fun x ↦ (hall x).1.symm
+  have hT_eq : T = V := ContinuousLinearMap.ext fun x ↦ (hall x).2.symm
+  exact ⟨hS_eq ▸ hS, hT_eq ▸ hT⟩
+
 set_option maxHeartbeats 1000000 in
 /-- On a target-cyclic realization of the trace, the source shell sums
 converge strongly to the actual represented generator and its adjoint. -/
@@ -39,19 +59,13 @@ theorem stronglyConverges_shell_sums_of_trace_of_cyclic
       (ContinuousLinearMap.partialSum (fun n ↦
         (ρ (shellFamilySourceHom family ((representativeShellData family i).link n)))†))
       atTop ((ρ (shellFamilyGenerator family i))†) := by
-  obtain ⟨S, T, hS, hT, _, _, _, heq⟩ :=
-    exists_shell_sums_eq_on_cyclicSubspace family ρ ξ hξ i
-  have htop := cyclicSubspace_eq_top_of_trace_of_cyclic family ρ ξ hξ hcyclic
-  have hall (x : H) : ρ (shellFamilyGenerator family i) x = S x ∧
-      ((ρ (shellFamilyGenerator family i))†) x = T x := by
-    apply heq x
-    rw [htop]
-    trivial
-  have hS_eq : S = ρ (shellFamilyGenerator family i) :=
-    ContinuousLinearMap.ext fun x ↦ (hall x).1.symm
-  have hT_eq : T = (ρ (shellFamilyGenerator family i))† :=
-    ContinuousLinearMap.ext fun x ↦ (hall x).2.symm
-  exact ⟨hS_eq ▸ hS, hT_eq ▸ hT⟩
+  exact strongLimits_of_sums_on_top_subspace
+    (Representation.cyclicSubspace (ρ.comp (shellFamilySourceHom family)) ξ)
+    (fun n ↦ ρ (shellFamilySourceHom family ((representativeShellData family i).link n)))
+    (fun n ↦ (ρ (shellFamilySourceHom family ((representativeShellData family i).link n)))†)
+    (ρ (shellFamilyGenerator family i)) ((ρ (shellFamilyGenerator family i))†)
+    (exists_shell_sums_eq_on_cyclicSubspace family ρ ξ hξ i)
+    (cyclicSubspace_eq_top_of_trace_of_cyclic family ρ ξ hξ hcyclic)
 
 private theorem comp_partialSum_eq_partialSum_comp
     (e : H →L[ℂ] K) (A : ℕ → H →L[ℂ] H) (B : ℕ → K →L[ℂ] K)
@@ -77,6 +91,7 @@ theorem exists_pointed_unitary_of_trace_of_cyclic
     (hρ : DenseRange (fun a ↦ ρ a ξ)) (hσ : DenseRange (fun a ↦ σ a η)) :
     ∃ e : H ≃ₗᵢ[ℂ] K, e ξ = η ∧
       ∀ a, (e : H →L[ℂ] K).comp (ρ a) = (σ a).comp (e : H →L[ℂ] K) := by
+  classical
   let ρB := ρ.comp (shellFamilySourceHom family)
   let σB := σ.comp (shellFamilySourceHom family)
   have hdρ : DenseRange (StarAlgHom.orbitMap ρB ξ) :=
@@ -85,8 +100,9 @@ theorem exists_pointed_unitary_of_trace_of_cyclic
     denseRange_source_orbit_of_trace_of_cyclic family σ η hη hσ
   have hstate (a : Limit) : inner ℂ ξ (ρB a ξ) = inner ℂ η (σB a η) :=
     (hξ a).trans (hη a).symm
-  obtain ⟨e, he, _⟩ :=
-    StarAlgHom.existsUnique_pointedCyclicTransport ρB σB ξ η hdρ hdσ hstate
+  have htransport := StarAlgHom.existsUnique_pointedCyclicTransport ρB σB ξ η hdρ hdσ hstate
+  let e := htransport.exists.choose
+  have he := htransport.exists.choose_spec
   have hgen (i : MathlibAnnex.CStarAlgebra.PureState.GNSClass Limit) :
       (e : H →L[ℂ] K).comp (ρ (shellFamilyGenerator family i)) =
         (σ (shellFamilyGenerator family i)).comp (e : H →L[ℂ] K) := by

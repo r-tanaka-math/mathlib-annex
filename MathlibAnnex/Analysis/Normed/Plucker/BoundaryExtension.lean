@@ -57,9 +57,8 @@ private theorem modelMcShaneToCoord_spec {n N : ℕ}
   constructor
   · intro x y
     have h := hs.1.dist_le_mul (show Space M from x) (show Space M from y)
-    simpa only [modelMcShaneToCoord, NNReal.coe_one, one_mul, dist_eq_norm,
-      norm_space_eq, toReference_sub_ofReference]
-      using h
+    rw [dist_space_eq (M := M)] at h
+    simpa only [modelMcShaneToCoord, NNReal.coe_one, one_mul, dist_eq_norm] using h
   · intro u
     have hu' : M.p u.val = 1 := u.property
     have hu : (show Space M from u.val) ∈ Metric.sphere (0 : Space M) 1 :=
@@ -135,7 +134,11 @@ private theorem norm_coordinateBoundaryData_sub_le_seminorm_sub {m N : ℕ}
     ‖coordinateBoundaryData Δ A u - coordinateBoundaryData Δ A v‖ =
         ‖A ((show Fin (m + 1) → ℝ from (Δ u').val) -
           (show Fin (m + 1) → ℝ from (Δ v').val))‖ := by
-      simp [coordinateBoundaryData, u', v', map_sub]
+      simpa only [coordinateBoundaryData, u', v'] using
+        (congrArg (fun z : Fin N → ℝ => ‖z‖)
+          (map_sub A
+            (show Fin (m + 1) → ℝ from (Δ u').val)
+            (show Fin (m + 1) → ℝ from (Δ v').val))).symm
     _ ≤ MY.p ((show Fin (m + 1) → ℝ from (Δ u').val) -
         (show Fin (m + 1) → ℝ from (Δ v').val)) := hA _
     _ = MX.p (u.val - v.val) := chord

@@ -498,7 +498,7 @@ theorem isMinimalNonzero_closedIdealGeneratedBy
         exact K.toNonUnitalStarSubalgebra.mul_mem heK hstar
       have hd0 : d ≠ 0 := by
         intro hd
-        exact he0 ((CStarRing.mul_star_self_eq_zero_iff e).mp hd)
+        exact he0 (_root_.mul_star_self_eq_zero.mp hd)
       have hpe : p * e = e := by
         dsimp only [e]
         calc

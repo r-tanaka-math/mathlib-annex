@@ -1,0 +1,12 @@
+import BanachGeometry.LipschitzFreeSpace.Localization.Auxiliary
+import BanachGeometry.LipschitzFreeSpace.Localization.ScalarTests
+import BanachGeometry.LipschitzFreeSpace.Localization.OrderedLimsup
+/- Exact observed axioms are recorded in the external kernel audit receipts. -/
+import BanachGeometry
+#print axioms BanachGeometry.LipschitzFreeLocalization.tendsto_norm_starProjection_zero
+#print axioms BanachGeometry.LipschitzFreeLocalization.badSet_finite_of_incrementLocality
+#print axioms BanachGeometry.LipschitzFreeLocalization.completelyContinuous_linearize_of_incrementLocality
+#print axioms BanachGeometry.LipschitzFreeLocalization.summableTestOperator_coord
+#print axioms BanachGeometry.LipschitzFreeLocalization.compact_patch_lipschitzOn
+#print axioms BanachGeometry.HilbertSums.exists_quantitativeHilbertData
+#print axioms BanachGeometry.LipschitzFreeLocalization.tendsto_shrinkingPairingLimsup_zero

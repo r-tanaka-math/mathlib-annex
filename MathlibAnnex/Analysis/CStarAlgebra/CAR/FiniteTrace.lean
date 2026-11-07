@@ -91,11 +91,12 @@ theorem stageTrace_mul_comm (n : ℕ) (a b : Stage n) :
   intro j _
   exact mul_comm _ _
 
+set_option backward.isDefEq.respectTransparency false in
 private theorem step_diagonal (n : ℕ) (a : Stage n)
     (i : Fin (2 ^ n)) (b : Fin 2) :
     step n a (stepIndexEquiv n (i, b)) (stepIndexEquiv n (i, b)) = a i i := by
   simp [step, amplify, CStarMatrix.reindexₐ_apply, Matrix.reindex_apply,
-    Matrix.kronecker_apply]
+    CStarMatrix.ofMatrix_apply, CStarMatrix.ofMatrix_symm_apply, Matrix.kronecker_apply]
 
 private theorem sum_step_diagonal (n : ℕ) (a : Stage n) :
     (∑ k : Fin (2 ^ (n + 1)), step n a k k) = 2 * ∑ i, a i i := by

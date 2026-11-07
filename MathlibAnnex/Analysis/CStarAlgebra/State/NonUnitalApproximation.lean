@@ -74,7 +74,8 @@ theorem hasNoNonzeroCompactImage_unitization
       _ = pi.unitization (z * Unitization.inr b) := by rw [map_mul]
       _ = pi (z.fst • b + z.snd * b) := by
         induction z using Unitization.ind with
-        | inl_add_inr c a => simp [unitization]
+        | inl_add_inr c a =>
+            simp [unitization, Unitization.starLift, Unitization.lift, NonUnitalAlgHom.toAlgHom]
   rw [hbelongs] at hcompact ⊢
   exact hpi _ hcompact
 
@@ -156,12 +157,9 @@ theorem mul_self_le_self_of_nonneg_of_norm_le_one
   have heU1 : (e : Unitization ℂ A) ≤ 1 :=
     (CStarAlgebra.norm_le_one_iff_of_nonneg (e : Unitization ℂ A) heU0).mp (by
       simpa only [Unitization.norm_inr] using he1)
-  have hp := CStarAlgebra.pow_antitone heU0 heU1
+  have hp := CStarAlgebra.pow_antitone heU1 heU0
     (show (1 : ℕ) ≤ 2 by norm_num)
-  have hee0 : 0 ≤ e * e := by
-    simpa only [he0.isSelfAdjoint.star_eq] using star_mul_self_nonneg e
-  apply (Unitization.inr_le_iff (e * e) e hee0.isSelfAdjoint
-    he0.isSelfAdjoint).mp
+  apply Unitization.inr_le_inr_iff.mp
   simpa [pow_two] using hp
 
 /-- A norm-one positive functional converges to one along the canonical

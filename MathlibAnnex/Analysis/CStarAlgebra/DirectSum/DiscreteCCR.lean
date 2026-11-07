@@ -431,7 +431,7 @@ theorem mem_coordinateRangeC0Ideal
     x ∈ coordinateRangeC0Ideal hCCR ↔
       C0DirectSum.VanishesAtInfinity
         (fun P : PrimitiveSpectrum A => CompactFiber P) x.1 := by
-  simp [coordinateRangeC0Ideal]
+  exact TwoSidedIdeal.mem_mk' _ _ _ _ _ _ x
 
 /-- The c₀-ideal inside the coordinate-map range is norm closed. -/
 theorem isClosed_coordinateRangeC0Ideal
@@ -652,8 +652,9 @@ theorem norm_coordinateC0Equiv
         ContinuousLinearMap.compactOperatorStarSubalgebra ℂ
           P.pureStateRepresentative.GNS)
     (a : A) : ‖coordinateC0Equiv hCCR a‖ = ‖a‖ := by
+  change ‖coordinateC0Map hCCR a‖ = ‖a‖
   exact NonUnitalStarAlgHom.norm_map
-    (coordinateC0Equiv hCCR) (coordinateC0Equiv hCCR).injective a
+    (coordinateC0Map hCCR) (coordinateC0Map_bijective hCCR).1 a
 
 @[simp]
 theorem coordinateC0Equiv_symm_apply_apply

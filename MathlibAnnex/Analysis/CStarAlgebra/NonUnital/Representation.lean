@@ -54,13 +54,13 @@ noncomputable def unitization (pi : NonUnitalCStarRepresentation A H) :
 theorem unitization_inr
     (pi : NonUnitalCStarRepresentation A H) (a : A) :
     pi.unitization (Unitization.inr a) = pi a := by
-  simp [unitization]
+  simp [unitization, Unitization.starLift, Unitization.lift, NonUnitalAlgHom.toAlgHom]
 
 @[simp]
 theorem unitization_inr_apply
     (pi : NonUnitalCStarRepresentation A H) (a : A) (x : H) :
     pi.unitization (Unitization.inr a) x = pi a x := by
-  simp [unitization]
+  simp [unitization, Unitization.starLift, Unitization.lift, NonUnitalAlgHom.toAlgHom]
 
 theorem nontrivial_of_isNonzero
     (pi : NonUnitalCStarRepresentation A H) (hpi : pi.IsNonzero) :
@@ -83,7 +83,8 @@ theorem reduces_unitization_of_reduces
     | inl_add_inr c a =>
         intro x hx
         have hax : pi a x ∈ L := (hL.2 a x hx).1
-        simpa [unitization] using L.add_mem (L.smul_mem c hx) hax
+        simpa [unitization, Unitization.starLift, Unitization.lift, NonUnitalAlgHom.toAlgHom] using
+          L.add_mem (L.smul_mem c hx) hax
   intro z x hx
   refine ⟨hinv z x hx, ?_⟩
   rw [← ContinuousLinearMap.star_eq_adjoint, ← map_star]
@@ -108,7 +109,7 @@ theorem isIrreducible_restriction_of_isIrreducible_unitization
   have heq : sigma.unitization = rho := by
     apply Unitization.starAlgHom_ext
     ext a
-    simp [sigma, unitization]
+    simp [sigma, unitization, Unitization.starLift, Unitization.lift, NonUnitalAlgHom.toAlgHom]
   have hred : rho.Reduces L := by
     rw [← heq]
     exact reduces_unitization_of_reduces sigma L hL
@@ -146,7 +147,7 @@ theorem unitization_unitaryEquivalent
   induction z using Unitization.ind with
   | inl_add_inr c a =>
       intro x
-      simp [unitization, hU]
+      simp [unitization, Unitization.starLift, Unitization.lift, NonUnitalAlgHom.toAlgHom, hU]
 
 end NonUnitalCStarRepresentation
 

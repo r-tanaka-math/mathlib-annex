@@ -71,7 +71,7 @@ theorem tendsto_integral_det_of_strongLn
       (𝕜 := ℝ) (E := (Fin n → ℝ))
   have hdetQ_meas :
       AEStronglyMeasurable (fun x => det (Q x)) μ :=
-    hdet_cont.comp_aestronglyMeasurable hQ.1
+    hdet_cont.comp_aestronglyMeasurable hQ.aestronglyMeasurable
   have hdetQ_bound : ∀ x,
       ‖det (Q x)‖ ≤ (n : ℝ) * ‖Q x‖ ^ n := by
     intro x
@@ -98,9 +98,9 @@ theorem tendsto_integral_det_of_strongLn
         MemLp (fun x => det (P i x) - det (Q x)) 1 μ := by
       filter_upwards [hP, hdiff] with i hi hdi
       have hdi1 : MemLp (fun x => P i x - Q x) 1 μ := by simpa using hdi
-      refine' ⟨(hdet_cont.comp_aestronglyMeasurable hi.1).sub
-        (hdet_cont.comp_aestronglyMeasurable hQ.1), _⟩
-      refine' lt_of_le_of_lt (eLpNorm_mono fun x => _) hdi1.2
+      have hmeas := (hdet_cont.comp_aestronglyMeasurable hi.aestronglyMeasurable).sub
+        (hdet_cont.comp_aestronglyMeasurable hQ.aestronglyMeasurable)
+      refine' lt_of_le_of_lt (eLpNorm_mono hmeas (fun x => _)) hdi1
       simpa only [Nat.cast_one, one_mul, Nat.sub_self, pow_zero] using hpoint i x
     have hDnorm : Tendsto
         (fun i => eLpNorm (fun x => det (P i x) - det (Q x)) 1 μ)
@@ -108,12 +108,14 @@ theorem tendsto_integral_det_of_strongLn
       have hseminorm1 : Tendsto
           (fun i => eLpNorm (fun x => P i x - Q x) 1 μ) l (𝓝 0) := by
         simpa using hseminorm
-      apply tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds hseminorm1
-      · intro i
-        exact bot_le
-      · intro i
-        exact eLpNorm_mono fun x => by
-          simpa only [Nat.cast_one, one_mul, Nat.sub_self, pow_zero] using hpoint i x
+      apply tendsto_of_tendsto_of_tendsto_of_le_of_le' tendsto_const_nhds hseminorm1
+      · exact Eventually.of_forall fun i => bot_le
+      · filter_upwards [hP] with i hi
+        exact eLpNorm_mono
+          ((hdet_cont.comp_aestronglyMeasurable hi.aestronglyMeasurable).sub
+            (hdet_cont.comp_aestronglyMeasurable hQ.aestronglyMeasurable))
+          (fun x => by
+            simpa only [Nat.cast_one, one_mul, Nat.sub_self, pow_zero] using hpoint i x)
     have hIntD : Tendsto
         (fun i => ∫ x, det (P i x) - det (Q x) ∂μ) l (𝓝 0) := by
       refine' squeeze_zero_norm'
@@ -181,7 +183,7 @@ theorem tendsto_integral_det_of_strongLn
         dsimp [d]
         exact hdi.norm
       have hpow_meas : AEStronglyMeasurable (fun x => A x ^ (n - 1)) μ :=
-        hA.1.pow (n - 1)
+        hA.aestronglyMeasurable.pow (n - 1)
       have hpow_norm :
           eLpNorm (fun x => A x ^ (n - 1)) p μ = eLpNorm A n μ ^ (n - 1) := by
         let q : ℝ := (n - 1 : ℕ)
@@ -191,7 +193,7 @@ theorem tendsto_integral_det_of_strongLn
         have hqE : ENNReal.ofReal q = (n - 1 : ℕ) := by
           dsimp [q]
           simp
-        have hr := eLpNorm_norm_rpow (μ := μ) (p := p) (q := q) A hqpos
+        have hr := eLpNorm_norm_rpow (μ := μ) (p := p) (q := q) A hA.aestronglyMeasurable hqpos
         rw [hqE, hp_mul] at hr
         have hpowfun : (fun x => ‖A x‖ ^ q) = (fun x => A x ^ q) := by
           funext x
@@ -204,9 +206,10 @@ theorem tendsto_integral_det_of_strongLn
         calc
           eLpNorm (fun x => A x ^ (n - 1) * d x) 1 μ ≤
               eLpNorm (fun x => A x ^ (n - 1)) p μ * eLpNorm d n μ := by
-            have hh := eLpNorm_le_eLpNorm_mul_eLpNorm'_of_norm
+            have hh := eLpNorm_le_eLpNorm_mul_eLpNorm_of_norm
                 (p := p) (q := (n : ℝ≥0∞)) (r := 1) (μ := μ)
-                hpow_meas hd.1 (fun a b : ℝ => a * b) 1
+                (fun a b : ℝ => a * b) 1 (by fun_prop)
+                hpow_meas hd.aestronglyMeasurable
                 (ae_of_all μ fun x => by
                   simpa only [NNReal.coe_one, one_mul] using
                     (norm_mul (A x ^ (n - 1)) (d x)).le)
@@ -216,7 +219,7 @@ theorem tendsto_integral_det_of_strongLn
           _ = eLpNorm A n μ ^ (n - 1) *
               eLpNorm (fun x => P i x - Q x) n μ := by
             rw [hpow_norm]
-            simp only [d, eLpNorm_norm]
+            simp only [d, eLpNorm_norm _ hdi.aestronglyMeasurable]
       have hA_le : eLpNorm A n μ ≤
           eLpNorm (fun x => P i x - Q x) n μ + eLpNorm Q n μ + eLpNorm Q n μ := by
         let B : α → ℝ := fun x => ‖P i x - Q x‖ + ‖Q x‖ + ‖Q x‖
@@ -225,7 +228,7 @@ theorem tendsto_integral_det_of_strongLn
           exact (hdi.norm.add hQ.norm).add hQ.norm
         calc
           eLpNorm A n μ ≤ eLpNorm B n μ := by
-            apply eLpNorm_mono
+            apply eLpNorm_mono hA.aestronglyMeasurable
             intro x
             dsimp [A, B]
             have hp : ‖P i x‖ ≤ ‖P i x - Q x‖ + ‖Q x‖ := by
@@ -242,12 +245,14 @@ theorem tendsto_integral_det_of_strongLn
           _ ≤ eLpNorm (fun x => ‖P i x - Q x‖ + ‖Q x‖) n μ +
               eLpNorm (fun x => ‖Q x‖) n μ := by
             dsimp [B]
-            exact eLpNorm_add_le (p := (n : ℝ≥0∞)) (μ := μ)
-              (hdi.norm.add hQ.norm).1 hQ.norm.1 (by exact_mod_cast hn)
+            exact eLpNorm_add_le
+              (f := fun x => ‖P i x - Q x‖ + ‖Q x‖) (g := fun x => ‖Q x‖)
+              (p := (n : ℝ≥0∞)) (μ := μ) (by exact_mod_cast hn)
           _ ≤ (eLpNorm (fun x => ‖P i x - Q x‖) n μ +
               eLpNorm (fun x => ‖Q x‖) n μ) + eLpNorm (fun x => ‖Q x‖) n μ := by
-            have htri := eLpNorm_add_le (p := (n : ℝ≥0∞)) (μ := μ)
-              hdi.norm.1 hQ.norm.1 (by exact_mod_cast hn)
+            have htri := eLpNorm_add_le
+              (f := fun x => ‖P i x - Q x‖) (g := fun x => ‖Q x‖)
+              (p := (n : ℝ≥0∞)) (μ := μ) (by exact_mod_cast hn)
             calc
               eLpNorm (fun x => ‖P i x - Q x‖ + ‖Q x‖) n μ +
                     eLpNorm (fun x => ‖Q x‖) n μ =
@@ -260,11 +265,13 @@ theorem tendsto_integral_det_of_strongLn
                     eLpNorm (fun x => ‖Q x‖) n μ) +
                       eLpNorm (fun x => ‖Q x‖) n μ := by
                     simp only [add_comm]
-          _ = _ := by simp only [eLpNorm_norm]
+          _ = _ := by simp only [eLpNorm_norm _ hdi.aestronglyMeasurable,
+            eLpNorm_norm _ hQ.aestronglyMeasurable]
       calc
         eLpNorm (fun x => det (P i x) - det (Q x)) 1 μ ≤
             eLpNorm (fun x => (n : ℝ) * (A x ^ (n - 1) * d x)) 1 μ := by
           apply eLpNorm_mono
+            ((hdet_cont.comp_aestronglyMeasurable hi.aestronglyMeasurable).sub hdetQ_meas)
           intro x
           have hnonneg : 0 ≤ (n : ℝ) * (A x ^ (n - 1) * d x) := by
             exact mul_nonneg (Nat.cast_nonneg n)
@@ -276,7 +283,7 @@ theorem tendsto_integral_det_of_strongLn
                   dsimp [d]
                   exact norm_nonneg _))
           rw [Real.norm_of_nonneg hnonneg]
-          simpa only [A, d, mul_assoc] using hpoint i x
+          simpa only [A, d, mul_assoc, Pi.sub_apply] using hpoint i x
         _ = (n : ℝ≥0∞) * eLpNorm (fun x => A x ^ (n - 1) * d x) 1 μ := by
           have hfun : (fun x => (n : ℝ) * (A x ^ (n - 1) * d x)) =
               n • (fun x => A x ^ (n - 1) * d x) := by
@@ -309,7 +316,7 @@ theorem tendsto_integral_det_of_strongLn
         exact hlt.mono fun i hi => hi.le
       have hC_ne_top : C ≠ ⊤ := by
         dsimp [C, q]
-        finiteness [hQ.2]
+        finiteness [hQ]
       have hcontrolled : ∀ᶠ i in l,
           (n : ℝ≥0∞) *
               (eLpNorm (fun x => P i x - Q x) n μ + eLpNorm Q n μ + eLpNorm Q n μ) ^
@@ -338,9 +345,8 @@ theorem tendsto_integral_det_of_strongLn
     have hDmem : ∀ᶠ i in l,
         MemLp (fun x => det (P i x) - det (Q x)) 1 μ := by
       filter_upwards [hP, hbound, hdiff] with i hi hib hdi
-      refine' ⟨(hdet_cont.comp_aestronglyMeasurable hi.1).sub hdetQ_meas, _⟩
       refine' lt_of_le_of_lt hib _
-      finiteness [hQ.2, hdi.2]
+      finiteness [hQ, hdi]
     have hIntD : Tendsto
         (fun i => ∫ x, det (P i x) - det (Q x) ∂μ) l (𝓝 0) := by
       refine' squeeze_zero_norm'

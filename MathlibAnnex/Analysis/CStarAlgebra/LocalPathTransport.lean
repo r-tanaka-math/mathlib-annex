@@ -473,7 +473,6 @@ theorem leftContinuousPath_segment (n : ℕ)
   convert hh using 1 <;>
     simp [leftContinuousPath, MathlibAnnex.Path.intervalPath,
       leftPathSegments, translatedCorrectionPath, Path.cast]
-  congr 2
 
 theorem rightContinuousPath_segment (n : ℕ)
     (t : Set.Icc ((n + 1 : ℕ) : ℝ) (n + 2 : ℝ)) :
@@ -501,7 +500,6 @@ theorem rightContinuousPath_segment (n : ℕ)
   convert hh using 1 <;>
     simp [rightContinuousPath, MathlibAnnex.Path.intervalPath,
       rightPathSegments, translatedCorrectionPath, Path.cast]
-  congr 2
 
 noncomputable def leftAutomorphisms (n : ℕ) : A ≃⋆ₐ[ℂ] A :=
   innerAt (Q n).left

@@ -32,7 +32,9 @@ private theorem unitization_apply_eq_fst_smul_add
     (pi : NonUnitalCStarRepresentation A H) (z : Unitization ℂ A) :
     pi.unitization z = z.fst • (1 : H →L[ℂ] H) + pi z.snd := by
   induction z using Unitization.ind with
-  | inl_add_inr c a => simp [unitization, Algebra.algebraMap_eq_smul_one]
+  | inl_add_inr c a =>
+    simp [unitization, Unitization.starLift, Unitization.lift,
+      NonUnitalAlgHom.toAlgHom, Algebra.algebraMap_eq_smul_one]
 
 /-- The rank-one operator associated with a character eigenvector commutes
 with the represented commutative algebra. -/

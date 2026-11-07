@@ -50,7 +50,8 @@ theorem unitizationProjection_apply (x : Unitization ℂ A) :
 @[simp]
 theorem unitizationProjection_inclusion (x : A) :
     unitizationProjection (unitizationInclusion x) = x := by
-  simp [unitizationProjection, unitizationInclusion]
+  change (Unitization.inr x : Unitization ℂ A).snd = x
+  rfl
 
 /-- Extend a bilinear form from a nonunital algebra to its minimal
 unitization by projecting both arguments to the original algebra. -/

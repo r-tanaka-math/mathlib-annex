@@ -1,0 +1,16 @@
+/- Local execution status is recorded in the external qualification receipts. -/
+import BanachGeometry.AlmostIsometric.Existence
+import BanachGeometry.AlmostIsometric.Consequences
+import BanachGeometry.LipschitzFreeSpace.PositiveTailLocality
+#print axioms BanachGeometry.HilbertSums.Coding.abs_boundedScalar_sub_le
+#print axioms BanachGeometry.HilbertSums.Coding.exists_grid_digit
+#print axioms BanachGeometry.HilbertSums.Coding.one_half_le_norm_tentVector
+#print axioms BanachGeometry.HilbertSums.Coding.norm_unitCode
+#print axioms BanachGeometry.HilbertSums.Coding.unitCode_support_disjoint
+#print axioms BanachGeometry.HilbertSums.Coding.norm_unitCode_sub_le
+#print axioms BanachGeometry.HilbertSums.Coding.norm_unitSegment_sub_le
+#print axioms BanachGeometry.HilbertSums.tendsto_norm_blockTail_zero
+#print axioms BanachGeometry.HilbertSums.observedUnitCode_head
+#print axioms BanachGeometry.HilbertSums.observedUnitCode_support_disjoint
+#print axioms BanachGeometry.HilbertSums.dyadic_weight_total_le
+#print axioms BanachGeometry.HilbertSums.tendsto_harmonicClockEndpoint_atTop

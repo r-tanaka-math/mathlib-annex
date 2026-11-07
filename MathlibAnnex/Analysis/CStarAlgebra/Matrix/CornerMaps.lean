@@ -66,7 +66,10 @@ def entryMap : TwoByTwo A →L[ℂ] A :=
     ({ toFun := fun M => M 0 1
        map_add' := by intro M N; rfl
        map_smul' := by intro c M; rfl } : TwoByTwo A →ₗ[ℂ] A)
-    1 (by intro M; simpa using CStarMatrix.norm_entry_le_norm (M := M) (i := 0) (j := 1))
+    1 (by
+      intro M
+      change ‖M 0 1‖ ≤ 1 * ‖M‖
+      simpa only [one_mul] using CStarMatrix.norm_entry_le_norm (M := M) (i := 0) (j := 1))
 
 @[simp] theorem entryMap_apply (M : TwoByTwo A) : entryMap M = M 0 1 := rfl
 @[simp] theorem entryMap_corner (a : A) : entryMap (corner a) = a := rfl

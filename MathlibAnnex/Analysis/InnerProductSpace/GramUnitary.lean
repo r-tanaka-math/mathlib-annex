@@ -164,6 +164,7 @@ theorem exists_ambient_unitary_swap_of_gram_eq_of_orthogonal {n : ℕ}
   · simpa only [p, q, LinearMap.coprod_apply, pv, pw, familySynthesis_single,
       map_zero, add_zero, zero_add] using hU (0, Pi.single i 1)
 
+set_option backward.isDefEq.respectTransparency false in
 /-- In the orthogonal equal-Gram case the swapping unitary may be chosen
 involutive on the entire ambient Hilbert space.  This construction works in
 the joint range of the two synthesis maps and extends the involution by the

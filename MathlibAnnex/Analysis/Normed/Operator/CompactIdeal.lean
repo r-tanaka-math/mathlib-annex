@@ -49,7 +49,7 @@ def compactOperatorIdeal (𝕜 E : Type*) [RCLike 𝕜]
 @[simp]
 theorem mem_compactOperatorIdeal (T : E →L[𝕜] E) :
     T ∈ compactOperatorIdeal 𝕜 E ↔ IsCompactOperator T := by
-  simp only [compactOperatorIdeal, TwoSidedIdeal.mem_mk', Set.mem_setOf_eq]
+  exact TwoSidedIdeal.mem_mk' _ _ _ _ _ _ T
 
 /-- This is exactly the carrier of Mathlib's compact-operator submodule. -/
 theorem coe_compactOperatorIdeal :
@@ -61,8 +61,12 @@ theorem coe_compactOperatorIdeal :
 /-- Closedness refers to the unchanged operator norm on the ambient ring. -/
 theorem isClosed_compactOperatorIdeal [CompleteSpace E] :
     IsClosed (compactOperatorIdeal 𝕜 E : Set (E →L[𝕜] E)) := by
-  simpa only [compactOperatorIdeal, TwoSidedIdeal.coe_mk'] using
-    (isClosed_setOf_isCompactOperator :
+  have hcarrier : (compactOperatorIdeal 𝕜 E : Set (E →L[𝕜] E)) =
+      {T : E →L[𝕜] E | IsCompactOperator T} := by
+    ext T
+    exact mem_compactOperatorIdeal T
+  rw [hcarrier]
+  exact (isClosed_setOfPred_isCompactOperator :
       IsClosed {T : E →L[𝕜] E | IsCompactOperator T})
 
 /-- In particular a finite-dimensional operator ring consists entirely of compacts. -/

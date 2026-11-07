@@ -190,10 +190,7 @@ theorem hasDerivAt_exp_conjugation (X a : A) (t : ℝ) :
   have h1 := (hasDerivAt_exp_smul_const X t).mul_const a
   have h2 := hasDerivAt_exp_smul_const' (-X) t
   have h := h1.mul h2
-  convert h using 1
-  · funext s
-    simp only [Pi.mul_apply, mul_assoc]
-  · noncomm_ring
+  convert h using 1 <;> noncomm_ring
 
 theorem norm_exp_conjugation_sub_le
     (b : selfAdjoint A) (a : A) (t : ℝ) (ht : t ∈ Set.Icc (0 : ℝ) 1) :

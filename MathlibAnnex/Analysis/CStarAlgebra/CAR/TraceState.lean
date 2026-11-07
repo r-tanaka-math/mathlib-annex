@@ -18,6 +18,7 @@ namespace MathlibAnnex.CStarAlgebra.CAR
 
 open MathlibAnnex.Analysis.CStarAlgebra
 
+set_option synthInstance.maxHeartbeats 100000 in
 /-- The extended trace detects every nonzero square. This is faithfulness
 of the state, not merely injectivity of its representation. -/
 theorem traceExtension_star_mul_self_eq_zero_iff
@@ -48,13 +49,11 @@ theorem apply_shellFamilySourceHom_eq_trace_of_apply_one_of_mul_comm
   let ψ : Limit →L[ℂ] ℂ :=
     { toLinearMap := φ.toLinearMap.comp j.toLinearMap
       cont := φ.continuous.comp (map_continuous j) }
-  have hψ1 : ψ 1 = 1 := by
-    change φ (j 1) = 1
-    rw [map_one, hφ1]
-  have hψ (a b : Limit) : ψ (a * b) = ψ (b * a) := by
-    change φ (j (a * b)) = φ (j (b * a))
-    rw [map_mul j, map_mul j]
-    exact hφ _ _
+  have hψ1 : ψ 1 = 1 :=
+    (congrArg φ (map_one j)).trans hφ1
+  have hψ (a b : Limit) : ψ (a * b) = ψ (b * a) :=
+    (congrArg φ (map_mul j a b)).trans
+      ((hφ (j a) (j b)).trans (congrArg φ (map_mul j b a)).symm)
   have heq := eq_trace_of_apply_one_of_mul_comm ψ hψ1 hψ
   exact congrArg (fun f : Limit →L[ℂ] ℂ ↦ f b) heq
 

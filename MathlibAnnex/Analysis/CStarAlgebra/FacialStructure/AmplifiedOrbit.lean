@@ -56,8 +56,11 @@ theorem diagonal_apply_mem_cyclicSubspace_of_pairwise_not_unitaryEquivalent
   let D := diagonal (fun q : Sigma J => S q.1) C hC (fun q => hS q.1)
   have hU : sigma.unitization = rho := by
     apply Unitization.starAlgHom_ext
-    ext a
-    simp [sigma, unitization]
+    apply DFunLike.ext
+    intro a
+    change sigma.unitization (Unitization.inr a) = rho (Unitization.inr a)
+    rw [unitization_inr]
+    rfl
   have hred : rho.Reduces M := by
     rw [← hU]
     exact reduces_unitization_of_reduces sigma M (reduces_cyclicSubspace sigma x)

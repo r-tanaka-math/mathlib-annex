@@ -25,7 +25,7 @@ private theorem positive_map_norm_mono (phi : M →L[ℂ] ℂ)
   have h : phi x ≤ phi y := by
     apply sub_nonneg.mp
     simpa only [map_sub] using hp (y - x) (sub_nonneg.mpr hxy)
-  exact CStarAlgebra.norm_le_norm_of_nonneg_of_le (hp x hx) h
+  exact CStarAlgebra.norm_le_norm_of_le_of_nonneg h (hp x hx)
 
 /-- Positive functional domination of a conjugated square. -/
 theorem positive_conjugate_square_bound (phi : M →L[ℂ] ℂ)

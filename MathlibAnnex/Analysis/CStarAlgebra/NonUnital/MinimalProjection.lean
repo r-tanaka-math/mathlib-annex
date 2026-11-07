@@ -110,7 +110,7 @@ theorem exists_nonzero_projection_scalar_corner [Nontrivial A]
       ∀ a : A, ∃ c : ℂ, p * a * p = c • p := by
   obtain ⟨a, ha⟩ : ∃ a : A, a ≠ 0 := exists_ne 0
   let b : A := star a * a
-  have hbne : b ≠ 0 := CStarRing.star_mul_self_ne_zero_iff a |>.2 ha
+  have hbne : b ≠ 0 := star_mul_self_ne_zero.mpr ha
   have hbself : IsSelfAdjoint b := IsSelfAdjoint.star_mul_self a
   have hbinrself : IsSelfAdjoint (b : Unitization ℂ A) := hbself.inr ℂ
   obtain ⟨D, hD, hbD⟩ :=

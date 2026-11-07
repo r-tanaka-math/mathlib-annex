@@ -79,8 +79,10 @@ theorem state_eq_infinity_of_gns_restriction_zero
               (Unitization.inl_smul (A := A) c (1 : ℂ))
           _ = c • phi (1 : Unitization ℂ A) := map_smul phi c 1
           _ = c := by rw [hphi.2]; simp
-      simp only [map_add, hinl, hinr, add_zero]
-      simp [Unitization.fstHom]
+      change phi (Unitization.inl c + Unitization.inr a) =
+        (Unitization.inl c + Unitization.inr a).fst
+      simp only [map_add, hinl, hinr]
+      rfl
 
 /-- Every character of a closed unital star subalgebra of the unitization,
 except the scalar character, occurs as a joint unit eigenvector for the
@@ -140,8 +142,10 @@ theorem exists_unit_eigenvector_of_character_ne_infinity [Nontrivial A]
   obtain ⟨V, hV⟩ := hUunit
   have hrhoeq : rho.unitization = rhoU := by
     apply Unitization.starAlgHom_ext
-    ext a
-    simp [rho, unitization]
+    ext a x
+    change rho.unitization (Unitization.inr a) x = rhoU (Unitization.inr a) x
+    rw [unitization_inr_apply]
+    rfl
   have heigen (d : D) :
       rhoU (d : Unitization ℂ A) f.gnsCyclicVector =
         chi d • f.gnsCyclicVector := by

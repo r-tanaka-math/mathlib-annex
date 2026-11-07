@@ -470,9 +470,9 @@ theorem conjugateOperator_posPart_negPart
     (hA : IsSelfAdjoint A) (hfix : conjugateOperator A = A) :
     conjugateOperator (A⁺) = A⁺ ∧ conjugateOperator (A⁻) = A⁻ := by
   have hp : (A⁺).IsPositive :=
-    (ContinuousLinearMap.nonneg_iff_isPositive _).mp (CFC.posPart_nonneg A)
+    (ContinuousLinearMap.nonneg_iff_isPositive).mp (CFC.posPart_nonneg A)
   have hn : (A⁻).IsPositive :=
-    (ContinuousLinearMap.nonneg_iff_isPositive _).mp (CFC.negPart_nonneg A)
+    (ContinuousLinearMap.nonneg_iff_isPositive).mp (CFC.negPart_nonneg A)
   have hdec : A = conjugateOperator (A⁺) - conjugateOperator (A⁻) := by
     calc
       A = conjugateOperator A := hfix.symm
@@ -482,8 +482,8 @@ theorem conjugateOperator_posPart_negPart
   have hzero : conjugateOperator (A⁺) * conjugateOperator (A⁻) = 0 := by
     rw [← conjugateOperator_mul, CFC.posPart_mul_negPart, conjugateOperator_zero]
   have hh := CFC.posPart_negPart_unique hdec hzero
-    ((ContinuousLinearMap.nonneg_iff_isPositive _).mpr (isPositive_conjugateOperator hp))
-    ((ContinuousLinearMap.nonneg_iff_isPositive _).mpr (isPositive_conjugateOperator hn))
+    ((ContinuousLinearMap.nonneg_iff_isPositive).mpr (isPositive_conjugateOperator hp))
+    ((ContinuousLinearMap.nonneg_iff_isPositive).mpr (isPositive_conjugateOperator hn))
   exact ⟨hh.1.symm, hh.2.symm⟩
 
 end Descent

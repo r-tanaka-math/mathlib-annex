@@ -67,13 +67,39 @@ theorem exists_shell_sums_eq_on_cyclicSubspace (family : RepresentativeShellFami
       ‖S‖ ≤ 1 ∧ ‖T‖ ≤ 1 ∧ T = S† ∧
       ∀ x ∈ M, ρ (shellFamilyGenerator family i) x = S x ∧
         ((ρ (shellFamilyGenerator family i))†) x = T x := by
+  classical
   dsimp only
   let σ := ρ.comp (shellFamilySourceHom family)
   let M := Representation.cyclicSubspace σ ξ
-  obtain ⟨S, T, P, Q, R, hS, hT, hSnorm, hTnorm, hAdj,
-      hP, hPrange, hQ, hQrange, _, _, hgen, hR, _, _, hsupport, _⟩ :=
-    exists_targetShellReconstruction family (shellFamilyLinks family)
+  have hrec := exists_targetShellReconstruction (K := H) family (shellFamilyLinks family)
       (shellFamilyLinks_unitary family) (shellFamilyLinks_sourceShell family) ρ i
+  let S := hrec.choose
+  let T := hrec.choose_spec.choose
+  let P := hrec.choose_spec.choose_spec.choose
+  let Q := hrec.choose_spec.choose_spec.choose_spec.choose
+  let R := hrec.choose_spec.choose_spec.choose_spec.choose_spec.choose
+  have hprops := hrec.choose_spec.choose_spec.choose_spec.choose_spec.choose_spec
+  have hS := hprops.1
+  have hT := hprops.2.1
+  have hSnorm := hprops.2.2.1
+  have hTnorm := hprops.2.2.2.1
+  have hAdj := hprops.2.2.2.2.1
+  have hP := hprops.2.2.2.2.2.1
+  have hPrange := hprops.2.2.2.2.2.2.1
+  have hQ := hprops.2.2.2.2.2.2.2.1
+  have hQrange := hprops.2.2.2.2.2.2.2.2.1
+  have hgen := hprops.2.2.2.2.2.2.2.2.2.2.2.1
+  have hR := hprops.2.2.2.2.2.2.2.2.2.2.2.2.1
+  have hsupport := hprops.2.2.2.2.2.2.2.2.2.2.2.2.2.2.2.1
+  change ContinuousLinearMap.StronglyConverges
+    (ContinuousLinearMap.partialSum
+      (fun n ↦ σ ((representativeShellData family i).link n))) atTop S at hS
+  change ContinuousLinearMap.StronglyConverges
+    (ContinuousLinearMap.partialSum
+      (fun n ↦ (σ ((representativeShellData family i).link n))†)) atTop T at hT
+  change T = S† at hAdj
+  change IsStarProjection P at hP
+  change IsStarProjection Q at hQ
   have hPzero : ∀ x ∈ M, P x = 0 :=
     projection_eq_zero_on_cyclicSubspace σ ξ (transportedFlag family i)
       (isStarProjection_transportedFlag family i)
@@ -84,7 +110,12 @@ theorem exists_shell_sums_eq_on_cyclicSubspace (family : RepresentativeShellFami
   change ρ (shellFamilyGenerator family i) = S + R at hgen
   change R = (ρ (shellFamilyGenerator family i)).comp P at hR
   have hRzero (x : H) (hx : x ∈ M) : R x = 0 := by
-    rw [hR, ContinuousLinearMap.comp_apply, hPzero x hx, map_zero]
+    calc
+      R x = (ρ (shellFamilyGenerator family i)) (P x) :=
+        congrArg (fun C : H →L[ℂ] H => C x) hR
+      _ = (ρ (shellFamilyGenerator family i)) 0 :=
+        congrArg (ρ (shellFamilyGenerator family i)) (hPzero x hx)
+      _ = 0 := map_zero (ρ (shellFamilyGenerator family i))
   have hstar : star R = P * star R * Q := by
     change R = Q * R * P at hsupport
     have h := congrArg star hsupport
@@ -109,6 +140,7 @@ theorem reduces_cyclicSubspace_of_trace (family : RepresentativeShellFamily)
       (ρ.comp (shellFamilySourceHom family)) ξ a = trace a) :
     ρ.Reduces (Representation.cyclicSubspace
       (ρ.comp (shellFamilySourceHom family)) ξ) := by
+  classical
   let σ := ρ.comp (shellFamilySourceHom family)
   let M := Representation.cyclicSubspace σ ξ
   have hMclosed : IsClosed (M : Set H) := Representation.isClosed_cyclicSubspace σ ξ
@@ -121,8 +153,23 @@ theorem reduces_cyclicSubspace_of_trace (family : RepresentativeShellFamily)
       exact Representation.adjoint_mem_cyclicSubspace σ ξ a hx
   have hgenerator (i : MathlibAnnex.CStarAlgebra.PureState.GNSClass Limit) :
       M.Reduces (ρ (shellFamilyGenerator family i)) := by
-    obtain ⟨S, T, hS, hT, _, _, hAdj, heq⟩ :=
-      exists_shell_sums_eq_on_cyclicSubspace family ρ ξ hξ i
+    have hsums := exists_shell_sums_eq_on_cyclicSubspace family ρ ξ hξ i
+    let S := hsums.choose
+    let T := hsums.choose_spec.choose
+    have hprops := hsums.choose_spec.choose_spec
+    have hS := hprops.1
+    have hT := hprops.2.1
+    have hAdj := hprops.2.2.2.2.1
+    have heq := hprops.2.2.2.2.2
+    change ContinuousLinearMap.StronglyConverges
+      (ContinuousLinearMap.partialSum
+        (fun n ↦ σ ((representativeShellData family i).link n))) atTop S at hS
+    change ContinuousLinearMap.StronglyConverges
+      (ContinuousLinearMap.partialSum
+        (fun n ↦ (σ ((representativeShellData family i).link n))†)) atTop T at hT
+    change T = S† at hAdj
+    change ∀ x ∈ M, ρ (shellFamilyGenerator family i) x = S x ∧
+      ((ρ (shellFamilyGenerator family i))†) x = T x at heq
     have hW (n : ℕ) : M.Reduces (σ ((representativeShellData family i).link n)) :=
       hsource ((representativeShellData family i).link n)
     have hSreduce : M.Reduces S :=

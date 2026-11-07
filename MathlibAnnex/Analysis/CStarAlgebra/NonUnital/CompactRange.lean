@@ -42,7 +42,8 @@ theorem denseRange_apply_of_isIrreducible_of_fixed
   induction z using Unitization.ind with
   | inl_add_inr c a =>
       refine ⟨c • p + a, ?_⟩
-      simpa [unitization, hpe] using hz
+      simpa [unitization, Unitization.starLift, Unitization.lift,
+        NonUnitalAlgHom.toAlgHom, hpe] using hz
 
 /-- Algebraic rank-one links obtained from one represented rank-one
 projection. -/

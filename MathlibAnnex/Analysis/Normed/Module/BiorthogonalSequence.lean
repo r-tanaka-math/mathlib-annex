@@ -147,13 +147,16 @@ private def biorthogonalNext (hX : ¬ FiniteDimensional 𝕜 X)
       simpa [Function.update_of_ne hin, Function.update_of_ne hjn]
         using (s.property i hi').2 j hj'
 
+set_option backward.isDefEq.respectTransparency false in
+set_option backward.whnf.reducibleClassField false in
 private theorem biorthogonalNext_agrees (hX : ¬ FiniteDimensional 𝕜 X)
     (ε : ℕ → ℝ) (hε : ∀ n, 0 < ε n) (n : ℕ)
     (s : BiorthogonalStage (𝕜 := 𝕜) (X := X) ε n) {i : ℕ} (hi : i < n) :
     ((biorthogonalNext hX ε hε n s).val.1 i,
       (biorthogonalNext hX ε hε n s).val.2 i) = (s.val.1 i, s.val.2 i) := by
   classical
-  simp only [biorthogonalNext, id_eq, Function.update_of_ne (ne_of_lt hi)]
+  dsimp only [biorthogonalNext, id_eq]
+  simp only [Function.update_of_ne (ne_of_lt hi)]
 
 private def biorthogonalStages (hX : ¬ FiniteDimensional 𝕜 X)
     (ε : ℕ → ℝ) (hε : ∀ n, 0 < ε n) :

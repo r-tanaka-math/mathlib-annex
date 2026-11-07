@@ -78,7 +78,7 @@ theorem positive_value_norm_mono (phi : (H →L[ℂ] H) →L[ℂ] ℂ)
     have h := hp (U - T) (sub_nonneg.mpr hTU)
     rw [map_sub] at h
     exact sub_nonneg.mp h
-  exact CStarAlgebra.norm_le_norm_of_nonneg_of_le (hp T hT) hm
+  exact CStarAlgebra.norm_le_norm_of_le_of_nonneg hm (hp T hT)
 
 variable {A : Type u} [CStarAlgebra A] [PartialOrder A] [StarOrderedRing A]
 variable [Nontrivial H]

@@ -199,7 +199,11 @@ theorem not_finiteDimensional_range_rootCorner
     isCompactOperator_of_locallyCompactSpace_dom Q
   have hcompact : IsCompactOperator P := by
     have hc := hQ.clm_comp R.subtypeL
-    simpa [P, Q, R, Function.comp_def] using hc
+    have heq : (R.subtypeL : R → H) ∘ Q = (P : H → H) := by
+      funext x
+      rfl
+    rw [heq] at hc
+    exact hc
   have hezero : limitMatrixUnit n 0 0 = 0 :=
     eq_zero_of_isCompactOperator_image ρ hρ hcompact
   have hstage : matrixUnit n 0 0 = 0 := by

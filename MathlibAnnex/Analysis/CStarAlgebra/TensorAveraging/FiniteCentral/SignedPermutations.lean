@@ -94,6 +94,7 @@ def flipCoordinate [DecidableEq κ] (i : κ) : SignedPermutation κ := by
     by_cases h : j = i <;> simp [f, h]
   refine ⟨{ toFun := f, invFun := f, left_inv := hinv, right_inv := hinv }, ?_⟩
   rintro ⟨j,t⟩
+  change f (flipLabel (j, t)) = flipLabel (f (j, t))
   by_cases h : j = i <;> simp [f, h, flipLabel]
 
 @[simp] theorem flipCoordinate_apply [DecidableEq κ] (i j : κ) (t : Bool) :

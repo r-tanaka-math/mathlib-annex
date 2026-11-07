@@ -389,7 +389,92 @@ theorem forall_compact_eq_zero_iff_range_of_injective :
     compactOperatorStarSubalgebra_le_iff_range_of_injective
       (hclosedT := hclosedT) T hT rho hrho hinj]
 
+include hclosedT hT hrho hinj in
+/-- Compose normal-part transport with faithful image rigidity before specializing the carrier. -/
+private theorem compact_le_iff_of_faithful_normalPart
+    (S : NonUnitalStarSubalgebra ℂ (H →L[ℂ] H))
+    [IsClosed (S : Set (H →L[ℂ] H))]
+    (hS : NonUnitalCStarRepresentation.IsIrreducible (NonUnitalStarSubalgebraClass.subtype S))
+    (f : ClosureSpace.Homeomorph
+      ((NormedSpace.geometricStructureClosure ℂ S).subspace (normalPart S))
+      ((NormedSpace.geometricStructureClosure ℂ (NonUnitalStarAlgHom.range rho)).subspace
+        (normalPart (NonUnitalStarAlgHom.range rho)))) :
+    ContinuousLinearMap.compactOperatorStarSubalgebra ℂ H ≤ S ↔
+      ContinuousLinearMap.compactOperatorStarSubalgebra ℂ K ≤ T := by
+  have hR : NonUnitalCStarRepresentation.IsIrreducible
+      (NonUnitalStarSubalgebraClass.subtype (NonUnitalStarAlgHom.range rho)) :=
+    (NonUnitalCStarRepresentation.isIrreducible_imageRepresentation_iff rho).2 hrho
+  exact (compactOperatorStarSubalgebra_le_iff_of_normalPart_homeomorph
+      S (NonUnitalStarAlgHom.range rho) hS hR f).trans
+    (compactOperatorStarSubalgebra_le_iff_range_of_injective
+      (hclosedT := hclosedT) T hT rho hrho hinj).symm
+
+include hclosedT hT hrho hinj in
+/-- Equality uses the same full homeomorphism and the same faithful image. -/
+private theorem eq_compact_iff_of_faithful_normalPart
+    (S : NonUnitalStarSubalgebra ℂ (H →L[ℂ] H))
+    [IsClosed (S : Set (H →L[ℂ] H))]
+    (hS : NonUnitalCStarRepresentation.IsIrreducible (NonUnitalStarSubalgebraClass.subtype S))
+    (f : ClosureSpace.Homeomorph
+      ((NormedSpace.geometricStructureClosure ℂ S).subspace (normalPart S))
+      ((NormedSpace.geometricStructureClosure ℂ (NonUnitalStarAlgHom.range rho)).subspace
+        (normalPart (NonUnitalStarAlgHom.range rho)))) :
+    S = ContinuousLinearMap.compactOperatorStarSubalgebra ℂ H ↔
+      T = ContinuousLinearMap.compactOperatorStarSubalgebra ℂ K := by
+  have hR : NonUnitalCStarRepresentation.IsIrreducible
+      (NonUnitalStarSubalgebraClass.subtype (NonUnitalStarAlgHom.range rho)) :=
+    (NonUnitalCStarRepresentation.isIrreducible_imageRepresentation_iff rho).2 hrho
+  exact (eq_compactOperatorStarSubalgebra_iff_of_normalPart_homeomorph
+      S (NonUnitalStarAlgHom.range rho) hS hR f).trans
+    (eq_compactOperatorStarSubalgebra_iff_range_of_injective
+      (hclosedT := hclosedT) T hT rho hrho hinj).symm
+
+include hclosedT hrho hinj in
+/-- Restrict and package a faithful image while its Hilbert carrier is abstract. -/
+private theorem exists_normalPart_image_of_faithful
+    (S : NonUnitalStarSubalgebra ℂ (H →L[ℂ] H))
+    [IsClosed (S : Set (H →L[ℂ] H))]
+    (q : ClosureSpace.Homeomorph
+      (NormedSpace.geometricStructureClosure ℂ S)
+      (NormedSpace.geometricStructureClosure ℂ (NonUnitalStarAlgHom.range rho)))
+    (himage : q.toEquiv '' normalPart S = normalPart (NonUnitalStarAlgHom.range rho)) :
+    ∃ (G : Type w) (_ : NormedAddCommGroup G) (_ : InnerProductSpace ℂ G)
+      (_ : CompleteSpace G) (rho' : NonUnitalCStarRepresentation T G),
+      Function.Injective rho' ∧ rho'.IsIrreducible ∧
+        Nonempty (ClosureSpace.Homeomorph
+          ((NormedSpace.geometricStructureClosure ℂ S).subspace (normalPart S))
+          ((NormedSpace.geometricStructureClosure ℂ (NonUnitalStarAlgHom.range rho')).subspace
+            (normalPart (NonUnitalStarAlgHom.range rho')))) := by
+  exact ⟨L, inferInstance, inferInstance, inferInstance, rho, hinj, hrho,
+    ⟨normalPartHomeomorphOfImage (H := H) (K := L)
+      (S := S) (T := NonUnitalStarAlgHom.range rho) q himage⟩⟩
+
 end FaithfulImage
+
+/-- Package the faithful GNS image and its normal-part homeomorphism
+while the target algebra is still abstract. -/
+private theorem exists_normalPart_image_of_abstract_target
+    {B : Type v} [NonUnitalCStarAlgebra B] [PartialOrder B] [StarOrderedRing B]
+    (S : NonUnitalStarSubalgebra ℂ (H →L[ℂ] H))
+    [IsClosed (S : Set (H →L[ℂ] H))]
+    (hS : NonUnitalCStarRepresentation.IsIrreducible
+      (NonUnitalStarSubalgebraClass.subtype S))
+    (e : ClosureSpace.Homeomorph (NormedSpace.geometricStructureClosure ℂ S)
+      (NormedSpace.geometricStructureClosure ℂ B)) :
+    ∃ (G : Type v) (_ : NormedAddCommGroup G) (_ : InnerProductSpace ℂ G)
+      (_ : CompleteSpace G) (rho : NonUnitalCStarRepresentation B G),
+      Function.Injective rho ∧ rho.IsIrreducible ∧
+        Nonempty (ClosureSpace.Homeomorph
+          ((NormedSpace.geometricStructureClosure ℂ S).subspace (normalPart S))
+          ((NormedSpace.geometricStructureClosure ℂ (NonUnitalStarAlgHom.range rho)).subspace
+            (normalPart (NonUnitalStarAlgHom.range rho)))) := by
+  obtain ⟨phi, hfaith, r, _hpre, _hinv, himage⟩ :=
+    exists_faithful_normalPart_transport S hS e
+  refine ⟨phi.GNS, inferInstance, inferInstance, inferInstance,
+    phi.gnsRepresentation, hfaith, phi.isIrreducible_gnsRepresentation, ?_⟩
+  exact ⟨normalPartHomeomorphOfImage
+    (H := H) (K := phi.GNS) (S := S)
+    (T := NonUnitalStarAlgHom.range phi.gnsRepresentation) (e.trans r.symm) himage⟩
 
 section ActualTransport
 
@@ -409,38 +494,49 @@ local instance : PartialOrder T := _root_.CStarAlgebra.spectralOrder T
 local instance : StarOrderedRing T := _root_.CStarAlgebra.spectralOrderedRing T
 
 include hS hT e in
+/-- Hide the concrete pure-state GNS carrier before using faithful-image rigidity. -/
+private theorem exists_abstract_faithful_normalPart_image :
+    ∃ (G : Type v) (_ : NormedAddCommGroup G) (_ : InnerProductSpace ℂ G)
+      (_ : CompleteSpace G) (rho : NonUnitalCStarRepresentation T G),
+      Function.Injective rho ∧ rho.IsIrreducible ∧
+        Nonempty (ClosureSpace.Homeomorph
+          ((NormedSpace.geometricStructureClosure ℂ S).subspace (normalPart S))
+          ((NormedSpace.geometricStructureClosure ℂ (NonUnitalStarAlgHom.range rho)).subspace
+            (normalPart (NonUnitalStarAlgHom.range rho)))) := by
+  exact exists_normalPart_image_of_abstract_target
+    (H := H) (B := T) S hS e
+
+include hS hT e in
 /-- The same faithful target image transports compact containment across the specified GSS map. -/
 theorem compactOperatorStarSubalgebra_le_iff_of_geometricStructure_homeomorph :
     ContinuousLinearMap.compactOperatorStarSubalgebra ℂ H ≤ S ↔
       ContinuousLinearMap.compactOperatorStarSubalgebra ℂ K ≤ T := by
-  obtain ⟨phi, hfaith, r, _hpre, _hinv, himage⟩ :=
-    exists_faithful_normalPart_transport S hS e
-  let f := normalPartHomeomorphOfImage (e.trans r.symm) himage
-  have hR : NonUnitalCStarRepresentation.IsIrreducible (NonUnitalStarSubalgebraClass.subtype (NonUnitalStarAlgHom.range phi.gnsRepresentation)) :=
-    (NonUnitalCStarRepresentation.isIrreducible_imageRepresentation_iff
-      phi.gnsRepresentation).2 phi.isIrreducible_gnsRepresentation
-  exact (compactOperatorStarSubalgebra_le_iff_of_normalPart_homeomorph
-      S (NonUnitalStarAlgHom.range phi.gnsRepresentation) hS hR f).trans
-    (compactOperatorStarSubalgebra_le_iff_range_of_injective
-      (hclosedT := by infer_instance) T hT phi.gnsRepresentation
-        phi.isIrreducible_gnsRepresentation hfaith).symm
+  obtain ⟨G, nG, iG, cG, rho, hfaith, hrho, ⟨f⟩⟩ :=
+    exists_abstract_faithful_normalPart_image S T hS hT e
+  letI := nG
+  letI := iG
+  letI := cG
+  exact compact_le_iff_of_faithful_normalPart
+    (H := H) (K := K) (L := G)
+    (T := T) (hclosedT := by infer_instance) (hT := hT)
+    (rho := rho) (hrho := hrho)
+    (hinj := hfaith) (S := S) (hS := hS) (f := f)
 
 include hS hT e in
 /-- Equality with the compact algebra is invariant under the specified full GSS homeomorphism. -/
 theorem eq_compactOperatorStarSubalgebra_iff_of_geometricStructure_homeomorph :
     S = ContinuousLinearMap.compactOperatorStarSubalgebra ℂ H ↔
       T = ContinuousLinearMap.compactOperatorStarSubalgebra ℂ K := by
-  obtain ⟨phi, hfaith, r, _hpre, _hinv, himage⟩ :=
-    exists_faithful_normalPart_transport S hS e
-  let f := normalPartHomeomorphOfImage (e.trans r.symm) himage
-  have hR : NonUnitalCStarRepresentation.IsIrreducible (NonUnitalStarSubalgebraClass.subtype (NonUnitalStarAlgHom.range phi.gnsRepresentation)) :=
-    (NonUnitalCStarRepresentation.isIrreducible_imageRepresentation_iff
-      phi.gnsRepresentation).2 phi.isIrreducible_gnsRepresentation
-  exact (eq_compactOperatorStarSubalgebra_iff_of_normalPart_homeomorph
-      S (NonUnitalStarAlgHom.range phi.gnsRepresentation) hS hR f).trans
-    (eq_compactOperatorStarSubalgebra_iff_range_of_injective
-      (hclosedT := by infer_instance) T hT phi.gnsRepresentation
-        phi.isIrreducible_gnsRepresentation hfaith).symm
+  obtain ⟨G, nG, iG, cG, rho, hfaith, hrho, ⟨f⟩⟩ :=
+    exists_abstract_faithful_normalPart_image S T hS hT e
+  letI := nG
+  letI := iG
+  letI := cG
+  exact eq_compact_iff_of_faithful_normalPart
+    (H := H) (K := K) (L := G)
+    (T := T) (hclosedT := by infer_instance) (hT := hT)
+    (rho := rho) (hrho := hrho)
+    (hinj := hfaith) (S := S) (hS := hS) (f := f)
 
 include hS hT e in
 /-- The proper compact-containing alternative is invariant under the specified GSS map. -/

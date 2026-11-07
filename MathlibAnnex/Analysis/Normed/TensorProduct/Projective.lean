@@ -496,7 +496,8 @@ def ofContinuousLinearMap (B : E →L[𝕜] F →L[𝕜] G) :
         gcongr
         exact B.le_opNorm _
       _ = ‖B‖ * ∏ i, ‖m i‖ := by
-        simp [Fintype.prod_sum_type, mul_assoc]
+        set_option backward.isDefEq.respectTransparency false in
+          simp [Fintype.prod_sum_type, mul_assoc]
 
 @[simp]
 theorem ofContinuousLinearMap_apply (B : E →L[𝕜] F →L[𝕜] G)
@@ -609,7 +610,8 @@ def completionLinearEquiv :
   left_inv f := by
     apply ContinuousLinearMap.ext
     intro z
-    simp [completionRestrictL, completionExtendL]
+    change completionExtend 𝕜 E F G f (toCompletion 𝕜 E F z) = f z
+    exact completionExtend_toCompletion 𝕜 E F G f z
   right_inv f := by
     apply ContinuousLinearMap.extend_unique
       (f.comp (toCompletion 𝕜 E F))
@@ -653,9 +655,10 @@ def liftIsometry :
 theorem liftIsometry_tprod (B : BoundedBilinearMap 𝕜 E F G) (x : E) (y : F) :
     liftIsometry 𝕜 E F G B (tprod 𝕜 E F x y) =
       BoundedBilinearMap.apply 𝕜 E F G B x y := by
-  simp [liftIsometry, algebraicLiftIsometry, completionLiftIsometry,
-    completionLinearEquiv, completionExtendL, tprod,
-    BoundedBilinearMap.apply, pureAlgebraic]
+  change completionExtend 𝕜 E F G (PiTensorProduct.liftIsometry 𝕜 (PairFamily E F) G B)
+    (toCompletion 𝕜 E F (PiTensorProduct.tprod 𝕜 (pair E F x y))) = B (pair E F x y)
+  rw [completionExtend_toCompletion]
+  simp
 
 /-- The dual of the completed projective tensor product is isometrically the
 space of bounded bilinear forms. -/

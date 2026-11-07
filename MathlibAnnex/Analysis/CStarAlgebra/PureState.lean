@@ -131,12 +131,12 @@ theorem nonnegative_of_norm_le_one_of_apply_one [Nontrivial A]
   change 0 ≤ (phi a).re
   let b : A := algebraMap ℝ A ‖a‖ - a
   have hb : 0 ≤ b := by
-    exact sub_nonneg.mpr (IsSelfAdjoint.le_algebraMap_norm_self ha.isSelfAdjoint)
+    exact sub_nonneg.mpr (IsSelfAdjoint.le_algebraMap_norm_self a ha.isSelfAdjoint)
   have hb_le : b ≤ algebraMap ℝ A ‖a‖ := by
     dsimp [b]
     exact sub_le_self _ ha
   have hbnorm : ‖b‖ ≤ ‖a‖ := by
-    have h := CStarAlgebra.norm_le_norm_of_nonneg_of_le hb hb_le
+    have h := CStarAlgebra.norm_le_norm_of_le_of_nonneg hb_le hb
     simpa using h
   have hphib : ‖phi b‖ ≤ ‖b‖ := by
     calc

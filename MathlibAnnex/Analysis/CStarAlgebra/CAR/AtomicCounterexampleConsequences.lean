@@ -14,7 +14,7 @@ set_option autoImplicit false
 set_option maxHeartbeats 1000000
 noncomputable section
 namespace MathlibAnnex.Analysis.CStarAlgebra
-universe v w
+universe u v w z
 
 /-- The single inherited CAR atomic target; this is a transparent name, not
 another construction or a project-scoped copy of a C*-algebra. -/
@@ -76,6 +76,31 @@ theorem atomicCounterexample_unitaryEquivalent
         U (atomicCounterexampleRepresentation a x) = rho a (U x) :=
   (MathlibAnnex.CStarAlgebra.CAR.atomicCounterexampleEndpoint.{v}).captures_nonunital K rho hrho
 
+/-- Compose the same two captures while the common ambient carrier is abstract. -/
+private theorem equivalent_of_two_captures
+    {A : Type u} [CStarAlgebra A]
+    {F : Type z} [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+    {H : Type v} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
+    {K : Type w} [NormedAddCommGroup K] [InnerProductSpace ℂ K] [CompleteSpace K]
+    (ambient : Representation A F)
+    (rho : NonUnitalRepresentation (A := A) (H := H))
+    (sigma : NonUnitalRepresentation (A := A) (H := K))
+    (hcaptureR : ∃ R : F ≃ₗᵢ[ℂ] H, ∀ (a : A) (x : F),
+      R (ambient a x) = rho a (R x))
+    (hcaptureS : ∃ S : F ≃ₗᵢ[ℂ] K, ∀ (a : A) (x : F),
+      S (ambient a x) = sigma a (S x)) :
+    ∃ U : H ≃ₗᵢ[ℂ] K, ∀ (a : A) (x : H), U (rho a x) = sigma a (U x) := by
+  obtain ⟨R, hR⟩ := hcaptureR
+  obtain ⟨S, hS⟩ := hcaptureS
+  refine ⟨R.symm.trans S, ?_⟩
+  intro a x
+  have hRx : R.symm (rho a x) = ambient a (R.symm x) := by
+    apply R.injective
+    simpa only [R.apply_symm_apply] using (hR a (R.symm x)).symm
+  change S (R.symm (rho a x)) = sigma a (S (R.symm x))
+  rw [hRx]
+  exact hS a (R.symm x)
+
 /-- Two arbitrary irreducible representations, on independent universes,
 are compared through the SAME fixed atomic model. -/
 theorem atomicCounterexample_irreducibleModels_equivalent
@@ -86,16 +111,9 @@ theorem atomicCounterexample_irreducibleModels_equivalent
     (hrho : rho.IsIrreducible) (hsigma : sigma.IsIrreducible) :
     ∃ U : H ≃ₗᵢ[ℂ] K, ∀ (a : AtomicCounterexampleAlgebra) (x : H),
       U (rho a x) = sigma a (U x) := by
-  obtain ⟨R, hR⟩ := atomicCounterexample_unitaryEquivalent rho hrho
-  obtain ⟨S, hS⟩ := atomicCounterexample_unitaryEquivalent sigma hsigma
-  refine ⟨R.symm.trans S, ?_⟩
-  intro a x
-  have hRx : R.symm (rho a x) = atomicCounterexampleRepresentation a (R.symm x) := by
-    apply R.injective
-    simpa only [R.apply_symm_apply] using (hR a (R.symm x)).symm
-  change S (R.symm (rho a x)) = sigma a (S (R.symm x))
-  rw [hRx]
-  exact hS a (R.symm x)
+  exact equivalent_of_two_captures atomicCounterexampleRepresentation rho sigma
+    (atomicCounterexample_unitaryEquivalent rho hrho)
+    (atomicCounterexample_unitaryEquivalent sigma hsigma)
 
 /-- The same algebra is not a full compact-operator model on any Hilbert
 space. The conclusion includes surjectivity onto ALL compact operators. -/

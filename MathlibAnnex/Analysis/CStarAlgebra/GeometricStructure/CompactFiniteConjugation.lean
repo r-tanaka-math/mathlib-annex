@@ -140,9 +140,11 @@ theorem exists_compact_conjugate_homeomorph_of_bounded_pairs
       change (normalPartStarHomeomorph 𝒦K hK).toEquiv
         (normalPartSemilinearMap 𝒦K 𝒦K hK A.toLinearEquiv B.toLinearEquiv
           (normalPartPoint 𝒦K hK z w hz hw)) = _
-      rw [normalPartSemilinearMap_point 𝒦K 𝒦K hK hK hτ, normalPartStarHomeomorph_point,
-        hfi, hgg, hff]
-      rfl
+      rw [normalPartSemilinearMap_point 𝒦K 𝒦K hK hK hτ]
+      have hstar := normalPartStarHomeomorph_point 𝒦K hK (A z) (B w)
+        (fun h => hz (A.injective (h.trans (map_zero A).symm)))
+        (fun h => hw (B.injective (h.trans (map_zero B).symm)))
+      exact hstar.trans (by rw [hfi, hgg, hff]; rfl)
   · rcases normalPart_equiv_evaluation_of_semilinear_eq_or_star S S hS hS g hτ
         P.toLinearEquiv Q.toLinearEquiv hg with ⟨_, hgg, _⟩ | ⟨_, hgg, _⟩
     · let A := ContinuousLinearEquiv.sandwichOfCommute hcomm V V Q
@@ -172,9 +174,11 @@ theorem exists_compact_conjugate_homeomorph_of_bounded_pairs
       change (normalPartStarHomeomorph 𝒦K hK).toEquiv
         (normalPartSemilinearMap 𝒦K 𝒦K hK A.toLinearEquiv B.toLinearEquiv
           (normalPartPoint 𝒦K hK z w hz hw)) = _
-      rw [normalPartSemilinearMap_point 𝒦K 𝒦K hK hK hτ, normalPartStarHomeomorph_point,
-        hfi, hgg, hff]
-      rfl
+      rw [normalPartSemilinearMap_point 𝒦K 𝒦K hK hK hτ]
+      have hstar := normalPartStarHomeomorph_point 𝒦K hK (A z) (B w)
+        (fun h => hz (A.injective (h.trans (map_zero A).symm)))
+        (fun h => hw (B.injective (h.trans (map_zero B).symm)))
+      exact hstar.trans (by rw [hfi, hgg, hff]; rfl)
 
 include hS in
 /-- The forward continuity inputs produce the needed bounded pairs. Infinite

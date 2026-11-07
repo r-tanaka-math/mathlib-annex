@@ -229,8 +229,8 @@ private theorem det_rowsFrom_insert_sub
     ext r c
     by_cases hri : r = i
     · subst r
-      simp [rowsFrom, hi, _root_.Matrix.updateRow]
-    · simp [rowsFrom, _root_.Matrix.updateRow, hri]
+      simp [rowsFrom, hi, _root_.Matrix.updateRow_apply]
+    · simp [rowsFrom, _root_.Matrix.updateRow_apply, hri]
   have hbase : (rowsFrom P Q s).updateRow i (Q i) = rowsFrom P Q s := by
     simpa [rowsFrom, hi] using
       _root_.Matrix.updateRow_eq_self (rowsFrom P Q s) i
@@ -252,8 +252,8 @@ private theorem prod_le_pow_mul_of_distinguished
       symm
       exact Finset.mul_prod_erase (Finset.univ : Finset ι) f hmem
     _ ≤ δ * (Finset.univ.erase i).prod (fun _ => S) := by
-      apply mul_le_mul hi
-      · apply Finset.prod_le_prod
+      apply mul_le_mul_of_nonneg' hi
+      · apply Finset.prod_le_prod₀
         · intro j _
           exact hf j
         · intro j hj
@@ -284,15 +284,15 @@ private theorem abs_det_rowsFrom_insert_sub_le_max
   · positivity
   · have h := rowL1_stdMatrix_le_opNorm (P - Q) i
     rw [stdMatrix_sub] at h
-    simpa [oneRowDifference, Matrix.rowL1Norm, _root_.Matrix.updateRow] using h
+    simpa [oneRowDifference, Matrix.rowL1Norm, _root_.Matrix.updateRow_apply] using h
   · intro j hji
     by_cases hjs : j ∈ s
-    · simpa [oneRowDifference, Matrix.rowL1Norm, _root_.Matrix.updateRow,
+    · simpa [oneRowDifference, Matrix.rowL1Norm, _root_.Matrix.updateRow_apply,
         hji, rowsFrom, hjs] using
-        (rowL1_stdMatrix_le_opNorm P j).trans (le_max_left _ _)
-    · simpa [oneRowDifference, Matrix.rowL1Norm, _root_.Matrix.updateRow,
+        (rowL1_stdMatrix_le_opNorm P j).trans (le_max_left ‖P‖ ‖Q‖)
+    · simpa [oneRowDifference, Matrix.rowL1Norm, _root_.Matrix.updateRow_apply,
         hji, rowsFrom, hjs] using
-        (rowL1_stdMatrix_le_opNorm Q j).trans (le_max_right _ _)
+        (rowL1_stdMatrix_le_opNorm Q j).trans (le_max_right ‖P‖ ‖Q‖)
 
 private theorem abs_det_rowsFrom_sub_le_max
     {ι : Type u} [Fintype ι] [DecidableEq ι]

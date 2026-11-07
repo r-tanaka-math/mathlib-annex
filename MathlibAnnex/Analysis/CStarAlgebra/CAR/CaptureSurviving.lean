@@ -26,6 +26,8 @@ open MathlibAnnex.Analysis.InnerProductSpace
 
 universe v
 
+set_option synthInstance.maxHeartbeats 100000 in
+set_option backward.isDefEq.respectTransparency false in
 /-- A specified nonzero limiting fixed space supplies unit vectors carrying
 the selected state and the root state, joined by the represented target
 generator. -/

@@ -30,6 +30,8 @@ open MathlibAnnex.Analysis.InnerProductSpace
 
 universe v
 
+set_option synthInstance.maxHeartbeats 100000 in
+set_option backward.isDefEq.respectTransparency false in
 /-- Under the all-zero limiting-defect hypothesis, the completed-CAR
 restriction of an irreducible target representation is itself irreducible. -/
 theorem isIrreducible_restrictedRepresentation_of_all_fixed_bot

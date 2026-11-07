@@ -263,6 +263,7 @@ theorem normalPart_semilinear_factors_smul_smul
       normalPartPoint T hT (U x) (V y)
         (by simpa only [map_zero] using U.injective.ne hx)
         (by simpa only [map_zero] using V.injective.ne hy) := by
+  dsimp only
   let U := normalPartFirstSemilinearEquiv S T hS hT e hdim
   let V := normalPartSecondSemilinearEquiv S T hS hT e hdim
   have hUa : normalPartFirstScalarEquiv S T hS hT e hdim a ≠ 0 := by
@@ -271,12 +272,22 @@ theorem normalPart_semilinear_factors_smul_smul
   have hVb : normalPartSecondScalarEquiv S T hS hT e hdim b ≠ 0 := by
     simpa only [map_zero] using
       (normalPartSecondScalarEquiv S T hS hT e hdim).injective.ne hb
-  simpa only [U, V, map_smulₛₗ, RingEquiv.toRingHom_eq_coe,
-    RingEquiv.coe_toRingHom] using
-    normalPartPoint_smul_smul T hT (U x) (V y)
+  have hUmap : U (a • x) = normalPartFirstScalarEquiv S T hS hT e hdim a • U x := by
+    simpa only [RingEquiv.toRingHom_eq_coe, RingEquiv.coe_toRingHom] using
+      U.map_smulₛₗ a x
+  have hVmap : V (b • y) = normalPartSecondScalarEquiv S T hS hT e hdim b • V y := by
+    simpa only [RingEquiv.toRingHom_eq_coe, RingEquiv.coe_toRingHom] using
+      V.map_smulₛₗ b y
+  have hp := normalPartPoint_smul_smul T hT (U x) (V y)
       (by simpa only [map_zero] using U.injective.ne hx)
       (by simpa only [map_zero] using V.injective.ne hy)
       (normalPartFirstScalarEquiv S T hS hT e hdim a)
       (normalPartSecondScalarEquiv S T hS hT e hdim b) hUa hVb
+  apply Subtype.ext
+  apply Subtype.ext
+  change {c : T | inner ℂ (V (b • y)) ((c : K →L[ℂ] K) (U (a • x))) = 0} =
+    {c : T | inner ℂ (V y) ((c : K →L[ℂ] K) (U x)) = 0}
+  rw [hUmap, hVmap]
+  exact congrArg (fun I : normalPart T => I.val.val) hp
 
 end MathlibAnnex.Analysis.CStarAlgebra

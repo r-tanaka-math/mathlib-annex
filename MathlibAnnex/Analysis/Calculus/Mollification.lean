@@ -285,13 +285,11 @@ theorem tendsto_eLpNorm_fderiv_mollify_sub
           _ ≤ ‖entry i j‖ * (C : ℝ) := by
             exact mul_le_mul_of_nonneg_left
               (norm_fderiv_le_of_lipschitz ℝ hLip) (norm_nonneg (entry i j))
-      constructor
-      · exact ((hentry_meas i j).indicator hSmeas).aestronglyMeasurable
-      · change eLpNorm
-          (S.indicator (fun x => entry i j (fderiv ℝ f x)))
-            ((m + 1 : ℕ) : ℝ≥0∞) volume < ∞
-        rw [MeasureTheory.eLpNorm_indicator_eq_eLpNorm_restrict hSmeas]
-        exact hlocal.eLpNorm_lt_top
+      change eLpNorm
+        (S.indicator (fun x => entry i j (fderiv ℝ f x)))
+          ((m + 1 : ℕ) : ℝ≥0∞) volume < ∞
+      rw [MeasureTheory.eLpNorm_indicator_eq_eLpNorm_restrict hSmeas.nullMeasurableSet]
+      exact hlocal.eLpNorm_lt_top
     letI : Fact (1 ≤ ((m + 1 : ℕ) : ℝ≥0∞)) :=
       ⟨by exact_mod_cast Nat.succ_le_succ (Nat.zero_le m)⟩
     letI : Fact (((m + 1 : ℕ) : ℝ≥0∞) ≠ ∞) := ⟨by simp⟩
@@ -393,7 +391,7 @@ theorem tendsto_eLpNorm_fderiv_mollify_sub
               ContinuousLinearMap.lsmul ℝ ℝ, volume] (q i j)) x - q i j x‖ ≤
             2 * B := by
         rw [hstd ε hε, ← dist_eq_norm]
-        apply ContDiffBump.dist_normed_convolution_le (hq i j).1
+        apply ContDiffBump.dist_normed_convolution_le (hq i j).aestronglyMeasurable
         intro y hy
         rw [Real.dist_eq]
         calc
@@ -465,7 +463,7 @@ theorem tendsto_eLpNorm_fderiv_mollify_sub
             by_contra hc
             exact hx (hconv_supp ε hε hε1 (Ne.symm hc))
         rw [← hind]
-        exact (MeasureTheory.memLp_indicator_iff_restrict hTmeas).2 hlocal
+        exact (MeasureTheory.memLp_indicator_iff_restrict hTmeas.nullMeasurableSet).2 hlocal
       have hdiff_mem (ε : ℝ) (hε : 0 < ε) (hε1 : ε < 1) :
           MemLp (fun x =>
             ((standardMollifier ε) ⋆[
@@ -492,7 +490,7 @@ theorem tendsto_eLpNorm_fderiv_mollify_sub
       have hFmeas : ∀ᶠ ε in nhdsWithin (0 : ℝ) (Set.Ioi 0),
           AEStronglyMeasurable (F ε) volume := by
         filter_upwards [hsmall] with ε hε
-        exact (hdiff_mem ε hε.1 hε.2).1.norm.pow (m + 1)
+        exact (hdiff_mem ε hε.1 hε.2).aestronglyMeasurable.norm.pow (m + 1)
       have hFbound : ∀ᶠ ε in nhdsWithin (0 : ℝ) (Set.Ioi 0),
           ∀ᵐ x ∂volume, ‖F ε x‖ ≤ bound x := by
         filter_upwards [hsmall] with ε hε
@@ -734,11 +732,11 @@ theorem tendsto_eLpNorm_fderiv_mollify_sub
           (measurable_fderiv ℝ f)).stronglyMeasurable
       have hRmeas (z : Fin (m + 1) × Fin N) :
           AEStronglyMeasurable
-            (fun x => ‖entry z.1 z.2
-              (fderiv ℝ (mollify ε f) x - fderiv ℝ f x)‖)
+            (fun x => entry z.1 z.2
+              (fderiv ℝ (mollify ε f) x - fderiv ℝ f x))
             (volume.restrict K) := by
         exact ((((entry z.1 z.2).continuous.measurable.comp
-          hDmeas.measurable).norm).stronglyMeasurable).aestronglyMeasurable
+          hDmeas.measurable)).stronglyMeasurable).aestronglyMeasurable
       calc
         eLpNorm
             (fun x => fderiv ℝ (mollify ε f) x - fderiv ℝ f x)
@@ -748,7 +746,7 @@ theorem tendsto_eLpNorm_fderiv_mollify_sub
               ‖entry i j
                 (fderiv ℝ (mollify ε f) x - fderiv ℝ f x)‖)
             ((m + 1 : ℕ) : ℝ≥0∞) (volume.restrict K) := by
-              apply MeasureTheory.eLpNorm_mono_real
+              apply MeasureTheory.eLpNorm_mono_real hDmeas.aestronglyMeasurable.restrict
               intro x
               exact hOp _
         _ = eLpNorm
@@ -765,17 +763,18 @@ theorem tendsto_eLpNorm_fderiv_mollify_sub
               (fun x => ‖entry z.1 z.2
                 (fderiv ℝ (mollify ε f) x - fderiv ℝ f x)‖)
               ((m + 1 : ℕ) : ℝ≥0∞) (volume.restrict K) := by
-              apply MeasureTheory.eLpNorm_sum_le
-              · intro z hz
-                exact hRmeas z
-              · exact Fact.out
+              exact MeasureTheory.eLpNorm_sum_le Fact.out
         _ = ∑ i : Fin (m + 1), ∑ j : Fin N,
             eLpNorm
               (fun x => entry i j
                 (fderiv ℝ (mollify ε f) x - fderiv ℝ f x))
               ((m + 1 : ℕ) : ℝ≥0∞) (volume.restrict K) := by
               rw [Fintype.sum_prod_type]
-              simp only [eLpNorm_norm]
+              apply Finset.sum_congr rfl
+              intro i _
+              apply Finset.sum_congr rfl
+              intro j _
+              exact eLpNorm_norm _ (hRmeas (i, j))
     have hsum_tendsto : Tendsto
         (fun ε => ∑ i : Fin (m + 1), ∑ j : Fin N,
           eLpNorm

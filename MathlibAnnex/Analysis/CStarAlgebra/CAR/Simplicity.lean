@@ -47,6 +47,7 @@ theorem norm_leftMulMapPreGNS_apply_le (x : Limit) (y : rootPositiveState.PreGNS
     rw [← mul_assoc, mul_assoc _ (star x), sq,
       ← CStarRing.norm_star_mul_self (x := x), smul_mul_assoc]
     exact CStarAlgebra.star_left_conjugate_le_norm_smul
+      (rootPositiveState.ofPreGNS y) (star x * x) (IsSelfAdjoint.star_mul_self x)
   calc
     _ ≤ rootPositiveState
         (‖x‖ ^ 2 • star (rootPositiveState.ofPreGNS y) *

@@ -119,9 +119,9 @@ theorem geometricStructureClosure_eq_univ_iff_iInter_eq_singleton_zero
     (S : Set (GeometricStructureSpace 𝕜 E)) :
     (geometricStructureClosure 𝕜 E).closure S = Set.univ ↔
       (⋂ I ∈ S, I.val) = ({0} : Set E) := by
-  rw [geometricStructureClosure_eq_univ_iff_kernel_eq_singleton_zero,
-    ClosureSpace.HullKernel.kernel_eq_iInter]
-  rfl
+  rw [geometricStructureClosure_eq_univ_iff_kernel_eq_singleton_zero]
+  have h := ClosureSpace.HullKernel.kernel_eq_iInter (geometricStructureFamily 𝕜 E) S
+  exact ⟨fun hkernel => h.symm.trans hkernel, fun hinter => h.trans hinter⟩
 
 /-- The empty set is closure-dense exactly when the primal space is the zero space.
 The empty intersection is still `univ`; the GSS definition is not changed. -/

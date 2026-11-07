@@ -19,6 +19,8 @@ namespace MathlibAnnex.CStarAlgebra.CAR
 
 open MathlibAnnex.Analysis.CStarAlgebra
 
+universe u
+
 /-- The CAR trace extends to a state of the actual target. -/
 theorem exists_state_extension_trace (family : RepresentativeShellFamily) :
     ∃ φ : ShellFamilyTarget family →L[ℂ] ℂ,
@@ -65,49 +67,77 @@ abbrev TracialHilbertSpace (family : RepresentativeShellFamily) :=
 noncomputable def tracialVector (family : RepresentativeShellFamily) :
     TracialHilbertSpace family := (traceExtensionPositive family).gnsCyclicVector
 
+/-- Name the same GNS homomorphism before specializing the state and algebra. -/
+private noncomputable def representationOfPositive
+    {A : Type u} [CStarAlgebra A] [PartialOrder A] [StarOrderedRing A]
+    (φ : A →ₚ[ℂ] ℂ) : Representation A φ.GNS :=
+  φ.gnsStarAlgHom
+
+private theorem representationOfPositive_inner
+    {A : Type u} [CStarAlgebra A] [PartialOrder A] [StarOrderedRing A]
+    (φ : A →ₚ[ℂ] ℂ) (a : A) :
+    inner ℂ φ.gnsCyclicVector
+      (representationOfPositive φ a φ.gnsCyclicVector) = φ a :=
+  φ.inner_gnsCyclicVector_gnsStarAlgHom a
+
+set_option maxHeartbeats 1000000 in
+set_option synthInstance.maxHeartbeats 100000 in
+set_option backward.isDefEq.respectTransparency false in
 /-- The target's GNS representation, not merely a representation of its CAR source. -/
 noncomputable def tracialRepresentation (family : RepresentativeShellFamily) :
     Representation (ShellFamilyTarget family) (TracialHilbertSpace family) :=
-  (traceExtensionPositive family).gnsStarAlgHom
+  representationOfPositive (traceExtensionPositive family)
 
+set_option synthInstance.maxHeartbeats 100000 in
+set_option backward.isDefEq.respectTransparency false in
 @[simp]
 theorem norm_tracialVector (family : RepresentativeShellFamily) :
     ‖tracialVector family‖ = 1 :=
   (traceExtensionPositive family).norm_gnsCyclicVector (traceExtensionPositive_one family)
 
+set_option synthInstance.maxHeartbeats 100000 in
+set_option backward.isDefEq.respectTransparency false in
 theorem tracialVector_ne_zero (family : RepresentativeShellFamily) :
     tracialVector family ≠ 0 := by
-  intro hzero
-  have h := norm_tracialVector family
-  rw [hzero, norm_zero] at h
-  exact zero_ne_one h
+  apply norm_ne_zero_iff.mp
+  rw [norm_tracialVector]
+  exact one_ne_zero
 
 /-- This nontriviality proof remains separate from the representation proof. -/
 theorem nontrivial_tracialHilbertSpace (family : RepresentativeShellFamily) :
     Nontrivial (TracialHilbertSpace family) :=
   nontrivial_of_ne (tracialVector family) 0 (tracialVector_ne_zero family)
 
+set_option maxHeartbeats 1000000 in
+set_option synthInstance.maxHeartbeats 100000 in
+set_option backward.isDefEq.respectTransparency false in
 @[simp]
 theorem inner_tracialVector_tracialRepresentation (family : RepresentativeShellFamily)
     (a : ShellFamilyTarget family) :
     inner ℂ (tracialVector family) (tracialRepresentation family a (tracialVector family)) =
       traceExtension family a :=
-  (traceExtensionPositive family).inner_gnsCyclicVector_gnsStarAlgHom a
+  (representationOfPositive_inner (traceExtensionPositive family) a).trans
+    (traceExtensionPositive_apply family a)
 
+set_option maxHeartbeats 1000000 in
+set_option synthInstance.maxHeartbeats 200000 in
+set_option backward.isDefEq.respectTransparency false in
 /-- The source restriction implements the original CAR trace exactly. -/
 theorem vectorFunctional_tracialRepresentation_source (family : RepresentativeShellFamily)
     (b : Limit) :
     Representation.vectorFunctional
       ((tracialRepresentation family).comp (shellFamilySourceHom family))
       (tracialVector family) b = trace b := by
-  change inner ℂ (tracialVector family)
-    (tracialRepresentation family (shellFamilySourceHom family b) (tracialVector family)) = _
-  rw [inner_tracialVector_tracialRepresentation, traceExtension_shellFamilySourceHom]
+  exact (inner_tracialVector_tracialRepresentation family (shellFamilySourceHom family b)).trans
+    (traceExtension_shellFamilySourceHom family b)
 
 theorem denseRange_tracialRepresentation_orbit (family : RepresentativeShellFamily) :
     DenseRange (fun a ↦ tracialRepresentation family a (tracialVector family)) :=
   (traceExtensionPositive family).denseRange_gnsStarAlgHom_apply_gnsCyclicVector
 
+set_option maxHeartbeats 1000000 in
+set_option synthInstance.maxHeartbeats 200000 in
+set_option backward.isDefEq.respectTransparency false in
 /-- The CAR orbit, although smaller than the target orbit algebraically,
 is already dense in this Hilbert space. -/
 theorem denseRange_tracialRepresentation_source_orbit (family : RepresentativeShellFamily) :
@@ -117,6 +147,9 @@ theorem denseRange_tracialRepresentation_source_orbit (family : RepresentativeSh
     (tracialVector family) (vectorFunctional_tracialRepresentation_source family)
     (denseRange_tracialRepresentation_orbit family)
 
+set_option maxHeartbeats 1000000 in
+set_option synthInstance.maxHeartbeats 200000 in
+set_option backward.isDefEq.respectTransparency false in
 theorem separableSpace_tracialHilbertSpace (family : RepresentativeShellFamily) :
     TopologicalSpace.SeparableSpace (TracialHilbertSpace family) :=
   separableSpace_of_trace_of_cyclic family (tracialRepresentation family)

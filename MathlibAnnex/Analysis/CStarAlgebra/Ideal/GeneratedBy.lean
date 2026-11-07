@@ -559,7 +559,7 @@ theorem eq_zero_of_restrictClosedIdealGeneratedByCyclic_eq_zero
     have hc0 : c = 0 := (smul_eq_zero.mp hcv).resolve_right hv0
     have hd0 : star eJ.1 * eJ.1 = 0 := by
       simpa only [hc0, _root_.zero_smul ℂ p] using hc
-    have he0 : eJ.1 = 0 := (CStarRing.star_mul_self_eq_zero_iff eJ.1).mp hd0
+    have he0 : eJ.1 = 0 := _root_.star_mul_self_eq_zero.mp hd0
     change a.1 * (b * p) = 0 at he0
     simpa only [mul_assoc] using he0
   have hap : a.1 * p = 0 := by
@@ -578,7 +578,7 @@ theorem eq_zero_of_restrictClosedIdealGeneratedByCyclic_eq_zero
   have hstarK := hJK hstarJ
   change MemTwoSidedLeftAnnihilator a.1 (star a.1) at hstarK
   apply Subtype.ext
-  exact (CStarRing.mul_star_self_eq_zero_iff (a : A)).mp hstarK.1
+  exact _root_.mul_star_self_eq_zero.mp hstarK.1
 
 /-- Faithfulness of the concrete generated-ideal cyclic representation. -/
 theorem injective_restrictClosedIdealGeneratedByCyclic

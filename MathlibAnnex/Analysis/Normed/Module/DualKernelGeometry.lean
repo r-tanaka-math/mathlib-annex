@@ -9,6 +9,8 @@ public import MathlibAnnex.Analysis.Normed.Module.DualKernel
 public import Mathlib.Analysis.Normed.Module.FiniteDimension
 public import Mathlib.LinearAlgebra.Dimension.Finite
 
+import Mathlib.Analysis.Normed.Module.HahnBanach
+
 /-!
 # A third continuous-dual kernel through two distinct hyperplanes
 

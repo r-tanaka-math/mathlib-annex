@@ -52,7 +52,8 @@ theorem intertwines_unitization_iff
       intro x
       have hx := congrArg (fun T : H →L[ℂ] K => T x) (h a)
       change V (pi a x) = sigma a (V x) at hx
-      simpa [unitization, ContinuousLinearMap.comp_apply, hx]
+      simpa [unitization, Unitization.starLift, Unitization.lift,
+        NonUnitalAlgHom.toAlgHom, ContinuousLinearMap.comp_apply, hx]
 
 /-- Nonzero irreducibility, not equality or inequality of kernels, is the
 hypothesis needed to apply the existing bounded-intertwiner theorem. -/

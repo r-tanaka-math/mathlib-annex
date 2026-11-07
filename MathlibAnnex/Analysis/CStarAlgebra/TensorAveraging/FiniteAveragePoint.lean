@@ -92,8 +92,13 @@ private theorem convex_rowClosure :
   let f : WeakDual ℂ (StrongDual ℂ (Tensor A)) →
       WeakDual ℂ (StrongDual ℂ (Tensor A)) →
       WeakDual ℂ (StrongDual ℂ (Tensor A)) := fun x' y' => a • x' + c • y'
-  have hf : Continuous (Function.uncurry f) :=
-    (continuous_fst.const_smul _).add (continuous_snd.const_smul _)
+  have hf : Continuous (Function.uncurry f) := by
+    dsimp only [f, Function.uncurry]
+    have hfst : Continuous (fun p : WeakDual ℂ (StrongDual ℂ (Tensor A)) ×
+        WeakDual ℂ (StrongDual ℂ (Tensor A)) => p.1) := continuous_fst
+    have hsnd : Continuous (fun p : WeakDual ℂ (StrongDual ℂ (Tensor A)) ×
+        WeakDual ℂ (StrongDual ℂ (Tensor A)) => p.2) := continuous_snd
+    exact (hfst.const_smul a).add (hsnd.const_smul c)
   exact map_mem_closure₂ (f := f) hf hx hy
     (fun _ hx' _ hy' => hconv hx' hy' ha hc hac)
 

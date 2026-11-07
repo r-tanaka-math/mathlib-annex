@@ -134,7 +134,8 @@ theorem continuous_normalPartToCompactFiniteHomeomorph [Nontrivial H]
     (isIrreducible_compactOperatorRepresentation H)
     (ContinuousLinearEquiv.refl ℂ H) (ContinuousLinearEquiv.refl ℂ H)).2
       (fun b => by
-        simpa [InnerProductSpace.adjointSandwich] using hcompact b.property)
+        simpa [InnerProductSpace.adjointSandwich, ContinuousLinearMap.adjoint_id,
+          ContinuousLinearMap.id_comp] using hcompact b.property)
   exact compactNormalPartHomeomorph.continuous_toFun.comp hf
 
 include hS in

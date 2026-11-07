@@ -15,6 +15,8 @@ namespace MathlibAnnex.CStarAlgebra.CAR
 
 open MathlibAnnex.Analysis.CStarAlgebra
 
+set_option maxHeartbeats 2000000 in
+set_option synthInstance.maxHeartbeats 100000 in
 /-- Any state extending the original CAR trace is the chosen extension. -/
 theorem eq_traceExtension_of_mem_stateSpace_of_apply_shellFamilySourceHom_eq_trace
     (family : RepresentativeShellFamily) (φ : ShellFamilyTarget family →L[ℂ] ℂ)

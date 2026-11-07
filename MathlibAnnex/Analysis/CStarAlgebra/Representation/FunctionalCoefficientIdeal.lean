@@ -46,7 +46,7 @@ def boundedSequenceIdeal (J : TwoSidedIdeal D) : TwoSidedIdeal (ℕ →ᵇ D) :=
 @[simp]
 theorem mem_boundedSequenceIdeal_iff (J : TwoSidedIdeal D) (x : ℕ →ᵇ D) :
     x ∈ boundedSequenceIdeal J ↔ ∀ n, x n ∈ J := by
-  simp only [boundedSequenceIdeal, TwoSidedIdeal.mem_mk', Set.mem_setOf_eq]
+  exact TwoSidedIdeal.mem_mk' _ _ _ _ _ _ x
 
 /-- Two-by-two matrices whose four bounded-sequence entries are pointwise in
 `J`.  This is the actual ideal annihilated by the auxiliary coefficient state. -/
@@ -74,8 +74,10 @@ theorem mem_auxiliaryMatrixIdeal_iff (J : TwoSidedIdeal D)
     (M : MathlibAnnex.FunctionalCoefficient.AuxiliaryMatrixAlgebra D) :
     M ∈ auxiliaryMatrixIdeal J ↔
       ∀ i j n, M i j n ∈ J := by
-  rw [auxiliaryMatrixIdeal, TwoSidedIdeal.mem_mk']
-  simp only [Set.mem_setOf_eq, mem_boundedSequenceIdeal_iff]
+  have hmem : M ∈ auxiliaryMatrixIdeal J ↔
+      ∀ i j, M i j ∈ boundedSequenceIdeal J :=
+    TwoSidedIdeal.mem_mk' _ _ _ _ _ _ M
+  exact hmem.trans (by simp only [mem_boundedSequenceIdeal_iff])
 
 /-- A diagonal constant belongs to the matrix ideal exactly as needed for
 restriction of the auxiliary GNS representation. -/

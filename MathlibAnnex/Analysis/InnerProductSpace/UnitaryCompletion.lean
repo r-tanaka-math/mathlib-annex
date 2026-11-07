@@ -55,7 +55,7 @@ theorem unitary_conjugacy_of_complement_product
     ((e : E →L[𝕜] F).comp P).comp ((e : E →L[𝕜] F)†) = Q := by
   have hAadj : A† = (1 - P).comp ((e : E →L[𝕜] F)†) := by
     have h := congrArg (fun T : E →L[𝕜] F ↦ T†) hA
-    simpa [adjoint_comp, map_sub, hPadj] using h.symm
+    simpa [adjoint_comp, map_sub, adjoint_one, hPadj] using h.symm
   have hPapply : ∀ x, P (P x) = P x := by
     intro x
     exact congrArg (fun T : E →L[𝕜] E ↦ T x) hPidem

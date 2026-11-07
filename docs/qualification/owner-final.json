@@ -1,0 +1,105 @@
+{
+  "attempt": 1,
+  "axiom_allowlist": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "catalog_sha256": "f12515b28eb787ea5370d9e9edbd6134b3d557f8bafde1aee36bbf2d66b0c4fe",
+  "census_modules": 918,
+  "census_raw_sha256": "bd1801781eaf43fb716aef843fdea64012806472a6fdde95f6e648759ef997d3",
+  "checks": {
+    "build": "PASS",
+    "cleanliness": "PASS",
+    "compiled_axiom_audit": "PASS",
+    "complete_source_coverage": "PASS",
+    "downstream_import": "PASS",
+    "gss_project_entry_import": "PASS",
+    "gss_public_census": "PASS",
+    "identity": "PASS",
+    "lip_project_entry_import": "PASS",
+    "lip_public_census": "PASS",
+    "naimark_entry_import": "PASS",
+    "project_entry_import": "PASS",
+    "project_entry_parser": "PASS",
+    "pure_state_homogeneity_entry_import": "PASS",
+    "rosenberg_entry_import": "PASS",
+    "sphere_rigidity_entry_import": "PASS",
+    "validation_consumer_import": "PASS"
+  },
+  "commit": "a533e6221d89d93147862cefec1de684de02b296",
+  "controller_lean_execution": "NOT_RUN",
+  "declaration_count": 18448,
+  "forbidden_axiom_count": 0,
+  "job_id": 127970114430,
+  "lip_production": 166,
+  "lip_project_closure": 159,
+  "lip_source_targets": 188,
+  "main_declarations": {
+    "BanachGeometry.AlmostIsometricAtEveryTolerance": {
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "display_is_not_exact_expr_identity": true,
+      "display_type": "BanachGeometry.SeparableRealBanach → BanachGeometry.SeparableRealBanach → Prop",
+      "kind": "def",
+      "module": "BanachGeometry.Basic"
+    },
+    "BanachGeometry.AlmostIsometricPair.exists_almostIsometric_nonisomorphic_pair": {
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "display_is_not_exact_expr_identity": true,
+      "display_type": "BanachGeometry.ExistsAlmostIsometricNonisomorphicPair",
+      "kind": "theorem",
+      "module": "BanachGeometry.AlmostIsometric.Existence"
+    },
+    "BanachGeometry.AlmostIsometricPair.finiteOptimalDistance_eq_one": {
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "display_is_not_exact_expr_identity": true,
+      "display_type": "@Eq.{1} Real (@BanachGeometry.LipschitzDistance.finiteOptimalDistance.{0, 0} BanachGeometry.AlmostIsometricPair.xSpace.Carrier BanachGeometry.AlmostIsometricPair.ySpace.Carrier BanachGeometry.AlmostIsometricPair.xSpace.normedAddCommGroup BanachGeometry.AlmostIsometricPair.ySpace.normedAddCommGroup) (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))",
+      "kind": "theorem",
+      "module": "BanachGeometry.AlmostIsometric.Existence"
+    },
+    "BanachGeometry.AlmostIsometricPair.optimal_distortion_one_not_attained": {
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "display_is_not_exact_expr_identity": true,
+      "display_type": "@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne) ∉ @BanachGeometry.LipschitzDistance.optimalDistortions.{0, 0} BanachGeometry.AlmostIsometricPair.xSpace.Carrier BanachGeometry.AlmostIsometricPair.ySpace.Carrier BanachGeometry.AlmostIsometricPair.xSpace.normedAddCommGroup BanachGeometry.AlmostIsometricPair.ySpace.normedAddCommGroup",
+      "kind": "theorem",
+      "module": "BanachGeometry.AlmostIsometric.Existence"
+    }
+  },
+  "module_count": 928,
+  "module_execution_counts": {
+    "CHECKPOINT_RESTORED": 928,
+    "FRESH": 0,
+    "INHERITED": 0
+  },
+  "outside_lip_entry": [
+    "BanachGeometry.AlmostIsometric.EscapeNorm",
+    "BanachGeometry.AlmostIsometric.HilbertFreeSpaceDataViaCoordinates",
+    "BanachGeometry.LipschitzFreeSpace.Localization.Auxiliary",
+    "BanachGeometry.LipschitzFreeSpace.Localization.OrderedLimsup",
+    "BanachGeometry.LipschitzFreeSpace.Localization.ScalarTests",
+    "BanachGeometry.SequenceSpaces.ApproximateNorming",
+    "BanachGeometry.WeakSequences.C0DualIsometry"
+  ],
+  "producer_count": 22,
+  "publication": "SEPARATE_OWNER_ACT",
+  "receipt_file_sha256": "5cdb28090aa7be92e541ba1ac0db51062830dfa3b1b5dc96caaf18f664b7375c",
+  "run_id": "42240755323",
+  "terminal_gate": "PASS_FINALIZED",
+  "tree": "24f3c06d0872d1de99d1a67cc8c3e0c941608781"
+}

@@ -88,6 +88,7 @@ end Representation
 
 section PositiveRange
 
+set_option backward.isDefEq.respectTransparency false in
 /-- If a self-adjoint operator has strictly negative quadratic form on the
 unit sphere of `Kᗮ`, then its positive part has finite-dimensional range and
 is compact. -/

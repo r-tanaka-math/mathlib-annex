@@ -1,0 +1,1631 @@
+{
+  "candidate_package_version": "0.5.0",
+  "compiled_axiom_policy": {
+    "allowlist": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "result": "PASS",
+    "root": "MathlibAnnex"
+  },
+  "current_qualification": {
+    "attempt": 1,
+    "census_modules": 918,
+    "checks": {
+      "build": "PASS",
+      "cleanliness": "PASS",
+      "compiled_axiom_audit": "PASS",
+      "complete_source_coverage": "PASS",
+      "downstream_import": "PASS",
+      "gss_project_entry_import": "PASS",
+      "gss_public_census": "PASS",
+      "identity": "PASS",
+      "lip_project_entry_import": "PASS",
+      "lip_public_census": "PASS",
+      "naimark_entry_import": "PASS",
+      "project_entry_import": "PASS",
+      "project_entry_parser": "PASS",
+      "pure_state_homogeneity_entry_import": "PASS",
+      "rosenberg_entry_import": "PASS",
+      "sphere_rigidity_entry_import": "PASS",
+      "validation_consumer_import": "PASS"
+    },
+    "commit": "a533e6221d89d93147862cefec1de684de02b296",
+    "declaration_count": 18448,
+    "forbidden_axiom_count": 0,
+    "job_id": 127970114430,
+    "module_count": 928,
+    "receipt_file_sha256": "5cdb28090aa7be92e541ba1ac0db51062830dfa3b1b5dc96caaf18f664b7375c",
+    "run_id": "42240755323",
+    "terminal_gate": "PASS_FINALIZED",
+    "tree": "24f3c06d0872d1de99d1a67cc8c3e0c941608781"
+  },
+  "dependency_lock": {
+    "bytes": 3163,
+    "path": "lake-manifest.json",
+    "sha256": "0160fed451d167ce527e31575f2ec27210fc81b20a038709de22d7bc6b4d18a3"
+  },
+  "digest_encoding": {
+    "algorithm": "SHA-256",
+    "direct_root_digest": "canonical JSON of direct_project_modules",
+    "json": "UTF-8, sorted object keys, compact separators, Unicode unescaped, trailing LF",
+    "resolved_closure_digest": "canonical JSON of {modules: resolved_mathlibannex_import_closure, edges: resolved_import_edges}"
+  },
+  "direct_project_modules": [
+    "BanachGeometry.AlmostIsometric.Existence",
+    "BanachGeometry.AlmostIsometric.Consequences",
+    "BanachGeometry.LipschitzFreeSpace.PositiveTailLocality"
+  ],
+  "direct_root_digest": "5aa20b717be678f51a764b3a703d072d23834381ed2c29b9944b1e05f02989b3",
+  "display_name": "Lipschitz-homeomorphic Banach spaces (FIX2)",
+  "entry_module": {
+    "bytes": 228,
+    "module": "MathlibAnnex.Projects.LipschitzHomeomorphicBanachSpaces",
+    "path": "MathlibAnnex/Projects/LipschitzHomeomorphicBanachSpaces.lean",
+    "sha256": "b7486ee6f2d821d72cfe64d1df4fc8c6e54bc1336fe399042ae00b65c2fec87a"
+  },
+  "entry_scope": "IMPORT_NAVIGATION_FACADE_NO_DECLARATIONS",
+  "excluded_module_roles": {
+    "AGGREGATE_ONLY": [
+      "MathlibAnnex",
+      "BanachGeometry"
+    ],
+    "PRIVATE_ORCHESTRATION": [
+      "Original FIX2 prompts/logs/bundles/cache/authority material are not adopted as library source"
+    ],
+    "PROJECT_FACADE": [
+      "MathlibAnnex.Projects.LipschitzHomeomorphicBanachSpaces",
+      "Projects.AlmostIsometricBanachSpaces"
+    ],
+    "VALIDATION": [
+      "Audit/**",
+      "Tests/**",
+      "examples/ImportLipschitzHomeomorphicBanachSpaces.lean",
+      "examples/ImportLipValidation.lean"
+    ]
+  },
+  "formalization_source_state": "HOSTED_OWNER_FINAL_PASS",
+  "interface_lineage": "VERIFIED_DISPATCH_STARTER_TO_QUALIFIED_SOURCE",
+  "lean_toolchain": "leanprover/lean4:v4.35.0",
+  "mathlib_revision": "56a005855ea17e0b0958f73ec801ae140b0a1679",
+  "original_contribution_release_license": "SCOPE_REQUIRES_EXPLICIT_OWNER_GRANT",
+  "package_version": "0.5.0",
+  "project_id": "lipschitz-homeomorphic-banach-spaces",
+  "project_slug": "lipschitz-homeomorphic-banach-spaces",
+  "publication_state": "PUBLIC_RELEASE_REQUIRES_SEPARATE_OWNER_ACT",
+  "record_type": "MATHLIBANNEX_PROJECT_SOURCE_MANIFEST",
+  "resolved_closure_digest": "53d6000d16d1d5e8060e9116769c61a5e2f08475181be508578d5bda62e4a997",
+  "resolved_import_edges": {
+    "BanachGeometry.AlmostIsometric.ApproximationParameters": [
+      "BanachGeometry.Basic"
+    ],
+    "BanachGeometry.AlmostIsometric.Consequences": [
+      "BanachGeometry.AlmostIsometric.GraphPairs",
+      "BanachGeometry.OperatorGraphs.GeneralGraphBounds",
+      "BanachGeometry.SequenceSpaces.WeightedL1",
+      "BanachGeometry.LipschitzFreeGeometry.WeakSums",
+      "BanachGeometry.LipschitzFreeSpace.UniversalProperties"
+    ],
+    "BanachGeometry.AlmostIsometric.CriterionAssembly": [
+      "BanachGeometry.AlmostIsometric.FixedBanach",
+      "BanachGeometry.SequenceSpaces.L1Linear",
+      "BanachGeometry.Complemented.Factorization"
+    ],
+    "BanachGeometry.AlmostIsometric.Escape": [
+      "BanachGeometry.AlmostIsometric.Insertion",
+      "BanachGeometry.SequenceSpaces.C0Banach"
+    ],
+    "BanachGeometry.AlmostIsometric.Existence": [
+      "BanachGeometry.NoC0.NoC0Closure",
+      "BanachGeometry.AlmostIsometric.LipschitzDistance",
+      "BanachGeometry.AlmostIsometric.OptimalLipschitz",
+      "BanachGeometry.AlmostIsometric.Escape",
+      "BanachGeometry.AlmostIsometric.HilbertFreeSpaceData"
+    ],
+    "BanachGeometry.AlmostIsometric.FamilyFromHilbertData": [
+      "BanachGeometry.OperatorGraphs.GraphBounds",
+      "BanachGeometry.AlmostIsometric.ApproximationParameters",
+      "BanachGeometry.AlmostIsometric.CriterionAssembly"
+    ],
+    "BanachGeometry.AlmostIsometric.FixedBanach": [
+      "BanachGeometry.AlmostIsometric.Insertion",
+      "BanachGeometry.SequenceSpaces.C0Banach",
+      "BanachGeometry.SequenceSpaces.L1Separable"
+    ],
+    "BanachGeometry.AlmostIsometric.FixedSpaces": [
+      "BanachGeometry.SequenceSpaces.L1Map",
+      "BanachGeometry.SequenceSpaces.C0Adapters"
+    ],
+    "BanachGeometry.AlmostIsometric.FromQuantitativeHilbertData": [
+      "BanachGeometry.Complemented.HeadSplitting",
+      "BanachGeometry.AlmostIsometric.FamilyFromHilbertData"
+    ],
+    "BanachGeometry.AlmostIsometric.GraphPairs": [
+      "BanachGeometry.NoC0.NoC0Closure",
+      "BanachGeometry.AlmostIsometric.OptimalLipschitz",
+      "BanachGeometry.HilbertSums.L2Separable"
+    ],
+    "BanachGeometry.AlmostIsometric.HilbertFreeSpaceData": [
+      "BanachGeometry.LipschitzFreeSpace.Localization.CoordinateBridge",
+      "BanachGeometry.LipschitzFreeSpace.HilbertLocality"
+    ],
+    "BanachGeometry.AlmostIsometric.Insertion": [
+      "BanachGeometry.AlmostIsometric.InsertionIndices",
+      "BanachGeometry.AlmostIsometric.FixedSpaces"
+    ],
+    "BanachGeometry.AlmostIsometric.InsertionIndices": [
+      "BanachGeometry.AlmostIsometric.PointedBiLip"
+    ],
+    "BanachGeometry.AlmostIsometric.LipschitzDistance": [
+      "BanachGeometry.Complemented.HeadSplitting"
+    ],
+    "BanachGeometry.AlmostIsometric.OptimalLipschitz": [
+      "BanachGeometry.AlmostIsometric.LipschitzDistance"
+    ],
+    "BanachGeometry.AlmostIsometric.PointedBiLip": [
+      "BanachGeometry.Basic"
+    ],
+    "BanachGeometry.Basic": [],
+    "BanachGeometry.Complemented.ConcreteDual": [
+      "BanachGeometry.SequenceSpaces.C0Dual",
+      "BanachGeometry.SequenceSpaces.C0Adapters",
+      "BanachGeometry.HilbertSums.L2Separable",
+      "BanachGeometry.WeakSequences.CountableExclusion"
+    ],
+    "BanachGeometry.Complemented.Corner": [
+      "BanachGeometry.SequenceSpaces.C0Blocks",
+      "BanachGeometry.Complemented.CornerAssembly",
+      "BanachGeometry.WeakSequences.WeakTailGliding"
+    ],
+    "BanachGeometry.Complemented.CornerAssembly": [
+      "BanachGeometry.Complemented.Localization",
+      "BanachGeometry.WeakSequences.L1Shifts",
+      "BanachGeometry.AlmostIsometric.CriterionAssembly"
+    ],
+    "BanachGeometry.Complemented.Factorization": [
+      "BanachGeometry.AlmostIsometric.PointedBiLip"
+    ],
+    "BanachGeometry.Complemented.FiniteDual": [
+      "BanachGeometry.SequenceSpaces.C0FiniteHead",
+      "BanachGeometry.Complemented.ConcreteDual"
+    ],
+    "BanachGeometry.Complemented.FinitePerturbation": [
+      "BanachGeometry.WeakSequences.L1Shifts",
+      "BanachGeometry.WeakSequences.OperatorTails",
+      "BanachGeometry.Complemented.Factorization"
+    ],
+    "BanachGeometry.Complemented.FiniteRows": [
+      "BanachGeometry.Complemented.FiniteDual",
+      "BanachGeometry.Complemented.RowSplitting"
+    ],
+    "BanachGeometry.Complemented.HeadSplitting": [
+      "BanachGeometry.Complemented.FiniteRows",
+      "BanachGeometry.Complemented.FinitePerturbation",
+      "BanachGeometry.Complemented.Corner"
+    ],
+    "BanachGeometry.Complemented.Localization": [
+      "BanachGeometry.Complemented.Factorization",
+      "BanachGeometry.SequenceSpaces.C0Operators"
+    ],
+    "BanachGeometry.Complemented.RowSplitting": [
+      "BanachGeometry.AlmostIsometric.CriterionAssembly",
+      "BanachGeometry.WeakSequences.CountableExclusion"
+    ],
+    "BanachGeometry.HilbertSums.Coding.Bounds": [
+      "BanachGeometry.HilbertSums.Coding.Tent"
+    ],
+    "BanachGeometry.HilbertSums.Coding.Scalar": [
+      "BanachGeometry.HilbertSums.FrozenRearrangement"
+    ],
+    "BanachGeometry.HilbertSums.Coding.Tent": [
+      "BanachGeometry.HilbertSums.Coding.Scalar"
+    ],
+    "BanachGeometry.HilbertSums.Coding.UnitSegment": [
+      "BanachGeometry.HilbertSums.Coding.Bounds"
+    ],
+    "BanachGeometry.HilbertSums.DyadicEnergy": [
+      "BanachGeometry.HilbertSums.TailProjections",
+      "BanachGeometry.HilbertSums.Coding.UnitSegment"
+    ],
+    "BanachGeometry.HilbertSums.FrozenIsometry": [
+      "BanachGeometry.HilbertSums.FrozenRearrangement",
+      "BanachGeometry.Basic"
+    ],
+    "BanachGeometry.HilbertSums.FrozenRearrangement": [],
+    "BanachGeometry.HilbertSums.Graded.Basic": [
+      "BanachGeometry.HilbertSums.Graded.FiniteCoordinates"
+    ],
+    "BanachGeometry.HilbertSums.Graded.CoordinateIsometry": [
+      "BanachGeometry.HilbertSums.Graded.Separable"
+    ],
+    "BanachGeometry.HilbertSums.Graded.FiniteCoordinates": [
+      "BanachGeometry.HilbertSums.ScaleClock.Growth"
+    ],
+    "BanachGeometry.HilbertSums.Graded.Separable": [
+      "BanachGeometry.HilbertSums.Graded.Basic",
+      "BanachGeometry.HilbertSums.L2Separable"
+    ],
+    "BanachGeometry.HilbertSums.InverseComparison": [
+      "BanachGeometry.HilbertSums.ScalarSplitting"
+    ],
+    "BanachGeometry.HilbertSums.L2Separable": [
+      "BanachGeometry.Basic"
+    ],
+    "BanachGeometry.HilbertSums.Nonlinear.Defect": [
+      "BanachGeometry.HilbertSums.Nonlinear.Equivalence",
+      "BanachGeometry.HilbertSums.Graded.CoordinateIsometry"
+    ],
+    "BanachGeometry.HilbertSums.Nonlinear.DistanceBounds": [
+      "BanachGeometry.HilbertSums.Nonlinear.RecursiveInverse",
+      "BanachGeometry.HilbertSums.InverseComparison"
+    ],
+    "BanachGeometry.HilbertSums.Nonlinear.Equivalence": [
+      "BanachGeometry.HilbertSums.Nonlinear.PointBounds",
+      "BanachGeometry.HilbertSums.Nonlinear.DistanceBounds"
+    ],
+    "BanachGeometry.HilbertSums.Nonlinear.PointBounds": [
+      "BanachGeometry.HilbertSums.Nonlinear.TailEnergy",
+      "BanachGeometry.HilbertSums.ScaleClock.Order"
+    ],
+    "BanachGeometry.HilbertSums.Nonlinear.RecursiveInverse": [
+      "BanachGeometry.HilbertSums.Nonlinear.UnitDirections"
+    ],
+    "BanachGeometry.HilbertSums.Nonlinear.SeparatedSupports": [
+      "BanachGeometry.HilbertSums.Nonlinear.Support"
+    ],
+    "BanachGeometry.HilbertSums.Nonlinear.Support": [
+      "BanachGeometry.HilbertSums.Nonlinear.Equivalence",
+      "BanachGeometry.HilbertSums.Graded.CoordinateIsometry"
+    ],
+    "BanachGeometry.HilbertSums.Nonlinear.TailEnergy": [
+      "BanachGeometry.HilbertSums.Nonlinear.RecursiveInverse"
+    ],
+    "BanachGeometry.HilbertSums.Nonlinear.UnitDirections": [
+      "BanachGeometry.HilbertSums.Graded.Separable"
+    ],
+    "BanachGeometry.HilbertSums.ScalarSplitting": [
+      "BanachGeometry.HilbertSums.FrozenIsometry"
+    ],
+    "BanachGeometry.HilbertSums.ScaleClock.Global": [
+      "BanachGeometry.HilbertSums.DyadicEnergy"
+    ],
+    "BanachGeometry.HilbertSums.ScaleClock.Growth": [
+      "BanachGeometry.HilbertSums.ScaleClock.Global"
+    ],
+    "BanachGeometry.HilbertSums.ScaleClock.Order": [
+      "BanachGeometry.HilbertSums.ScaleClock.Growth"
+    ],
+    "BanachGeometry.HilbertSums.TailProjections": [
+      "BanachGeometry.HilbertSums.Coding.Bounds",
+      "BanachGeometry.HilbertSums.FrozenIsometry"
+    ],
+    "BanachGeometry.LipschitzFreeGeometry.BidualSeparation": [
+      "BanachGeometry.LipschitzFreeGeometry.MolecularApproximation"
+    ],
+    "BanachGeometry.LipschitzFreeGeometry.BlockSelection": [
+      "BanachGeometry.LipschitzFreeGeometry.SmoothRows"
+    ],
+    "BanachGeometry.LipschitzFreeGeometry.CauchyApproximation": [
+      "BanachGeometry.LipschitzFreeGeometry.WeakCauchy"
+    ],
+    "BanachGeometry.LipschitzFreeGeometry.CauchyReduction": [
+      "BanachGeometry.LipschitzFreeGeometry.CauchyApproximation"
+    ],
+    "BanachGeometry.LipschitzFreeGeometry.CompactHilbertWSC": [
+      "BanachGeometry.LipschitzFreeGeometry.WUCOperator"
+    ],
+    "BanachGeometry.LipschitzFreeGeometry.CompactLipschitz": [
+      "BanachGeometry.LipschitzFreeGeometry.ShrinkingCutoffs"
+    ],
+    "BanachGeometry.LipschitzFreeGeometry.CompactLocalization": [
+      "BanachGeometry.LipschitzFreeGeometry.CompactLipschitz"
+    ],
+    "BanachGeometry.LipschitzFreeGeometry.CompactReduction": [
+      "BanachGeometry.LipschitzFreeGeometry.CompactSupports"
+    ],
+    "BanachGeometry.LipschitzFreeGeometry.CompactSupports": [
+      "BanachGeometry.LipschitzFreeGeometry.FiniteMultipliers"
+    ],
+    "BanachGeometry.LipschitzFreeGeometry.CompleteContinuity": [
+      "BanachGeometry.LipschitzFreeGeometry.CompactLocalization"
+    ],
+    "BanachGeometry.LipschitzFreeGeometry.DetectingSequence": [
+      "BanachGeometry.LipschitzFreeGeometry.SelectionStep"
+    ],
+    "BanachGeometry.LipschitzFreeGeometry.EnergyEstimates": [
+      "BanachGeometry.LipschitzFreeGeometry.TriangularDuals"
+    ],
+    "BanachGeometry.LipschitzFreeGeometry.FiniteMultipliers": [
+      "BanachGeometry.LipschitzFreeGeometry.FiniteReduction"
+    ],
+    "BanachGeometry.LipschitzFreeGeometry.FiniteReduction": [
+      "BanachGeometry.LipschitzFreeGeometry.RadiusReduction"
+    ],
+    "BanachGeometry.LipschitzFreeGeometry.FiniteRows": [
+      "BanachGeometry.LipschitzFreeGeometry.BidualSeparation"
+    ],
+    "BanachGeometry.LipschitzFreeGeometry.FreeSpace": [
+      "BanachGeometry.LipschitzFreeGeometry.Model"
+    ],
+    "BanachGeometry.LipschitzFreeGeometry.GraphObstruction": [
+      "BanachGeometry.LipschitzFreeGeometry.WeakSums"
+    ],
+    "BanachGeometry.LipschitzFreeGeometry.HilbertBlocks": [
+      "BanachGeometry.LipschitzFreeGeometry.CauchyReduction"
+    ],
+    "BanachGeometry.LipschitzFreeGeometry.LocalLipschitz": [
+      "BanachGeometry.LipschitzFreeGeometry.SeparableCoordinates"
+    ],
+    "BanachGeometry.LipschitzFreeGeometry.Localization": [
+      "BanachGeometry.LipschitzFreeGeometry.GraphObstruction"
+    ],
+    "BanachGeometry.LipschitzFreeGeometry.Model": [],
+    "BanachGeometry.LipschitzFreeGeometry.MolecularApproximation": [
+      "BanachGeometry.LipschitzFreeGeometry.SmoothHilbert"
+    ],
+    "BanachGeometry.LipschitzFreeGeometry.Multipliers": [
+      "BanachGeometry.LipschitzFreeGeometry.SupportedDuality"
+    ],
+    "BanachGeometry.LipschitzFreeGeometry.NullSequences": [
+      "BanachGeometry.LipschitzFreeGeometry.FreeSpace"
+    ],
+    "BanachGeometry.LipschitzFreeGeometry.PairingEstimates": [
+      "BanachGeometry.LipschitzFreeGeometry.SmoothMultiplier"
+    ],
+    "BanachGeometry.LipschitzFreeGeometry.RadiusReduction": [
+      "BanachGeometry.LipschitzFreeGeometry.Multipliers"
+    ],
+    "BanachGeometry.LipschitzFreeGeometry.Schur": [
+      "BanachGeometry.LipschitzFreeGeometry.WeightedGraph"
+    ],
+    "BanachGeometry.LipschitzFreeGeometry.SelectionStep": [
+      "BanachGeometry.LipschitzFreeGeometry.PairingEstimates"
+    ],
+    "BanachGeometry.LipschitzFreeGeometry.SeparableCoordinates": [
+      "BanachGeometry.LipschitzFreeGeometry.Localization"
+    ],
+    "BanachGeometry.LipschitzFreeGeometry.ShrinkingCutoffs": [
+      "BanachGeometry.LipschitzFreeGeometry.LocalLipschitz"
+    ],
+    "BanachGeometry.LipschitzFreeGeometry.SmoothCalculus": [
+      "BanachGeometry.LipschitzFreeGeometry.FiniteRows"
+    ],
+    "BanachGeometry.LipschitzFreeGeometry.SmoothHilbert": [
+      "BanachGeometry.LipschitzFreeGeometry.HilbertBlocks"
+    ],
+    "BanachGeometry.LipschitzFreeGeometry.SmoothMultiplier": [
+      "BanachGeometry.LipschitzFreeGeometry.BlockSelection"
+    ],
+    "BanachGeometry.LipschitzFreeGeometry.SmoothRows": [
+      "BanachGeometry.LipschitzFreeGeometry.EnergyEstimates"
+    ],
+    "BanachGeometry.LipschitzFreeGeometry.SupportedDuality": [
+      "BanachGeometry.LipschitzFreeGeometry.CompleteContinuity"
+    ],
+    "BanachGeometry.LipschitzFreeGeometry.TriangularDuals": [
+      "BanachGeometry.LipschitzFreeGeometry.SmoothCalculus"
+    ],
+    "BanachGeometry.LipschitzFreeGeometry.WUCDuals": [
+      "BanachGeometry.LipschitzFreeGeometry.WUCFunctions"
+    ],
+    "BanachGeometry.LipschitzFreeGeometry.WUCFunctions": [
+      "BanachGeometry.LipschitzFreeGeometry.DetectingSequence"
+    ],
+    "BanachGeometry.LipschitzFreeGeometry.WUCOperator": [
+      "BanachGeometry.LipschitzFreeGeometry.WUCDuals"
+    ],
+    "BanachGeometry.LipschitzFreeGeometry.WeakCauchy": [
+      "BanachGeometry.LipschitzFreeGeometry.CompactReduction"
+    ],
+    "BanachGeometry.LipschitzFreeGeometry.WeakSums": [
+      "BanachGeometry.LipschitzFreeGeometry.Schur"
+    ],
+    "BanachGeometry.LipschitzFreeGeometry.WeightedGraph": [
+      "BanachGeometry.LipschitzFreeGeometry.NullSequences"
+    ],
+    "BanachGeometry.LipschitzFreeSpace.HilbertDefect": [
+      "BanachGeometry.HilbertSums.Graded.CoordinateIsometry",
+      "BanachGeometry.HilbertSums.Nonlinear.DistanceBounds",
+      "BanachGeometry.LipschitzFreeSpace.UniversalProperties",
+      "BanachGeometry.LipschitzFreeGeometry.CompactReduction",
+      "BanachGeometry.LipschitzFreeGeometry.CompactHilbertWSC"
+    ],
+    "BanachGeometry.LipschitzFreeSpace.HilbertLocality": [
+      "BanachGeometry.LipschitzFreeSpace.HilbertDefect",
+      "BanachGeometry.HilbertSums.Nonlinear.SeparatedSupports",
+      "BanachGeometry.HilbertSums.Nonlinear.Defect"
+    ],
+    "BanachGeometry.LipschitzFreeSpace.Localization.CompactSelection": [
+      "BanachGeometry.LipschitzFreeSpace.Localization.ExceptionalSet"
+    ],
+    "BanachGeometry.LipschitzFreeSpace.Localization.CoordinateBridge": [
+      "BanachGeometry.LipschitzFreeSpace.Localization.GeneralCriterion"
+    ],
+    "BanachGeometry.LipschitzFreeSpace.Localization.ExceptionalSet": [
+      "BanachGeometry.LipschitzFreeSpace.Localization.FiniteProjection",
+      "BanachGeometry.LipschitzFreeGeometry.LocalLipschitz"
+    ],
+    "BanachGeometry.LipschitzFreeSpace.Localization.FiniteProjection": [
+      "BanachGeometry.LipschitzFreeSpace.Localization.IncrementCondition"
+    ],
+    "BanachGeometry.LipschitzFreeSpace.Localization.GeneralCriterion": [
+      "BanachGeometry.LipschitzFreeSpace.Localization.CompactSelection",
+      "BanachGeometry.LipschitzFreeSpace.Localization.RelativeCompact",
+      "BanachGeometry.LipschitzFreeGeometry.CompactReduction"
+    ],
+    "BanachGeometry.LipschitzFreeSpace.Localization.IncrementCondition": [
+      "BanachGeometry.Basic"
+    ],
+    "BanachGeometry.LipschitzFreeSpace.Localization.RelativeCompact": [
+      "BanachGeometry.LipschitzFreeGeometry.CompactLocalization"
+    ],
+    "BanachGeometry.LipschitzFreeSpace.PositiveTailLocality": [
+      "BanachGeometry.LipschitzFreeSpace.HilbertLocality",
+      "BanachGeometry.LipschitzFreeSpace.Localization.CoordinateBridge"
+    ],
+    "BanachGeometry.LipschitzFreeSpace.UniversalProperties": [
+      "BanachGeometry.Basic",
+      "BanachGeometry.LipschitzFreeGeometry.CompactReduction",
+      "BanachGeometry.LipschitzFreeGeometry.CompactHilbertWSC"
+    ],
+    "BanachGeometry.NoC0.BPC0Insertion": [
+      "BanachGeometry.NoC0.BasisSeries"
+    ],
+    "BanachGeometry.NoC0.BPFiniteLower": [
+      "BanachGeometry.NoC0.BPSelection",
+      "BanachGeometry.NoC0.BPC0Insertion"
+    ],
+    "BanachGeometry.NoC0.BPSelection": [
+      "BanachGeometry.NoC0.BPSeparation",
+      "BanachGeometry.AlmostIsometric.ApproximationParameters"
+    ],
+    "BanachGeometry.NoC0.BPSeparation": [
+      "BanachGeometry.NoC0.BasisSeries"
+    ],
+    "BanachGeometry.NoC0.BasisDecay": [
+      "BanachGeometry.NoC0.BPFiniteLower"
+    ],
+    "BanachGeometry.NoC0.BasisSeries": [
+      "BanachGeometry.SequenceSpaces.ScalarBasis",
+      "BanachGeometry.SequenceSpaces.C0Blocks"
+    ],
+    "BanachGeometry.NoC0.HilbertC0Obstruction": [
+      "BanachGeometry.SequenceSpaces.C0Blocks",
+      "BanachGeometry.AlmostIsometric.ApproximationParameters"
+    ],
+    "BanachGeometry.NoC0.L1NoC0Reduction": [
+      "BanachGeometry.SequenceSpaces.ScalarBasis",
+      "BanachGeometry.SequenceSpaces.CanonicalSequences",
+      "BanachGeometry.WeakSequences.OperatorTails",
+      "BanachGeometry.OperatorGraphs.GraphObstruction"
+    ],
+    "BanachGeometry.NoC0.NoC0Closure": [
+      "BanachGeometry.NoC0.BasisDecay",
+      "BanachGeometry.OperatorGraphs.FiniteExclusionFromDecay"
+    ],
+    "BanachGeometry.OperatorGraphs.FiniteExclusionFromDecay": [
+      "BanachGeometry.AlmostIsometric.FromQuantitativeHilbertData",
+      "BanachGeometry.OperatorGraphs.FiniteGraph"
+    ],
+    "BanachGeometry.OperatorGraphs.FiniteGraph": [
+      "BanachGeometry.SequenceSpaces.SumFinite",
+      "BanachGeometry.NoC0.L1NoC0Reduction"
+    ],
+    "BanachGeometry.OperatorGraphs.GeneralGraphBounds": [
+      "BanachGeometry.OperatorGraphs.GeneralGraphChange",
+      "BanachGeometry.AlmostIsometric.OptimalLipschitz"
+    ],
+    "BanachGeometry.OperatorGraphs.GeneralGraphChange": [
+      "BanachGeometry.OperatorGraphs.GeneralGraphCoordinate"
+    ],
+    "BanachGeometry.OperatorGraphs.GeneralGraphCoordinate": [
+      "BanachGeometry.OperatorGraphs.GeneralGraphData"
+    ],
+    "BanachGeometry.OperatorGraphs.GeneralGraphData": [
+      "BanachGeometry.Basic",
+      "BanachGeometry.OperatorGraphs.GraphSupport",
+      "BanachGeometry.OperatorGraphs.GraphSplitting"
+    ],
+    "BanachGeometry.OperatorGraphs.GraphAdmissible": [
+      "BanachGeometry.OperatorGraphs.WeightedGraph"
+    ],
+    "BanachGeometry.OperatorGraphs.GraphBounds": [
+      "BanachGeometry.OperatorGraphs.GraphChange",
+      "BanachGeometry.AlmostIsometric.PointedBiLip"
+    ],
+    "BanachGeometry.OperatorGraphs.GraphChange": [
+      "BanachGeometry.OperatorGraphs.QuantitativePair",
+      "BanachGeometry.OperatorGraphs.GraphCoordinateEquiv"
+    ],
+    "BanachGeometry.OperatorGraphs.GraphCoordinateEquiv": [
+      "BanachGeometry.Basic"
+    ],
+    "BanachGeometry.OperatorGraphs.GraphLinear": [
+      "BanachGeometry.OperatorGraphs.GraphAdmissible",
+      "BanachGeometry.SequenceSpaces.C0Linear",
+      "BanachGeometry.SequenceSpaces.L1Linear"
+    ],
+    "BanachGeometry.OperatorGraphs.GraphObstruction": [
+      "BanachGeometry.SequenceSpaces.CanonicalSequences",
+      "BanachGeometry.NoC0.HilbertC0Obstruction",
+      "BanachGeometry.OperatorGraphs.GraphSupport",
+      "BanachGeometry.SequenceSpaces.UnitBall"
+    ],
+    "BanachGeometry.OperatorGraphs.GraphSplitting": [
+      "BanachGeometry.OperatorGraphs.GraphLinear",
+      "BanachGeometry.SequenceSpaces.PairLp",
+      "BanachGeometry.SequenceSpaces.C0Adapters"
+    ],
+    "BanachGeometry.OperatorGraphs.GraphSupport": [
+      "BanachGeometry.OperatorGraphs.GraphAdmissible"
+    ],
+    "BanachGeometry.OperatorGraphs.QuantitativePair": [
+      "BanachGeometry.OperatorGraphs.GraphSplitting",
+      "BanachGeometry.OperatorGraphs.GraphSupport",
+      "BanachGeometry.HilbertSums.L2Separable"
+    ],
+    "BanachGeometry.OperatorGraphs.WeightedGraph": [
+      "BanachGeometry.SequenceSpaces.C0Operators",
+      "BanachGeometry.SequenceSpaces.L1Separable"
+    ],
+    "BanachGeometry.SequenceSpaces.C0Adapters": [
+      "BanachGeometry.SequenceSpaces.C0Sum"
+    ],
+    "BanachGeometry.SequenceSpaces.C0Banach": [
+      "BanachGeometry.SequenceSpaces.C0Sum"
+    ],
+    "BanachGeometry.SequenceSpaces.C0Blocks": [
+      "BanachGeometry.SequenceSpaces.C0Operators"
+    ],
+    "BanachGeometry.SequenceSpaces.C0Dual": [
+      "BanachGeometry.SequenceSpaces.UnitBall",
+      "BanachGeometry.SequenceSpaces.C0Blocks",
+      "BanachGeometry.SequenceSpaces.L1Separable"
+    ],
+    "BanachGeometry.SequenceSpaces.C0FiniteHead": [
+      "BanachGeometry.SequenceSpaces.C0Operators"
+    ],
+    "BanachGeometry.SequenceSpaces.C0Linear": [
+      "BanachGeometry.SequenceSpaces.C0Sum"
+    ],
+    "BanachGeometry.SequenceSpaces.C0Operators": [
+      "BanachGeometry.SequenceSpaces.C0Banach"
+    ],
+    "BanachGeometry.SequenceSpaces.C0Sum": [
+      "BanachGeometry.AlmostIsometric.PointedBiLip"
+    ],
+    "BanachGeometry.SequenceSpaces.CanonicalSequences": [
+      "BanachGeometry.SequenceSpaces.ScalarBasis",
+      "BanachGeometry.Complemented.ConcreteDual",
+      "BanachGeometry.SequenceSpaces.C0Linear"
+    ],
+    "BanachGeometry.SequenceSpaces.L1Linear": [
+      "BanachGeometry.SequenceSpaces.L1Map"
+    ],
+    "BanachGeometry.SequenceSpaces.L1Map": [
+      "BanachGeometry.AlmostIsometric.PointedBiLip"
+    ],
+    "BanachGeometry.SequenceSpaces.L1Separable": [
+      "BanachGeometry.SequenceSpaces.L1Map"
+    ],
+    "BanachGeometry.SequenceSpaces.PairLp": [
+      "BanachGeometry.Basic"
+    ],
+    "BanachGeometry.SequenceSpaces.ScalarBasis": [
+      "BanachGeometry.SequenceSpaces.C0Adapters",
+      "BanachGeometry.SequenceSpaces.C0Banach"
+    ],
+    "BanachGeometry.SequenceSpaces.SumFinite": [
+      "BanachGeometry.SequenceSpaces.SumReindex"
+    ],
+    "BanachGeometry.SequenceSpaces.SumReindex": [
+      "BanachGeometry.SequenceSpaces.C0Sum",
+      "BanachGeometry.SequenceSpaces.L1Map"
+    ],
+    "BanachGeometry.SequenceSpaces.UnitBall": [
+      "BanachGeometry.Basic"
+    ],
+    "BanachGeometry.SequenceSpaces.WeightedL1": [
+      "BanachGeometry.NoC0.NoC0Closure"
+    ],
+    "BanachGeometry.WeakSequences.CountableExclusion": [
+      "BanachGeometry.WeakSequences.OperatorTails",
+      "BanachGeometry.AlmostIsometric.CriterionAssembly"
+    ],
+    "BanachGeometry.WeakSequences.L1DualBlocks": [
+      "BanachGeometry.WeakSequences.TailReduction"
+    ],
+    "BanachGeometry.WeakSequences.L1Shifts": [
+      "BanachGeometry.WeakSequences.L1Tails"
+    ],
+    "BanachGeometry.WeakSequences.L1Tails": [
+      "BanachGeometry.SequenceSpaces.L1Map"
+    ],
+    "BanachGeometry.WeakSequences.OperatorTails": [
+      "BanachGeometry.WeakSequences.WeakTailGliding",
+      "BanachGeometry.WeakSequences.SeparableDualSubsequence"
+    ],
+    "BanachGeometry.WeakSequences.SeparableDualSubsequence": [
+      "BanachGeometry.WeakSequences.TailReduction"
+    ],
+    "BanachGeometry.WeakSequences.TailReduction": [
+      "BanachGeometry.WeakSequences.L1Tails"
+    ],
+    "BanachGeometry.WeakSequences.WeakTailGliding": [
+      "BanachGeometry.WeakSequences.L1DualBlocks",
+      "BanachGeometry.WeakSequences.WeakTailReduction"
+    ],
+    "BanachGeometry.WeakSequences.WeakTailReduction": [
+      "BanachGeometry.WeakSequences.TailReduction"
+    ]
+  },
+  "resolved_mathlibannex_import_closure": [
+    {
+      "bytes": 4586,
+      "module": "BanachGeometry.AlmostIsometric.ApproximationParameters",
+      "path": "BanachGeometry/AlmostIsometric/ApproximationParameters.lean",
+      "sha256": "f22dafa603f63db64e9db4f42a5a0443c8d96b042537845981d192fc7ba6b294"
+    },
+    {
+      "bytes": 6918,
+      "module": "BanachGeometry.AlmostIsometric.Consequences",
+      "path": "BanachGeometry/AlmostIsometric/Consequences.lean",
+      "sha256": "478dd5a37094572e4dae802493fc3feb8ab429e39e37dd80860c44fac2c967c0"
+    },
+    {
+      "bytes": 3091,
+      "module": "BanachGeometry.AlmostIsometric.CriterionAssembly",
+      "path": "BanachGeometry/AlmostIsometric/CriterionAssembly.lean",
+      "sha256": "c126d9488bfcc61e363bbe45479b68b834d89fd8f98c2be506bb82ee627388af"
+    },
+    {
+      "bytes": 4274,
+      "module": "BanachGeometry.AlmostIsometric.Escape",
+      "path": "BanachGeometry/AlmostIsometric/Escape.lean",
+      "sha256": "e944f8d8fda926e609d326c16f330f542fe533810e9a78ed496365acd3cf1d89"
+    },
+    {
+      "bytes": 4370,
+      "module": "BanachGeometry.AlmostIsometric.Existence",
+      "path": "BanachGeometry/AlmostIsometric/Existence.lean",
+      "sha256": "fc43fba4983b1dd30f0304df10c1106f3f023ea9cdfd3f7c4303e1af28a25079"
+    },
+    {
+      "bytes": 4414,
+      "module": "BanachGeometry.AlmostIsometric.FamilyFromHilbertData",
+      "path": "BanachGeometry/AlmostIsometric/FamilyFromHilbertData.lean",
+      "sha256": "46522ac2f5b8e402821e9a0441b7b5ed6a8a79f89b1cba9b948b56ed92c76e97"
+    },
+    {
+      "bytes": 1766,
+      "module": "BanachGeometry.AlmostIsometric.FixedBanach",
+      "path": "BanachGeometry/AlmostIsometric/FixedBanach.lean",
+      "sha256": "531c37c75009c1a2586707ee53af54c8f9fd864fcbc303f4c86fd4e9f63f37f3"
+    },
+    {
+      "bytes": 4112,
+      "module": "BanachGeometry.AlmostIsometric.FixedSpaces",
+      "path": "BanachGeometry/AlmostIsometric/FixedSpaces.lean",
+      "sha256": "18818f6ca046bd2d1e48dc72c471f8ba5a96d8941bfc26f12df2ca1f61aed6c3"
+    },
+    {
+      "bytes": 998,
+      "module": "BanachGeometry.AlmostIsometric.FromQuantitativeHilbertData",
+      "path": "BanachGeometry/AlmostIsometric/FromQuantitativeHilbertData.lean",
+      "sha256": "4b7802c0e21900910618bd716b2dbb67ad5d0bfc6cd479df52afd87672c15e70"
+    },
+    {
+      "bytes": 6755,
+      "module": "BanachGeometry.AlmostIsometric.GraphPairs",
+      "path": "BanachGeometry/AlmostIsometric/GraphPairs.lean",
+      "sha256": "d2adb717a44fa371fe37c8b2b48d72324dd7631401960bf33383ae4da03f9548"
+    },
+    {
+      "bytes": 3402,
+      "module": "BanachGeometry.AlmostIsometric.HilbertFreeSpaceData",
+      "path": "BanachGeometry/AlmostIsometric/HilbertFreeSpaceData.lean",
+      "sha256": "ddd7424eb12465cf7cf5e78d9e9041b6722baa20f14e6974eb5b7f112bb7f869"
+    },
+    {
+      "bytes": 5800,
+      "module": "BanachGeometry.AlmostIsometric.Insertion",
+      "path": "BanachGeometry/AlmostIsometric/Insertion.lean",
+      "sha256": "3d6a0f8ebf10b0eaa2954cd7f5549d4d14f9a4b966941e6373366c5f1c57483f"
+    },
+    {
+      "bytes": 2564,
+      "module": "BanachGeometry.AlmostIsometric.InsertionIndices",
+      "path": "BanachGeometry/AlmostIsometric/InsertionIndices.lean",
+      "sha256": "877b753f0d74096a11450d9fd5e79efe77069c746d393467d93f377b4460e787"
+    },
+    {
+      "bytes": 5824,
+      "module": "BanachGeometry.AlmostIsometric.LipschitzDistance",
+      "path": "BanachGeometry/AlmostIsometric/LipschitzDistance.lean",
+      "sha256": "f5a3f57e4386714f37b9d57f29156326180405f5536c9ca95217a882226d2f05"
+    },
+    {
+      "bytes": 7165,
+      "module": "BanachGeometry.AlmostIsometric.OptimalLipschitz",
+      "path": "BanachGeometry/AlmostIsometric/OptimalLipschitz.lean",
+      "sha256": "cea88e523b5556946e2545cc1b8833b8b4e0e5c67a8b6c7ea7fcf2d6420c82f7"
+    },
+    {
+      "bytes": 3097,
+      "module": "BanachGeometry.AlmostIsometric.PointedBiLip",
+      "path": "BanachGeometry/AlmostIsometric/PointedBiLip.lean",
+      "sha256": "b363c5b1707c06da55a2115b933f19c573af8f2b752e203452bba45ee7e6a3e7"
+    },
+    {
+      "bytes": 4069,
+      "module": "BanachGeometry.Basic",
+      "path": "BanachGeometry/Basic.lean",
+      "sha256": "8a91d6eb7ecad4691bcc5924d730334af49888e8ee6147e69342232314472af6"
+    },
+    {
+      "bytes": 4190,
+      "module": "BanachGeometry.Complemented.ConcreteDual",
+      "path": "BanachGeometry/Complemented/ConcreteDual.lean",
+      "sha256": "140d1abd38049272f496b0be0adafba6f10adacdf03d6424191ce5d88ef1ccd0"
+    },
+    {
+      "bytes": 8270,
+      "module": "BanachGeometry.Complemented.Corner",
+      "path": "BanachGeometry/Complemented/Corner.lean",
+      "sha256": "c9810b54d4dd5caa7522c6dd53d6047cd11b02c7f06fced3c090d9908bdf0bd2"
+    },
+    {
+      "bytes": 3391,
+      "module": "BanachGeometry.Complemented.CornerAssembly",
+      "path": "BanachGeometry/Complemented/CornerAssembly.lean",
+      "sha256": "ed0de87885bc74aac91558c58d30694079ed43e8226fa6ce0294a26b4a3e8466"
+    },
+    {
+      "bytes": 3895,
+      "module": "BanachGeometry.Complemented.Factorization",
+      "path": "BanachGeometry/Complemented/Factorization.lean",
+      "sha256": "e3877b8d410ebc13a5c59c593a27d7546945f81bc152ededccad40464a55e97f"
+    },
+    {
+      "bytes": 1081,
+      "module": "BanachGeometry.Complemented.FiniteDual",
+      "path": "BanachGeometry/Complemented/FiniteDual.lean",
+      "sha256": "9d7d18f4566f5d686620da2beb10d1cd107cb4d6913351e8f4ec44ac2e16aa41"
+    },
+    {
+      "bytes": 3586,
+      "module": "BanachGeometry.Complemented.FinitePerturbation",
+      "path": "BanachGeometry/Complemented/FinitePerturbation.lean",
+      "sha256": "43618f03ba7a1fd9259fd9cb807a11e8bd642ad09781d731d836de9d33ad16ec"
+    },
+    {
+      "bytes": 4061,
+      "module": "BanachGeometry.Complemented.FiniteRows",
+      "path": "BanachGeometry/Complemented/FiniteRows.lean",
+      "sha256": "d9a175efdd60382ccca9405a792d0ed553302840ae4216e97acac435bd63d516"
+    },
+    {
+      "bytes": 5593,
+      "module": "BanachGeometry.Complemented.HeadSplitting",
+      "path": "BanachGeometry/Complemented/HeadSplitting.lean",
+      "sha256": "0bfab044b28ef36b4c539123661b6b211be1c42ca3a1cf8eaac7915375814f45"
+    },
+    {
+      "bytes": 3344,
+      "module": "BanachGeometry.Complemented.Localization",
+      "path": "BanachGeometry/Complemented/Localization.lean",
+      "sha256": "7bbf53d5d0c1f7ecaecfc04b26da14698c77bb1e649beff36963073eed56aca8"
+    },
+    {
+      "bytes": 9391,
+      "module": "BanachGeometry.Complemented.RowSplitting",
+      "path": "BanachGeometry/Complemented/RowSplitting.lean",
+      "sha256": "08146c67b721b771ff66fd8ea77081be00144c874bcb4aa2cb0bb6d29ac2b7f2"
+    },
+    {
+      "bytes": 6164,
+      "module": "BanachGeometry.HilbertSums.Coding.Bounds",
+      "path": "BanachGeometry/HilbertSums/Coding/Bounds.lean",
+      "sha256": "30a4f95ec07b8b8610b787f2653b2e480ce19b841b8f19c7936858f0088f6af9"
+    },
+    {
+      "bytes": 3607,
+      "module": "BanachGeometry.HilbertSums.Coding.Scalar",
+      "path": "BanachGeometry/HilbertSums/Coding/Scalar.lean",
+      "sha256": "85136664fa05debb01fa9b3a0abb10b66b63cfbbed39a2071c486d9bc3690e8d"
+    },
+    {
+      "bytes": 7189,
+      "module": "BanachGeometry.HilbertSums.Coding.Tent",
+      "path": "BanachGeometry/HilbertSums/Coding/Tent.lean",
+      "sha256": "f534e04fc6e39eb2f158e4aa8e7f088386efc0d3bdda7db475e777dca9ac339e"
+    },
+    {
+      "bytes": 3472,
+      "module": "BanachGeometry.HilbertSums.Coding.UnitSegment",
+      "path": "BanachGeometry/HilbertSums/Coding/UnitSegment.lean",
+      "sha256": "7adf4873bcac975d68bde72cb3d03c486435f1c05a18e739a97292927e3c013a"
+    },
+    {
+      "bytes": 7010,
+      "module": "BanachGeometry.HilbertSums.DyadicEnergy",
+      "path": "BanachGeometry/HilbertSums/DyadicEnergy.lean",
+      "sha256": "6eb7b03a0b10f5920657659f5689b22ab1e10f110389572626b091a303022bde"
+    },
+    {
+      "bytes": 9123,
+      "module": "BanachGeometry.HilbertSums.FrozenIsometry",
+      "path": "BanachGeometry/HilbertSums/FrozenIsometry.lean",
+      "sha256": "685b6f2777d55733c294d80a5890d6a0ef2df0d6f946f4568a0883cbfd00d655"
+    },
+    {
+      "bytes": 5574,
+      "module": "BanachGeometry.HilbertSums.FrozenRearrangement",
+      "path": "BanachGeometry/HilbertSums/FrozenRearrangement.lean",
+      "sha256": "b43016637db3c9c7b0281bd290f1fac81e93d60becdbdd4d710b1560cb371103"
+    },
+    {
+      "bytes": 7644,
+      "module": "BanachGeometry.HilbertSums.Graded.Basic",
+      "path": "BanachGeometry/HilbertSums/Graded/Basic.lean",
+      "sha256": "57a34245749d18162515dee524035fe6a1ad1563934b0a56ebb2c5c89b3dc970"
+    },
+    {
+      "bytes": 2337,
+      "module": "BanachGeometry.HilbertSums.Graded.CoordinateIsometry",
+      "path": "BanachGeometry/HilbertSums/Graded/CoordinateIsometry.lean",
+      "sha256": "b7a2f9cd507947c55689dcb4091cabf93fa57a38505d1052099f5f4b867725d1"
+    },
+    {
+      "bytes": 4807,
+      "module": "BanachGeometry.HilbertSums.Graded.FiniteCoordinates",
+      "path": "BanachGeometry/HilbertSums/Graded/FiniteCoordinates.lean",
+      "sha256": "f6e043392e81798380c89ab68bbd54bc3dfc0574d87320236ec6b696b969756d"
+    },
+    {
+      "bytes": 1056,
+      "module": "BanachGeometry.HilbertSums.Graded.Separable",
+      "path": "BanachGeometry/HilbertSums/Graded/Separable.lean",
+      "sha256": "80526e3df488832590b6ebc5d826285884b02a2e7596b47a7745fa4175d2bfb6"
+    },
+    {
+      "bytes": 10992,
+      "module": "BanachGeometry.HilbertSums.InverseComparison",
+      "path": "BanachGeometry/HilbertSums/InverseComparison.lean",
+      "sha256": "bd1b42d91667c13844cc11108992257a59eceff8c7ee8bc442e98d0645657870"
+    },
+    {
+      "bytes": 1513,
+      "module": "BanachGeometry.HilbertSums.L2Separable",
+      "path": "BanachGeometry/HilbertSums/L2Separable.lean",
+      "sha256": "f0a9134e4b80226346ba77de38d8c957a5af40c66480dd9a23cc9c284fb62761"
+    },
+    {
+      "bytes": 1741,
+      "module": "BanachGeometry.HilbertSums.Nonlinear.Defect",
+      "path": "BanachGeometry/HilbertSums/Nonlinear/Defect.lean",
+      "sha256": "2977666aec8036abf207c2c74446096c4a7c731b4ebbc581ac08b48bfabee087"
+    },
+    {
+      "bytes": 6986,
+      "module": "BanachGeometry.HilbertSums.Nonlinear.DistanceBounds",
+      "path": "BanachGeometry/HilbertSums/Nonlinear/DistanceBounds.lean",
+      "sha256": "530e8f29161e0ac5a3cfca25c2bd80443121bae5efe2cb0a5267e88d0b0e60ca"
+    },
+    {
+      "bytes": 5170,
+      "module": "BanachGeometry.HilbertSums.Nonlinear.Equivalence",
+      "path": "BanachGeometry/HilbertSums/Nonlinear/Equivalence.lean",
+      "sha256": "a0f38d4733558d74c149b2b6b33174ff4a7938b672fc2a856f6fc978eb1f2445"
+    },
+    {
+      "bytes": 6190,
+      "module": "BanachGeometry.HilbertSums.Nonlinear.PointBounds",
+      "path": "BanachGeometry/HilbertSums/Nonlinear/PointBounds.lean",
+      "sha256": "ebcae85162ee2f6f10179903b0a9becd70cd1d011efab3f23233861c7d2590ba"
+    },
+    {
+      "bytes": 9427,
+      "module": "BanachGeometry.HilbertSums.Nonlinear.RecursiveInverse",
+      "path": "BanachGeometry/HilbertSums/Nonlinear/RecursiveInverse.lean",
+      "sha256": "6797f9724812af8fdde3ab43774122535aa6824710241f5f48709dfa103d16e5"
+    },
+    {
+      "bytes": 5265,
+      "module": "BanachGeometry.HilbertSums.Nonlinear.SeparatedSupports",
+      "path": "BanachGeometry/HilbertSums/Nonlinear/SeparatedSupports.lean",
+      "sha256": "beedb08cedfa2b1899acf5ddf12e41041fe8d990d080e065b9ceac7a1a715a74"
+    },
+    {
+      "bytes": 7799,
+      "module": "BanachGeometry.HilbertSums.Nonlinear.Support",
+      "path": "BanachGeometry/HilbertSums/Nonlinear/Support.lean",
+      "sha256": "8750899b46351f2badba4b04549619df3b9e703bd66828c6917b69570e020b3c"
+    },
+    {
+      "bytes": 7392,
+      "module": "BanachGeometry.HilbertSums.Nonlinear.TailEnergy",
+      "path": "BanachGeometry/HilbertSums/Nonlinear/TailEnergy.lean",
+      "sha256": "006d2e750a9ea6ba29018dc59b5ea0013889617e3d1a9dc8476ee5d469ed8b6d"
+    },
+    {
+      "bytes": 9184,
+      "module": "BanachGeometry.HilbertSums.Nonlinear.UnitDirections",
+      "path": "BanachGeometry/HilbertSums/Nonlinear/UnitDirections.lean",
+      "sha256": "7a2c238623c32d574aaf2fb4a1e0131384c1e63241f31c6342dd9c7055252a3f"
+    },
+    {
+      "bytes": 2581,
+      "module": "BanachGeometry.HilbertSums.ScalarSplitting",
+      "path": "BanachGeometry/HilbertSums/ScalarSplitting.lean",
+      "sha256": "a8f45e58000db27f9c515804b6ccae8ec440a4e0984db6354545d96662661ec4"
+    },
+    {
+      "bytes": 12332,
+      "module": "BanachGeometry.HilbertSums.ScaleClock.Global",
+      "path": "BanachGeometry/HilbertSums/ScaleClock/Global.lean",
+      "sha256": "11aac5e8cb0889d3267622297e575ce3dea16b43a870e59d77003c7495a4bdb2"
+    },
+    {
+      "bytes": 5732,
+      "module": "BanachGeometry.HilbertSums.ScaleClock.Growth",
+      "path": "BanachGeometry/HilbertSums/ScaleClock/Growth.lean",
+      "sha256": "7628a44fcaa80cdaa4b2697d09d1ad2e149da87eff0bf71078907c16ad5582fb"
+    },
+    {
+      "bytes": 3224,
+      "module": "BanachGeometry.HilbertSums.ScaleClock.Order",
+      "path": "BanachGeometry/HilbertSums/ScaleClock/Order.lean",
+      "sha256": "2af127f8ddbf48bf1266efbcc02d06b54f24934915bd15d668b557f37bba761c"
+    },
+    {
+      "bytes": 7206,
+      "module": "BanachGeometry.HilbertSums.TailProjections",
+      "path": "BanachGeometry/HilbertSums/TailProjections.lean",
+      "sha256": "d84aee26aeb75362aaf5550fbf9459895debb4195893121c845a7ec17b6d2f5e"
+    },
+    {
+      "bytes": 5241,
+      "module": "BanachGeometry.LipschitzFreeGeometry.BidualSeparation",
+      "path": "BanachGeometry/LipschitzFreeGeometry/BidualSeparation.lean",
+      "sha256": "a3d11d2f7bc8610246095232a280c1293e4150109757c94d682d468321f4808d"
+    },
+    {
+      "bytes": 8034,
+      "module": "BanachGeometry.LipschitzFreeGeometry.BlockSelection",
+      "path": "BanachGeometry/LipschitzFreeGeometry/BlockSelection.lean",
+      "sha256": "799f159026bbb6ff24f66c3b0a6c63891ebd23a44432ebb3cfab7a91f0579f37"
+    },
+    {
+      "bytes": 6380,
+      "module": "BanachGeometry.LipschitzFreeGeometry.CauchyApproximation",
+      "path": "BanachGeometry/LipschitzFreeGeometry/CauchyApproximation.lean",
+      "sha256": "419fcc60781ef757fcff0f8782e3fb70ad4a1526fb9753d016cd6938daaa61e4"
+    },
+    {
+      "bytes": 10664,
+      "module": "BanachGeometry.LipschitzFreeGeometry.CauchyReduction",
+      "path": "BanachGeometry/LipschitzFreeGeometry/CauchyReduction.lean",
+      "sha256": "e87fe4773e3ce8f1744a2374ce8b4161990c715c7a3159aee0463eaed2ef9487"
+    },
+    {
+      "bytes": 3450,
+      "module": "BanachGeometry.LipschitzFreeGeometry.CompactHilbertWSC",
+      "path": "BanachGeometry/LipschitzFreeGeometry/CompactHilbertWSC.lean",
+      "sha256": "c2e22cbcf196b35193a44c9fe64411ffa6823fdd397ebe595b39f0eff6e36fe3"
+    },
+    {
+      "bytes": 8423,
+      "module": "BanachGeometry.LipschitzFreeGeometry.CompactLipschitz",
+      "path": "BanachGeometry/LipschitzFreeGeometry/CompactLipschitz.lean",
+      "sha256": "531fcea30b820b886f3979b74c4f83eb7ac6a1113d97f9d04d49f310c2678180"
+    },
+    {
+      "bytes": 16089,
+      "module": "BanachGeometry.LipschitzFreeGeometry.CompactLocalization",
+      "path": "BanachGeometry/LipschitzFreeGeometry/CompactLocalization.lean",
+      "sha256": "db7bfc9232b65aba0c221d03620575d426fa854888eb41ea748b803566c76942"
+    },
+    {
+      "bytes": 6249,
+      "module": "BanachGeometry.LipschitzFreeGeometry.CompactReduction",
+      "path": "BanachGeometry/LipschitzFreeGeometry/CompactReduction.lean",
+      "sha256": "267dd4ac20dd548d282ac1e4fba438da6f1e5f934856f229f60544222f883a6a"
+    },
+    {
+      "bytes": 10623,
+      "module": "BanachGeometry.LipschitzFreeGeometry.CompactSupports",
+      "path": "BanachGeometry/LipschitzFreeGeometry/CompactSupports.lean",
+      "sha256": "5fab550b7c162163245953acbcb308ba3cc9bf15a8e832d96ff0d3d097240982"
+    },
+    {
+      "bytes": 8807,
+      "module": "BanachGeometry.LipschitzFreeGeometry.CompleteContinuity",
+      "path": "BanachGeometry/LipschitzFreeGeometry/CompleteContinuity.lean",
+      "sha256": "35c6422273c0242f525c135c0b85f8980c7fd5b3e542cd97b3bec196ee11a642"
+    },
+    {
+      "bytes": 7377,
+      "module": "BanachGeometry.LipschitzFreeGeometry.DetectingSequence",
+      "path": "BanachGeometry/LipschitzFreeGeometry/DetectingSequence.lean",
+      "sha256": "e1639791d8dbfad9d77fbcf1b6154b1570ef808aa7fa6097fca92386c798276b"
+    },
+    {
+      "bytes": 5511,
+      "module": "BanachGeometry.LipschitzFreeGeometry.EnergyEstimates",
+      "path": "BanachGeometry/LipschitzFreeGeometry/EnergyEstimates.lean",
+      "sha256": "c49b882c1269c08eaea36f0d381970abe94fc2c88eb1007a0b8256023bc76154"
+    },
+    {
+      "bytes": 9297,
+      "module": "BanachGeometry.LipschitzFreeGeometry.FiniteMultipliers",
+      "path": "BanachGeometry/LipschitzFreeGeometry/FiniteMultipliers.lean",
+      "sha256": "19497ffb9664d2cd5b4c1d3fda2d5e43619fa98f56bbcc801b6b742a93b82a51"
+    },
+    {
+      "bytes": 8891,
+      "module": "BanachGeometry.LipschitzFreeGeometry.FiniteReduction",
+      "path": "BanachGeometry/LipschitzFreeGeometry/FiniteReduction.lean",
+      "sha256": "f93de043d47b05a50cd18a2f7366af1c6f678772fad37fa53d7a28ba08be922e"
+    },
+    {
+      "bytes": 2806,
+      "module": "BanachGeometry.LipschitzFreeGeometry.FiniteRows",
+      "path": "BanachGeometry/LipschitzFreeGeometry/FiniteRows.lean",
+      "sha256": "74a4c3a321379b4111d765d5bdd31feff9f761c51d2ce779d4af3d7fa3dfeded"
+    },
+    {
+      "bytes": 12103,
+      "module": "BanachGeometry.LipschitzFreeGeometry.FreeSpace",
+      "path": "BanachGeometry/LipschitzFreeGeometry/FreeSpace.lean",
+      "sha256": "be399d06e7478be6e626087308e82851322e75dae7e6e5837653835cbb855aae"
+    },
+    {
+      "bytes": 15482,
+      "module": "BanachGeometry.LipschitzFreeGeometry.GraphObstruction",
+      "path": "BanachGeometry/LipschitzFreeGeometry/GraphObstruction.lean",
+      "sha256": "0a7c44de90547f9eb6f33bd81bffc8694a7ec98e8cf746fd526c934d710068a6"
+    },
+    {
+      "bytes": 5149,
+      "module": "BanachGeometry.LipschitzFreeGeometry.HilbertBlocks",
+      "path": "BanachGeometry/LipschitzFreeGeometry/HilbertBlocks.lean",
+      "sha256": "a74f593e34b99743a857887ba41437263e88e3a4e2f92f49bfa0234826d2ae0a"
+    },
+    {
+      "bytes": 9957,
+      "module": "BanachGeometry.LipschitzFreeGeometry.LocalLipschitz",
+      "path": "BanachGeometry/LipschitzFreeGeometry/LocalLipschitz.lean",
+      "sha256": "7dd478b60d9f37922c4a7e2049b3bb28364f730dcd226b517ad457142d3022c9"
+    },
+    {
+      "bytes": 21192,
+      "module": "BanachGeometry.LipschitzFreeGeometry.Localization",
+      "path": "BanachGeometry/LipschitzFreeGeometry/Localization.lean",
+      "sha256": "c67d869f9d6da05b10bdb1bdbe2f20b7b840d210e846864f65f4ed6b493731d6"
+    },
+    {
+      "bytes": 1371,
+      "module": "BanachGeometry.LipschitzFreeGeometry.Model",
+      "path": "BanachGeometry/LipschitzFreeGeometry/Model.lean",
+      "sha256": "cb623ee36fd5edbfc4cb59a111b8a8b0b8e339ce3af8720c35ccac9fd249af0d"
+    },
+    {
+      "bytes": 6740,
+      "module": "BanachGeometry.LipschitzFreeGeometry.MolecularApproximation",
+      "path": "BanachGeometry/LipschitzFreeGeometry/MolecularApproximation.lean",
+      "sha256": "6378dece92ccbd4eb7cf7e509ff395256145001f7bc92c9e8455bd70ac51d028"
+    },
+    {
+      "bytes": 8027,
+      "module": "BanachGeometry.LipschitzFreeGeometry.Multipliers",
+      "path": "BanachGeometry/LipschitzFreeGeometry/Multipliers.lean",
+      "sha256": "65bcdcfa85dff7e6d7f2268846e86a8020bff4df819a8fb471fb5ce49afc5bb0"
+    },
+    {
+      "bytes": 4722,
+      "module": "BanachGeometry.LipschitzFreeGeometry.NullSequences",
+      "path": "BanachGeometry/LipschitzFreeGeometry/NullSequences.lean",
+      "sha256": "2fa608f68510dd1cb4176d6408609ac0e64af184cfae1abcd7a79d4476ab3dbb"
+    },
+    {
+      "bytes": 5547,
+      "module": "BanachGeometry.LipschitzFreeGeometry.PairingEstimates",
+      "path": "BanachGeometry/LipschitzFreeGeometry/PairingEstimates.lean",
+      "sha256": "df9aa0b0898345d92d98358eae226ce86440a4f863c88597d468fbc99d812578"
+    },
+    {
+      "bytes": 5680,
+      "module": "BanachGeometry.LipschitzFreeGeometry.RadiusReduction",
+      "path": "BanachGeometry/LipschitzFreeGeometry/RadiusReduction.lean",
+      "sha256": "3d9fb6b71b7db45e3d1752050af142909aa4df155e64155e655965e39a557848"
+    },
+    {
+      "bytes": 10476,
+      "module": "BanachGeometry.LipschitzFreeGeometry.Schur",
+      "path": "BanachGeometry/LipschitzFreeGeometry/Schur.lean",
+      "sha256": "200c9d70e2d425aa729560a5e7eb7ecc0b9ab17c743c25d95451bc63ae75e8c1"
+    },
+    {
+      "bytes": 4262,
+      "module": "BanachGeometry.LipschitzFreeGeometry.SelectionStep",
+      "path": "BanachGeometry/LipschitzFreeGeometry/SelectionStep.lean",
+      "sha256": "61b6ded8db699e0a6d1bc3f0bfe0c7b0700b3c3418def4d481f929bb6008aedb"
+    },
+    {
+      "bytes": 12228,
+      "module": "BanachGeometry.LipschitzFreeGeometry.SeparableCoordinates",
+      "path": "BanachGeometry/LipschitzFreeGeometry/SeparableCoordinates.lean",
+      "sha256": "a4ca98822f8d2cb4bbe9fbaaba23b1cff17cecc0206af1a7f85041ad1c08c27a"
+    },
+    {
+      "bytes": 3861,
+      "module": "BanachGeometry.LipschitzFreeGeometry.ShrinkingCutoffs",
+      "path": "BanachGeometry/LipschitzFreeGeometry/ShrinkingCutoffs.lean",
+      "sha256": "203fa29d669792b60e3c9629129cd75b417cd10072138efd0db763f272084a25"
+    },
+    {
+      "bytes": 7549,
+      "module": "BanachGeometry.LipschitzFreeGeometry.SmoothCalculus",
+      "path": "BanachGeometry/LipschitzFreeGeometry/SmoothCalculus.lean",
+      "sha256": "c61dd65c62a0ebb44d8f3b429d13d673d9aa53c6077e1d6a9e25744dfc969d5d"
+    },
+    {
+      "bytes": 9405,
+      "module": "BanachGeometry.LipschitzFreeGeometry.SmoothHilbert",
+      "path": "BanachGeometry/LipschitzFreeGeometry/SmoothHilbert.lean",
+      "sha256": "878f2bc9897ca4d615f1cc3a6773df82b89030be65defa3512ed7e3278656a75"
+    },
+    {
+      "bytes": 7503,
+      "module": "BanachGeometry.LipschitzFreeGeometry.SmoothMultiplier",
+      "path": "BanachGeometry/LipschitzFreeGeometry/SmoothMultiplier.lean",
+      "sha256": "e05c0b3b3c55e43690d584d6b9e5855de816881c3ab931e055229bae8c5bbafc"
+    },
+    {
+      "bytes": 8614,
+      "module": "BanachGeometry.LipschitzFreeGeometry.SmoothRows",
+      "path": "BanachGeometry/LipschitzFreeGeometry/SmoothRows.lean",
+      "sha256": "5d752fe059d4c4b02d81117b117c6075f88481c2847f01d2b177fe5183188680"
+    },
+    {
+      "bytes": 7436,
+      "module": "BanachGeometry.LipschitzFreeGeometry.SupportedDuality",
+      "path": "BanachGeometry/LipschitzFreeGeometry/SupportedDuality.lean",
+      "sha256": "78b5d0aaf54729155822c9744fe08aabf043f75f9e4384c11e18dc04047d4a9a"
+    },
+    {
+      "bytes": 2659,
+      "module": "BanachGeometry.LipschitzFreeGeometry.TriangularDuals",
+      "path": "BanachGeometry/LipschitzFreeGeometry/TriangularDuals.lean",
+      "sha256": "ffb2ac85c86fdacc2759486ad0b51904ab0d7245333495587e9c1a0128c0b94d"
+    },
+    {
+      "bytes": 5248,
+      "module": "BanachGeometry.LipschitzFreeGeometry.WUCDuals",
+      "path": "BanachGeometry/LipschitzFreeGeometry/WUCDuals.lean",
+      "sha256": "e2251b498b8b3772430928062735c0e3dae25f0e0676cfaa8c73f53b438ca301"
+    },
+    {
+      "bytes": 7178,
+      "module": "BanachGeometry.LipschitzFreeGeometry.WUCFunctions",
+      "path": "BanachGeometry/LipschitzFreeGeometry/WUCFunctions.lean",
+      "sha256": "ab406186412aec10ede403b9ceeb6396ad631f630223683c7f5bf02aaf3e4427"
+    },
+    {
+      "bytes": 3180,
+      "module": "BanachGeometry.LipschitzFreeGeometry.WUCOperator",
+      "path": "BanachGeometry/LipschitzFreeGeometry/WUCOperator.lean",
+      "sha256": "1b7a075b8310af91264df45c89d2fe6c275d82bd1024ab6d60932a0a0abcceb9"
+    },
+    {
+      "bytes": 3378,
+      "module": "BanachGeometry.LipschitzFreeGeometry.WeakCauchy",
+      "path": "BanachGeometry/LipschitzFreeGeometry/WeakCauchy.lean",
+      "sha256": "b05293bd60789152df68fd2ba67da78c1943a1a7a0d1e55831e2f04c6796745f"
+    },
+    {
+      "bytes": 20079,
+      "module": "BanachGeometry.LipschitzFreeGeometry.WeakSums",
+      "path": "BanachGeometry/LipschitzFreeGeometry/WeakSums.lean",
+      "sha256": "d45a27a7491ff823ac9cb77995248cb37e551b6fcb75afa70f3a1dc29ee881cb"
+    },
+    {
+      "bytes": 10345,
+      "module": "BanachGeometry.LipschitzFreeGeometry.WeightedGraph",
+      "path": "BanachGeometry/LipschitzFreeGeometry/WeightedGraph.lean",
+      "sha256": "7ebf1247740528c4f6bc11251bfb23927e7ce0c81363de242d66e23a80f35a03"
+    },
+    {
+      "bytes": 9652,
+      "module": "BanachGeometry.LipschitzFreeSpace.HilbertDefect",
+      "path": "BanachGeometry/LipschitzFreeSpace/HilbertDefect.lean",
+      "sha256": "2ee77b796c7a1484d111427be2d29eafa5647652369860eb0c060f06c5b8cbf0"
+    },
+    {
+      "bytes": 4506,
+      "module": "BanachGeometry.LipschitzFreeSpace.HilbertLocality",
+      "path": "BanachGeometry/LipschitzFreeSpace/HilbertLocality.lean",
+      "sha256": "38d6f5ea4aa7ec7384041cd51d0268dd579436a36d4418bb6166d91de85dd26c"
+    },
+    {
+      "bytes": 4005,
+      "module": "BanachGeometry.LipschitzFreeSpace.Localization.CompactSelection",
+      "path": "BanachGeometry/LipschitzFreeSpace/Localization/CompactSelection.lean",
+      "sha256": "72e1b5f3ebf7f6b088f7d7bd8863551643dd1adcb3299f2006feace93a40e125"
+    },
+    {
+      "bytes": 3491,
+      "module": "BanachGeometry.LipschitzFreeSpace.Localization.CoordinateBridge",
+      "path": "BanachGeometry/LipschitzFreeSpace/Localization/CoordinateBridge.lean",
+      "sha256": "d460475362704c8b7bbc7e62f979233985d169fea1aab93752eb48a1b71b17c8"
+    },
+    {
+      "bytes": 5422,
+      "module": "BanachGeometry.LipschitzFreeSpace.Localization.ExceptionalSet",
+      "path": "BanachGeometry/LipschitzFreeSpace/Localization/ExceptionalSet.lean",
+      "sha256": "a41e967a166e21613198c75275501d5a86afe17bb524b21bc9eab3af38340220"
+    },
+    {
+      "bytes": 2005,
+      "module": "BanachGeometry.LipschitzFreeSpace.Localization.FiniteProjection",
+      "path": "BanachGeometry/LipschitzFreeSpace/Localization/FiniteProjection.lean",
+      "sha256": "34b9fcfece4582ae806590636a51ea6cc25081b807bcbe07ea7628fbeb0e5b30"
+    },
+    {
+      "bytes": 7860,
+      "module": "BanachGeometry.LipschitzFreeSpace.Localization.GeneralCriterion",
+      "path": "BanachGeometry/LipschitzFreeSpace/Localization/GeneralCriterion.lean",
+      "sha256": "b3df51d58d112e88e48f1819fcdd265e8e39613b91c21b07b5867decf3427f78"
+    },
+    {
+      "bytes": 6713,
+      "module": "BanachGeometry.LipschitzFreeSpace.Localization.IncrementCondition",
+      "path": "BanachGeometry/LipschitzFreeSpace/Localization/IncrementCondition.lean",
+      "sha256": "029131270190d81e859da7e7c324fc5dd9d789a981e11bbca9e0c804f5ae2ebd"
+    },
+    {
+      "bytes": 7862,
+      "module": "BanachGeometry.LipschitzFreeSpace.Localization.RelativeCompact",
+      "path": "BanachGeometry/LipschitzFreeSpace/Localization/RelativeCompact.lean",
+      "sha256": "7046ce836450ff1517bc8729649c5add968c5417c75fcc346b5a5076057cb3e2"
+    },
+    {
+      "bytes": 5495,
+      "module": "BanachGeometry.LipschitzFreeSpace.PositiveTailLocality",
+      "path": "BanachGeometry/LipschitzFreeSpace/PositiveTailLocality.lean",
+      "sha256": "2857f68cefbd6c0f10a95d94d2eeca99daad6f18e5a497533f8b0c775da95059"
+    },
+    {
+      "bytes": 4237,
+      "module": "BanachGeometry.LipschitzFreeSpace.UniversalProperties",
+      "path": "BanachGeometry/LipschitzFreeSpace/UniversalProperties.lean",
+      "sha256": "5146a0c14bd44554d7270c2ff884edc405ebccd57b4ac34ae6c29e7d8747d0f8"
+    },
+    {
+      "bytes": 6648,
+      "module": "BanachGeometry.NoC0.BPC0Insertion",
+      "path": "BanachGeometry/NoC0/BPC0Insertion.lean",
+      "sha256": "3f9a8853144bb0f7f9cc92bfb8d459facfb3847094a17b98fa65ff41553c62f8"
+    },
+    {
+      "bytes": 4727,
+      "module": "BanachGeometry.NoC0.BPFiniteLower",
+      "path": "BanachGeometry/NoC0/BPFiniteLower.lean",
+      "sha256": "f1ff4b8e02f2b026752855e922793969d0064a18a9c7e78267f9060bd9c54a15"
+    },
+    {
+      "bytes": 5740,
+      "module": "BanachGeometry.NoC0.BPSelection",
+      "path": "BanachGeometry/NoC0/BPSelection.lean",
+      "sha256": "4db65be4b9699f3ae8703d80e9cca8894ac8f3b019d09f6b92821c076922c446"
+    },
+    {
+      "bytes": 5914,
+      "module": "BanachGeometry.NoC0.BPSeparation",
+      "path": "BanachGeometry/NoC0/BPSeparation.lean",
+      "sha256": "d1492f124f02328d71b01b0e624d24712931e59e7cb36e232b27094f7fe142cd"
+    },
+    {
+      "bytes": 2289,
+      "module": "BanachGeometry.NoC0.BasisDecay",
+      "path": "BanachGeometry/NoC0/BasisDecay.lean",
+      "sha256": "7eb5a42d191395ed9a3207a426f3597ddb1692bd537de59c3640a91038654ccd"
+    },
+    {
+      "bytes": 3618,
+      "module": "BanachGeometry.NoC0.BasisSeries",
+      "path": "BanachGeometry/NoC0/BasisSeries.lean",
+      "sha256": "920a75717bdb79398d9c8dafa3162f8a3150d5881b17a8e5a2040c441afba6d8"
+    },
+    {
+      "bytes": 8391,
+      "module": "BanachGeometry.NoC0.HilbertC0Obstruction",
+      "path": "BanachGeometry/NoC0/HilbertC0Obstruction.lean",
+      "sha256": "a62b70387a98c5df72a7d7ac39260340ff5cfb39ac11ca8bdf152793455ee195"
+    },
+    {
+      "bytes": 3387,
+      "module": "BanachGeometry.NoC0.L1NoC0Reduction",
+      "path": "BanachGeometry/NoC0/L1NoC0Reduction.lean",
+      "sha256": "8f4ae540d6a565bcf79140e287076d429b1a3fcb3c26828adb439692595f19ca"
+    },
+    {
+      "bytes": 2796,
+      "module": "BanachGeometry.NoC0.NoC0Closure",
+      "path": "BanachGeometry/NoC0/NoC0Closure.lean",
+      "sha256": "27a4bd351aa6f06ed0d92670be9d4ff98d57f20c4ec7be5bdf81ee61b831da7a"
+    },
+    {
+      "bytes": 2115,
+      "module": "BanachGeometry.OperatorGraphs.FiniteExclusionFromDecay",
+      "path": "BanachGeometry/OperatorGraphs/FiniteExclusionFromDecay.lean",
+      "sha256": "403734f3dcb1932e59bbb455fcf42c4d718e0a2b1606c31a4a31288dcfa1c222"
+    },
+    {
+      "bytes": 9511,
+      "module": "BanachGeometry.OperatorGraphs.FiniteGraph",
+      "path": "BanachGeometry/OperatorGraphs/FiniteGraph.lean",
+      "sha256": "d510ff1222e0a9ce8bf0a90574f95530784764b242ef1cf6215f0e0a08fbcccf"
+    },
+    {
+      "bytes": 11785,
+      "module": "BanachGeometry.OperatorGraphs.GeneralGraphBounds",
+      "path": "BanachGeometry/OperatorGraphs/GeneralGraphBounds.lean",
+      "sha256": "342d12cb716710d02a7e8575815758f207314234e2bd3dd2af50c7bdc6a8c8b1"
+    },
+    {
+      "bytes": 9161,
+      "module": "BanachGeometry.OperatorGraphs.GeneralGraphChange",
+      "path": "BanachGeometry/OperatorGraphs/GeneralGraphChange.lean",
+      "sha256": "1f5988a29e375a51f4b577abdf9534bccfaec8ae6be4bbb5744d3a04d7016bdc"
+    },
+    {
+      "bytes": 4735,
+      "module": "BanachGeometry.OperatorGraphs.GeneralGraphCoordinate",
+      "path": "BanachGeometry/OperatorGraphs/GeneralGraphCoordinate.lean",
+      "sha256": "d0842339acf99d55638f56b758465208f492f45454c445c25cdbd5de7bfe9ace"
+    },
+    {
+      "bytes": 2312,
+      "module": "BanachGeometry.OperatorGraphs.GeneralGraphData",
+      "path": "BanachGeometry/OperatorGraphs/GeneralGraphData.lean",
+      "sha256": "433ee07def88afc30fc3f055f53aa65f4c0683624b40d197c21d177dabb1ada6"
+    },
+    {
+      "bytes": 4681,
+      "module": "BanachGeometry.OperatorGraphs.GraphAdmissible",
+      "path": "BanachGeometry/OperatorGraphs/GraphAdmissible.lean",
+      "sha256": "2ee4ec7b16c2aedbb0f9c4ba7df754f59c7aa60922bcbd7eea7f4c36e232c148"
+    },
+    {
+      "bytes": 9360,
+      "module": "BanachGeometry.OperatorGraphs.GraphBounds",
+      "path": "BanachGeometry/OperatorGraphs/GraphBounds.lean",
+      "sha256": "74f61018f2f41099acfcf69aaba37fbdab8ef21fd88587a3bee3567c47bc494b"
+    },
+    {
+      "bytes": 8923,
+      "module": "BanachGeometry.OperatorGraphs.GraphChange",
+      "path": "BanachGeometry/OperatorGraphs/GraphChange.lean",
+      "sha256": "407fcea5f1a70b4eff723486048540fd2de2db67caf18aa65f19ae20cebeb4be"
+    },
+    {
+      "bytes": 4920,
+      "module": "BanachGeometry.OperatorGraphs.GraphCoordinateEquiv",
+      "path": "BanachGeometry/OperatorGraphs/GraphCoordinateEquiv.lean",
+      "sha256": "8a9eef4ba4fd2d806c6d93ada66d1a3bddcaa78db9c2c0a9379164662c7ea15a"
+    },
+    {
+      "bytes": 4500,
+      "module": "BanachGeometry.OperatorGraphs.GraphLinear",
+      "path": "BanachGeometry/OperatorGraphs/GraphLinear.lean",
+      "sha256": "67db4a3d555754b2d5ba25a89110ad52f759cb01bce172aa9c999d8b2d0f5ac0"
+    },
+    {
+      "bytes": 3658,
+      "module": "BanachGeometry.OperatorGraphs.GraphObstruction",
+      "path": "BanachGeometry/OperatorGraphs/GraphObstruction.lean",
+      "sha256": "2e40858dfb2d2c7d8084ccf1dfddb0954579361695da22b387792fba2e024bbf"
+    },
+    {
+      "bytes": 13870,
+      "module": "BanachGeometry.OperatorGraphs.GraphSplitting",
+      "path": "BanachGeometry/OperatorGraphs/GraphSplitting.lean",
+      "sha256": "e02f5058ac831bbd4258a5adfcfbcfb71c2addee2d912e39f5003b0a8ae314cc"
+    },
+    {
+      "bytes": 2534,
+      "module": "BanachGeometry.OperatorGraphs.GraphSupport",
+      "path": "BanachGeometry/OperatorGraphs/GraphSupport.lean",
+      "sha256": "862ef481de206803156d3e8a98b9f308f5bff1bc225f887a423390ae90ce3f00"
+    },
+    {
+      "bytes": 2993,
+      "module": "BanachGeometry.OperatorGraphs.QuantitativePair",
+      "path": "BanachGeometry/OperatorGraphs/QuantitativePair.lean",
+      "sha256": "c567eae09710f19a14b62fa5e562cf1f63a472c5b8a8e49195d4d8efabd16fed"
+    },
+    {
+      "bytes": 6578,
+      "module": "BanachGeometry.OperatorGraphs.WeightedGraph",
+      "path": "BanachGeometry/OperatorGraphs/WeightedGraph.lean",
+      "sha256": "c6f25b18f406c33b51e926c478fc01592b5094e8965cc6ce5c2105be157299c0"
+    },
+    {
+      "bytes": 5538,
+      "module": "BanachGeometry.SequenceSpaces.C0Adapters",
+      "path": "BanachGeometry/SequenceSpaces/C0Adapters.lean",
+      "sha256": "3365498673529652a854a2c0ef4d3ddab296fa867e30c68048eddf9f0048ab92"
+    },
+    {
+      "bytes": 6441,
+      "module": "BanachGeometry.SequenceSpaces.C0Banach",
+      "path": "BanachGeometry/SequenceSpaces/C0Banach.lean",
+      "sha256": "bf095c4342e1b82060f7e127ceeff12e1822be802aa6b321627b51035a0fcf52"
+    },
+    {
+      "bytes": 4698,
+      "module": "BanachGeometry.SequenceSpaces.C0Blocks",
+      "path": "BanachGeometry/SequenceSpaces/C0Blocks.lean",
+      "sha256": "3dd644e8729e583283efc7136b97fce6ab62c8425a3e777bfdfab07653e0b38a"
+    },
+    {
+      "bytes": 7603,
+      "module": "BanachGeometry.SequenceSpaces.C0Dual",
+      "path": "BanachGeometry/SequenceSpaces/C0Dual.lean",
+      "sha256": "ca77a4ba5c8396fcec1602af8fb4f1ae20e43e39bf32363bd980c86173992b71"
+    },
+    {
+      "bytes": 3191,
+      "module": "BanachGeometry.SequenceSpaces.C0FiniteHead",
+      "path": "BanachGeometry/SequenceSpaces/C0FiniteHead.lean",
+      "sha256": "15274255a1bceb507834bc87cf5b5d949446452c2fbdc784a9a4f5f8604ab5ac"
+    },
+    {
+      "bytes": 2353,
+      "module": "BanachGeometry.SequenceSpaces.C0Linear",
+      "path": "BanachGeometry/SequenceSpaces/C0Linear.lean",
+      "sha256": "afabb52ece05ec3b1c3a42a1728a3f8e5dc4651dcd557557b1d66510e8064bd1"
+    },
+    {
+      "bytes": 3353,
+      "module": "BanachGeometry.SequenceSpaces.C0Operators",
+      "path": "BanachGeometry/SequenceSpaces/C0Operators.lean",
+      "sha256": "b98a94a1390020e28b667433c0ad6de9fbb96d33e29ea9b35c5ab5e048c87c35"
+    },
+    {
+      "bytes": 7478,
+      "module": "BanachGeometry.SequenceSpaces.C0Sum",
+      "path": "BanachGeometry/SequenceSpaces/C0Sum.lean",
+      "sha256": "3af2305d3894114f0fa1fcc449c8c416df7635abce89384961a368e2cf287003"
+    },
+    {
+      "bytes": 5984,
+      "module": "BanachGeometry.SequenceSpaces.CanonicalSequences",
+      "path": "BanachGeometry/SequenceSpaces/CanonicalSequences.lean",
+      "sha256": "2348010c009dc6143afbf5baf05608bf9ee83545f8372ca181eefb9d63ffd308"
+    },
+    {
+      "bytes": 3079,
+      "module": "BanachGeometry.SequenceSpaces.L1Linear",
+      "path": "BanachGeometry/SequenceSpaces/L1Linear.lean",
+      "sha256": "06fbb89825e2c758cad0ea88ecb3382968383f04a73f2b9ab2e66c31894703e1"
+    },
+    {
+      "bytes": 2873,
+      "module": "BanachGeometry.SequenceSpaces.L1Map",
+      "path": "BanachGeometry/SequenceSpaces/L1Map.lean",
+      "sha256": "4d0271f19c4ae8a5bf41f86bfea928e719ee4a508ca6042a9d3c882e226ce3fe"
+    },
+    {
+      "bytes": 1821,
+      "module": "BanachGeometry.SequenceSpaces.L1Separable",
+      "path": "BanachGeometry/SequenceSpaces/L1Separable.lean",
+      "sha256": "58af8f3757e9cfaec55776da0954ff9f8041e86eef1d72c911e68a39049a58a9"
+    },
+    {
+      "bytes": 3137,
+      "module": "BanachGeometry.SequenceSpaces.PairLp",
+      "path": "BanachGeometry/SequenceSpaces/PairLp.lean",
+      "sha256": "7a5e11dcccb79cbdbecd9e4114bc7204a4b4aa0e0d31214412991cb5a2f7da37"
+    },
+    {
+      "bytes": 1813,
+      "module": "BanachGeometry.SequenceSpaces.ScalarBasis",
+      "path": "BanachGeometry/SequenceSpaces/ScalarBasis.lean",
+      "sha256": "62e5c1959bf4c22b8c079eff7fc9b29bff92d2b23a2a0e93ad3b0803a678e80c"
+    },
+    {
+      "bytes": 6791,
+      "module": "BanachGeometry.SequenceSpaces.SumFinite",
+      "path": "BanachGeometry/SequenceSpaces/SumFinite.lean",
+      "sha256": "332016ac34c96c5c8fc21ea8775717190faa8e4fe138d7e975644c9dee658581"
+    },
+    {
+      "bytes": 3953,
+      "module": "BanachGeometry.SequenceSpaces.SumReindex",
+      "path": "BanachGeometry/SequenceSpaces/SumReindex.lean",
+      "sha256": "bedb19af756e294082f246f418871b1126c5b316d5eb93c57e8f20ad5a8df8f1"
+    },
+    {
+      "bytes": 2420,
+      "module": "BanachGeometry.SequenceSpaces.UnitBall",
+      "path": "BanachGeometry/SequenceSpaces/UnitBall.lean",
+      "sha256": "755c4d961f80a0e95937b8137459ead1675c4d50bea1526098652905e1d83b1f"
+    },
+    {
+      "bytes": 3268,
+      "module": "BanachGeometry.SequenceSpaces.WeightedL1",
+      "path": "BanachGeometry/SequenceSpaces/WeightedL1.lean",
+      "sha256": "37cb419136cd602f18de96896798b252de69656d8038bf0e4ff490d630a7f118"
+    },
+    {
+      "bytes": 4609,
+      "module": "BanachGeometry.WeakSequences.CountableExclusion",
+      "path": "BanachGeometry/WeakSequences/CountableExclusion.lean",
+      "sha256": "48fc427134918ecf05014edb4bf7deaf76788872aac73331ebd9f8e6f44681d4"
+    },
+    {
+      "bytes": 5825,
+      "module": "BanachGeometry.WeakSequences.L1DualBlocks",
+      "path": "BanachGeometry/WeakSequences/L1DualBlocks.lean",
+      "sha256": "ffbdeee6ac437f51559d31329f6c295a0356262b89fdaa1df18fecc785f79c52"
+    },
+    {
+      "bytes": 4636,
+      "module": "BanachGeometry.WeakSequences.L1Shifts",
+      "path": "BanachGeometry/WeakSequences/L1Shifts.lean",
+      "sha256": "9131807a1bf06f35d1190c7663ac0bbdcb0a1eb7ad04e87ef2d5bb886f425c61"
+    },
+    {
+      "bytes": 7400,
+      "module": "BanachGeometry.WeakSequences.L1Tails",
+      "path": "BanachGeometry/WeakSequences/L1Tails.lean",
+      "sha256": "41f4d569c68751f47fa54857492fa46297d3208a8959650b5f14fb72bddf3536"
+    },
+    {
+      "bytes": 956,
+      "module": "BanachGeometry.WeakSequences.OperatorTails",
+      "path": "BanachGeometry/WeakSequences/OperatorTails.lean",
+      "sha256": "c2d9d86544e9ee0e84083195559ce929f5599754cfabecb6709fa523d0c168f7"
+    },
+    {
+      "bytes": 3443,
+      "module": "BanachGeometry.WeakSequences.SeparableDualSubsequence",
+      "path": "BanachGeometry/WeakSequences/SeparableDualSubsequence.lean",
+      "sha256": "b606d7f51745011314dab36030fe3e452c0f2a26a4fcf498990017d3b406c599"
+    },
+    {
+      "bytes": 4813,
+      "module": "BanachGeometry.WeakSequences.TailReduction",
+      "path": "BanachGeometry/WeakSequences/TailReduction.lean",
+      "sha256": "ff568967a2d0318f2c22008a3c8ab46047e8667757de4f252fbc29b3fbbf5058"
+    },
+    {
+      "bytes": 12183,
+      "module": "BanachGeometry.WeakSequences.WeakTailGliding",
+      "path": "BanachGeometry/WeakSequences/WeakTailGliding.lean",
+      "sha256": "001d027da18162a8e42cec2c98438aaf44f3bf124a4c8d106513b6c1ae3501c3"
+    },
+    {
+      "bytes": 3406,
+      "module": "BanachGeometry.WeakSequences.WeakTailReduction",
+      "path": "BanachGeometry/WeakSequences/WeakTailReduction.lean",
+      "sha256": "488f9fded8c1a60d892132ae8b87a866b33e3f09cac12d7d45acc6d813b05cab"
+    }
+  ],
+  "retained_outside_entry": [
+    "BanachGeometry.AlmostIsometric.EscapeNorm",
+    "BanachGeometry.AlmostIsometric.HilbertFreeSpaceDataViaCoordinates",
+    "BanachGeometry.LipschitzFreeSpace.Localization.Auxiliary",
+    "BanachGeometry.LipschitzFreeSpace.Localization.OrderedLimsup",
+    "BanachGeometry.LipschitzFreeSpace.Localization.ScalarTests",
+    "BanachGeometry.SequenceSpaces.ApproximateNorming",
+    "BanachGeometry.WeakSequences.C0DualIsometry"
+  ],
+  "schema_revision": 3,
+  "source_admission": "PRIVATE_SOURCE_ACCEPTED_BY_OWNER_FINAL_SUCCESSOR",
+  "source_module_count": 159
+}

@@ -28,7 +28,8 @@ variable {α : Type u} {β : Type v}
 
 /-- If the generating relation is transitive, its equivalence closure adds no new pairs. -/
 theorem related_iff_linked_of_transitive (c : ClosureSpace α)
-    (ht : Transitive c.Linked) (x y : α) : c.Related x y ↔ c.Linked x y := by
+    (ht : ∀ ⦃a b z : α⦄, c.Linked a b → c.Linked b z → c.Linked a z)
+    (x y : α) : c.Related x y ↔ c.Linked x y := by
   constructor
   · intro hxy
     change Relation.EqvGen c.Linked x y at hxy

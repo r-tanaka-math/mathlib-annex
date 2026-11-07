@@ -43,7 +43,7 @@ theorem operatorMatrixCoefficient_wotContinuous (η ξ : H) :
 theorem operatorVectorState_nonneg (ξ : H) (X : H →L[ℂ] H)
     (hX : 0 ≤ X) : 0 ≤ operatorVectorState H ξ X := by
   change 0 ≤ inner ℂ ξ (X ξ)
-  exact ((ContinuousLinearMap.nonneg_iff_isPositive X).mp hX).inner_nonneg_right ξ
+  exact (ContinuousLinearMap.nonneg_iff_isPositive.mp hX).inner_nonneg_right ξ
 
 /-- A positive functional on the concrete represented algebra, for any
 vector including zero.  Its underlying continuous functional is the one
@@ -56,8 +56,8 @@ def operatorVectorPositive (ξ : H) : (H →L[ℂ] H) →ₚ[ℂ] ℂ where
     change 0 ≤ operatorVectorState H ξ Y - operatorVectorState H ξ X
     rw [← map_sub]
     have hDiff : 0 ≤ Y - X :=
-      (ContinuousLinearMap.nonneg_iff_isPositive (Y - X)).mpr
-        ((ContinuousLinearMap.le_def X Y).mp hXY)
+      ContinuousLinearMap.nonneg_iff_isPositive.mpr
+        (ContinuousLinearMap.le_def.mp hXY)
     exact operatorVectorState_nonneg H ξ (Y - X) hDiff
 
 /-- The represented positive vector functional has exactly the squared

@@ -104,7 +104,10 @@ theorem exists_linked_linked_not_linked_geometricStructureClosure_l1Complex :
 
 /-- Remark 4.12: linkedness itself is not a transitive relation on the actual GSS. -/
 theorem not_transitive_linked_geometricStructureClosure_l1Complex :
-    ¬ Transitive (geometricStructureClosure ℂ ℓ¹(ℕ, ℂ)).Linked := by
+    ¬ (∀ ⦃I J K : GeometricStructureSpace ℂ ℓ¹(ℕ, ℂ)⦄,
+      (geometricStructureClosure ℂ ℓ¹(ℕ, ℂ)).Linked I J →
+      (geometricStructureClosure ℂ ℓ¹(ℕ, ℂ)).Linked J K →
+      (geometricStructureClosure ℂ ℓ¹(ℕ, ℂ)).Linked I K) := by
   intro h
   obtain ⟨I, J, K, _, _, _, hIJ, hJK, hIK⟩ :=
     exists_linked_linked_not_linked_geometricStructureClosure_l1Complex

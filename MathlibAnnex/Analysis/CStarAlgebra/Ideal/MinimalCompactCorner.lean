@@ -399,7 +399,7 @@ theorem exists_isMinimalStarProjection
     star_mul_self_nonneg x
   have ha0 : a ≠ 0 := by
     intro h
-    exact hx0 ((CStarRing.star_mul_self_eq_zero_iff (x : B)).mp h)
+    exact hx0 (_root_.star_mul_self_eq_zero.mp h)
   obtain ⟨p, hp, hp0, hpfin⟩ :=
     rho.exists_nonzero_finite_rank_projection_of_isCompactlyRepresented hrho a ha ha0
   obtain ⟨q, hq, -, hqfin⟩ :=

@@ -62,20 +62,23 @@ def rootLinear (n : ℕ) : Stage n →ₗ[ℂ] ℂ where
 /-- The distinguished-coordinate functional is continuous for the operator norm. -/
 noncomputable def rootFunctional (n : ℕ) : Stage n →L[ℂ] ℂ :=
   (rootLinear n).mkContinuous 1 fun x => by
-    simpa [rootLinear] using (CStarMatrix.norm_entry_le_norm (M := x) (i := (0 : Fin (2 ^ n)))
+    change ‖x 0 0‖ ≤ 1 * ‖x‖
+    simpa only [one_mul] using (CStarMatrix.norm_entry_le_norm (M := x) (i := (0 : Fin (2 ^ n)))
       (j := (0 : Fin (2 ^ n))))
 
 @[simp]
 theorem rootFunctional_apply (n : ℕ) (x : Stage n) : rootFunctional n x = x 0 0 :=
   rfl
 
+set_option backward.isDefEq.respectTransparency false in
 /-- The root vector functionals are compatible with the standard CAR stage embeddings. -/
 @[simp]
 theorem rootFunctional_step (n : ℕ) (x : Stage n) :
     rootFunctional (n + 1) (step n x) = rootFunctional n x := by
   change step n x 0 0 = x 0 0
-  simp [step, stepIndexEquiv, amplify, Matrix.reindex_apply, finProdFinEquiv]
-  congr 1 <;> apply Fin.ext <;> simp
+  simp [step, stepIndexEquiv, amplify, Matrix.reindex_apply, finProdFinEquiv,
+    CStarMatrix.ofMatrix_apply, CStarMatrix.ofMatrix_symm_apply] <;>
+    congr 1 <;> apply Fin.ext <;> simp
 
 /-- One-step local compression is exact after embedding an arbitrary old-stage element. -/
 theorem rootProjection_step_mul_mul (n : ℕ) (x : Stage n) :

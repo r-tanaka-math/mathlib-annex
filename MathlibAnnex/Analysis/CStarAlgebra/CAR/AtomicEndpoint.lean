@@ -21,7 +21,7 @@ namespace MathlibAnnex.CStarAlgebra.CAR
 
 open MathlibAnnex.Analysis.CStarAlgebra
 
-universe v
+universe u v w
 
 /-- The one completed-CAR link family selected from the actual shell-model
 construction.  Its definition has no target Hilbert-space universe
@@ -48,6 +48,7 @@ theorem shellFamilyLinks_map_selectedVector (family : RepresentativeShellFamily)
           completedRootPureState.classOf) :=
   (Classical.choose_spec (exists_completedAtomicShellModel family)).2.1
 
+set_option synthInstance.maxHeartbeats 100000 in
 theorem shellFamilyLinks_sourceShell (family : RepresentativeShellFamily) :
     ∀ i n, (shellFamilyLinks family i).comp
         (selectedAtomicRepresentation
@@ -155,6 +156,23 @@ theorem isUniqueIrreducibleModelAmongNonUnital_shellFamilyInclusion
 /-- Expanded ordinary capture statement.  The intertwining equation uses the
 original possibly nonunital representation, not merely its bundled
 `toUnital` view. -/
+private theorem unitaryEquivalent_nonUnital_eval
+    {A : Type u} [CStarAlgebra A]
+    {H : Type w} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
+    {K : Type v} [NormedAddCommGroup K] [InnerProductSpace ℂ K] [CompleteSpace K]
+    (pi : Representation A H)
+    (rho : NonUnitalRepresentation (A := A) (H := K))
+    (hrho : rho.IsIrreducible)
+    (h : pi.UnitaryEquivalent (rho.toUnital hrho)) :
+    ∃ U : H ≃ₗᵢ[ℂ] K, ∀ (a : A) (x : H), U (pi a x) = rho a (U x) := by
+  obtain ⟨U, hU⟩ := h
+  refine ⟨U, ?_⟩
+  intro a x
+  exact (hU a x).trans
+    (congrArg (fun R : K →L[ℂ] K => R (U x))
+      (NonUnitalRepresentation.toUnital_apply rho hrho a))
+
+/-- Evaluate the same nonunital capture using the abstract conversion lemma. -/
 theorem shellFamilyInclusion_unitaryEquivalent_nonUnital
     (family : RepresentativeShellFamily)
     {K : Type v} [NormedAddCommGroup K] [InnerProductSpace ℂ K]
@@ -167,10 +185,9 @@ theorem shellFamilyInclusion_unitaryEquivalent_nonUnital
       ∀ (a : ShellFamilyTarget family)
         (x : MathlibAnnex.CStarAlgebra.PureState.SelectedAtomicHilbert completedRootPureState),
         U (shellFamilyInclusion family a x) = rho a (U x) := by
-  obtain ⟨U, hU⟩ :=
-    (isUniqueIrreducibleModelAmongNonUnital_shellFamilyInclusion.{v} family).2.2
-      K rho hrho
-  exact ⟨U, fun a x ↦ by simpa using hU a x⟩
+  exact unitaryEquivalent_nonUnital_eval (shellFamilyInclusion family) rho hrho
+    ((isUniqueIrreducibleModelAmongNonUnital_shellFamilyInclusion.{v} family).2.2
+      K rho hrho)
 
 /-- Closed two-sided ideals of the same fixed target are trivial. -/
 theorem isSimpleCStarAlgebra_shellFamilyTarget (family : RepresentativeShellFamily) :

@@ -135,8 +135,11 @@ theorem normalPart_projective_factors_point
         (g (Projectivization.mk ℂ y hy)).rep_nonzero := by
   have h := he (Projectivization.mk ℂ x hx, Projectivization.mk ℂ y hy)
   rw [normalPartProjectivizationEquiv_mk] at h
-  simpa only [normalPartProjectivizationEquiv, Equiv.coe_ofBijective,
-    normalPartProjectivizationMap] using h
+  apply Subtype.ext
+  apply Subtype.ext
+  exact (congrArg (fun z : normalPart T => z.val.val) h).trans
+    (normalPartProjectivizationEquiv_val_val T hT
+      (f (Projectivization.mk ℂ x hx), g (Projectivization.mk ℂ y hy)))
 
 /-- The swapped version retains the literal source/target order. -/
 theorem normalPart_projective_swapped_factors_point
@@ -152,8 +155,11 @@ theorem normalPart_projective_swapped_factors_point
         (f (Projectivization.mk ℂ x hx)).rep_nonzero := by
   have h := he (Projectivization.mk ℂ x hx, Projectivization.mk ℂ y hy)
   rw [normalPartProjectivizationEquiv_mk] at h
-  simpa only [normalPartProjectivizationEquiv, Equiv.coe_ofBijective,
-    normalPartProjectivizationMap] using h
+  apply Subtype.ext
+  apply Subtype.ext
+  exact (congrArg (fun z : normalPart T => z.val.val) h).trans
+    (normalPartProjectivizationEquiv_val_val T hT
+      (g (Projectivization.mk ℂ y hy), f (Projectivization.mk ℂ x hx)))
 
 /-- Postcompose with the existing full star homeomorphism to correct a swap.
 Only finite continuity is claimed for the composite. -/

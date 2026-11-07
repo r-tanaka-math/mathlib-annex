@@ -123,7 +123,8 @@ theorem canonicalVectorMoment_apply
 
 theorem canonicalVectorTensorMoment_bilinear
     (ρ : A →⋆ₙₐ[ℂ] (H →L[ℂ] H)) (ξ : H) :
-    tensorDualIsometry (canonicalVectorTensorMoment A H ρ ξ) =
+    (tensorDualIsometry (𝕜 := ℂ) (E := BidualModel ℂ A) (F := BidualModel ℂ A))
+      (canonicalVectorTensorMoment A H ρ ξ) =
       canonicalVectorMoment A H ρ ξ := by
   simp [canonicalVectorTensorMoment, canonicalVectorMoment,
     firstExtensionIsometry]

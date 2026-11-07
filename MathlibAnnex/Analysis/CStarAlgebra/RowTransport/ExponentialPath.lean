@@ -58,6 +58,8 @@ theorem representation_expUnitary_pi_apply
   letI : NormedAlgebra ℚ A := NormedAlgebra.restrictScalars ℚ ℂ A
   letI : NormedAlgebra ℚ (H →L[ℂ] H) :=
     NormedAlgebra.restrictScalars ℚ ℂ (H →L[ℂ] H)
+  letI : ContinuousLinearMapClass (A →⋆ₐ[ℂ] (H →L[ℂ] H)) ℂ A (H →L[ℂ] H) :=
+    NonUnitalStarAlgHom.instContinuousLinearMapClassComplex
   rw [selfAdjoint.expUnitary_coe,
     NormedSpace.map_exp pi (map_continuous pi)]
   rw [map_smul pi Complex.I]

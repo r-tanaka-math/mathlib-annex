@@ -52,9 +52,9 @@ theorem realPositivePart_decomposition (D : H →L[ℝ] H) (hD : D.IsSymmetric) 
   obtain ⟨hpfix, hnfix⟩ := conjugateOperator_posPart_negPart
     (RealComplexification.extend D) hs (conjugateOperator_extend D)
   have hp : ((RealComplexification.extend D)⁺).IsPositive :=
-    (nonneg_iff_isPositive _).mp (CFC.posPart_nonneg (RealComplexification.extend D))
+    (nonneg_iff_isPositive).mp (CFC.posPart_nonneg (RealComplexification.extend D))
   have hn : ((RealComplexification.extend D)⁻).IsPositive :=
-    (nonneg_iff_isPositive _).mp (CFC.negPart_nonneg (RealComplexification.extend D))
+    (nonneg_iff_isPositive).mp (CFC.negPart_nonneg (RealComplexification.extend D))
   refine ⟨isPositive_descend hpfix hp, isPositive_descend hnfix hn, ?_, ?_⟩
   · have hh := congrArg descend (CFC.posPart_sub_negPart (RealComplexification.extend D) hs)
     simpa only [descend_sub, descend_extend, realPositivePart, realNegativePart] using hh.symm

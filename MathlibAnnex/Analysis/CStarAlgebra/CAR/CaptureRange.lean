@@ -29,6 +29,8 @@ open MathlibAnnex.Analysis.InnerProductSpace
 
 universe v
 
+set_option synthInstance.maxHeartbeats 100000 in
+set_option backward.isDefEq.respectTransparency false in
 /-- The arbitrary-index sum of the selected pure GNS cyclic copies is
 surjective in every nonzero irreducible representation of the actual target.
 The returned map still records its source intertwining law and its action on

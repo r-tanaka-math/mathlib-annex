@@ -44,7 +44,10 @@ theorem nonempty_linearIsometryEquiv_of_pluckerBodies_eq {m : ℕ}
   let C := Classical.choice (PluckerRecovery.Internal.nonempty_coordinateLinearIsometry_of_all_body_eq MX MY hBodies)
   let e : (Fin (m + 1) → ℝ) ≃ₗ[ℝ] (Fin (m + 1) → ℝ) :=
     LinearEquiv.ofBijective C.linearMap.toLinearMap ⟨C.injective, C.surjective⟩
-  exact ⟨{ toLinearEquiv := e, map_p_eq := fun x => by simpa [e] using C.seminorm_linearMap_eq x }⟩
+  refine ⟨{ toLinearEquiv := e, map_p_eq := ?_ }⟩
+  intro x
+  change MY.p (C.linearMap x) = MX.p x
+  exact C.seminorm_linearMap_eq x
 
 /-- Sphere isometry supplies the exact B3 body equality used by recovery. -/
 theorem nonempty_linearIsometryEquiv_of_sphereIsometryEquiv {m : ℕ}

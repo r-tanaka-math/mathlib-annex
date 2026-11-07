@@ -149,6 +149,8 @@ theorem hilbertTwo_coordinate_decomposition (x : HilbertTwo H) :
       coordinateEmbedding (1 : Fin 2) (x 1) := by
   apply lp.ext
   funext i
+  change x i = coordinateEmbedding (H := fun _ : Fin 2 => H) (0 : Fin 2) (x 0) i +
+    coordinateEmbedding (H := fun _ : Fin 2 => H) (1 : Fin 2) (x 1) i
   fin_cases i <;>
     simp [coordinateEmbedding_apply, lp.coeFn_single, Pi.single_apply, eq_comm]
 

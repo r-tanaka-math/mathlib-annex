@@ -184,8 +184,13 @@ theorem exists_faithful_pureState_image_transport
   · have hsets : e.toEquiv '' c.component I = r.toEquiv '' normalPart (NonUnitalStarAlgHom.range phi.gnsRepresentation) :=
       heC.trans (hC.symm.trans hr.symm)
     have h := congrArg (fun s => r.toEquiv.symm '' s) hsets
+    have hcancel : r.toEquiv.symm ''
+        (r.toEquiv '' normalPart (NonUnitalStarAlgHom.range phi.gnsRepresentation)) =
+        normalPart (NonUnitalStarAlgHom.range phi.gnsRepresentation) :=
+      r.toEquiv.symm_image_image _
+    rw [hcancel] at h
     change (r.toEquiv.symm ∘ e.toEquiv) '' c.component I = _
-    simpa [Set.image_image] using h
+    simpa only [Set.image_image, Function.comp_def] using h
 
 end Transport
 

@@ -44,7 +44,8 @@ private theorem radialMap_model_dist {n : ℕ}
     MY.p (radialMap Δ x - radialMap Δ y) ≤ 3 * MX.p (x - y) := by
   have h := (lipschitzWith_radialExtension Δ).dist_le_mul
     (show Space MX from x) (show Space MX from y)
-  simpa only [dist_space_eq, NNReal.coe_ofNat] using h
+  rw [dist_space_eq (M := MY), dist_space_eq (M := MX)] at h
+  simpa only [radialMap, NNReal.coe_ofNat] using h
 
 private theorem lipschitzWith_radialMap {n : ℕ}
     {MX MY : EquivalentSeminorm (Fin n → ℝ)}
@@ -308,7 +309,11 @@ private def radialOpenData {m : ℕ}
   f := radialMap Δ
   g := radialMap Δ.symm
   mapsTo_f := by intro x hx; simpa using hx
-  mapsTo_g := by intro x hx; simpa using hx
+  mapsTo_g := by
+    intro x hx
+    apply MX.p.mem_ball_zero.mpr
+    rw [radialMap_p Δ.symm]
+    exact MY.p.mem_ball_zero.mp hx
   left_inv := by intro x _; exact radialMap_leftInverse Δ x
   right_inv := by intro x _; exact radialMap_leftInverse Δ.symm x
   fConstant := (3 * MX.upper / MY.lower).toNNReal

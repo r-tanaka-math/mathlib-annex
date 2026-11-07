@@ -81,7 +81,7 @@ theorem subset_singleton_prod_or_prod_singleton_of_pairwise
   have hall := (pairwise_sharesCoordinate_iff S).1 hS
   by_cases hfst : ∀ q ∈ S, q.1 = p.1
   · exact Or.inl ⟨p.1, fun q hq => ⟨hfst q hq, mem_univ _⟩⟩
-  · simp only [not_forall, _root_.not_imp] at hfst
+  · simp only [not_forall, Classical.not_imp_iff_and_not] at hfst
     obtain ⟨q, hq, hqp⟩ := hfst
     have hqs : q.2 = p.2 := (hall q hq p hp).resolve_left hqp
     refine Or.inr ⟨p.2, ?_⟩

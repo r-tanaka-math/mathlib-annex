@@ -42,7 +42,8 @@ private theorem radialMap_model_dist {n : ℕ}
     MY.p (radialMap Δ x - radialMap Δ y) ≤ 3 * MX.p (x - y) := by
   have h := (lipschitzWith_radialExtension Δ).dist_le_mul
     (show Space MX from x) (show Space MX from y)
-  simpa only [dist_space_eq, NNReal.coe_ofNat] using h
+  rw [dist_space_eq (M := MY), dist_space_eq (M := MX)] at h
+  simpa only [radialMap, NNReal.coe_ofNat] using h
 
 private theorem lipschitzWith_radialMap {n : ℕ}
     {MX MY : EquivalentSeminorm (Fin n → ℝ)}
@@ -85,7 +86,11 @@ private theorem norm_coordinateBoundaryData_sub_le_seminorm_sub {m N : ℕ}
     ‖coordinateBoundaryData Δ A u - coordinateBoundaryData Δ A v‖ =
         ‖A ((show Fin (m + 1) → ℝ from (Δ u').val) -
           (show Fin (m + 1) → ℝ from (Δ v').val))‖ := by
-      simp [coordinateBoundaryData, u', v', map_sub]
+      simpa only [coordinateBoundaryData, u', v'] using
+        (congrArg (fun z : Fin N → ℝ => ‖z‖)
+          (map_sub A
+            (show Fin (m + 1) → ℝ from (Δ u').val)
+            (show Fin (m + 1) → ℝ from (Δ v').val))).symm
     _ ≤ MY.p ((show Fin (m + 1) → ℝ from (Δ u').val) -
         (show Fin (m + 1) → ℝ from (Δ v').val)) := hA _
     _ = MX.p (u.val - v.val) := chord

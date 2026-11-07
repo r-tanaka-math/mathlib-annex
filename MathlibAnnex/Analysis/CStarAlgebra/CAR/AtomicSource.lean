@@ -239,6 +239,8 @@ theorem selected_commonFixedProjection_eq_zero
     exact MathlibAnnex.CStarAlgebra.PureState.no_unitaryIntertwiner_selectedRepresentation
       completedRootPureState hij.symm U
 
+set_option synthInstance.maxHeartbeats 100000 in
+set_option backward.isDefEq.respectTransparency false in
 /-- The transported flag has precisely one fixed coordinate in the displayed
 arbitrary-index atomic representation. -/
 theorem iInf_range_atomic_transportedFlag_eq_span

@@ -56,6 +56,7 @@ theorem separableSpace_traceHilbertSpace : TopologicalSpace.SeparableSpace Trace
     (((ContinuousLinearMap.apply ℂ TraceHilbertSpace traceVector).comp
       (Representation.continuousLinearMap traceRepresentation)).continuous)
 
+set_option synthInstance.maxHeartbeats 100000 in
 set_option maxHeartbeats 5000000 in
 /-- The target-state GNS and CAR-trace GNS have the same dense pointed source
 orbit, so a unitary between them exists without any dimension assumption. -/
@@ -76,14 +77,19 @@ theorem exists_linearIsometryEquiv_traceHilbertSpace (family : RepresentativeShe
     change inner ℂ traceVector (traceRepresentation b traceVector) =
       inner ℂ (tracialVector family)
         (tracialRepresentation family (shellFamilySourceHom family b) (tracialVector family))
-    rw [inner_traceVector_traceRepresentation, inner_tracialVector_tracialRepresentation,
-      traceExtension_shellFamilySourceHom]
-  obtain ⟨e, he, _⟩ := StarAlgHom.existsUnique_pointedCyclicTransport
+    exact (inner_traceVector_traceRepresentation b).trans
+      ((inner_tracialVector_tracialRepresentation family
+        (shellFamilySourceHom family b)).trans
+        (traceExtension_shellFamilySourceHom family b)).symm
+  have htransport := StarAlgHom.existsUnique_pointedCyclicTransport
     traceRepresentation σ
     traceVector (tracialVector family) denseRange_traceRepresentation_orbit
     hσ hstate
+  let e := htransport.exists.choose
+  have he := htransport.exists.choose_spec
   exact ⟨e, he.2.1, he.2.2⟩
 
+set_option maxHeartbeats 1000000 in
 /-- The pointed unitary is fixed once for each already fixed shell family. -/
 noncomputable def traceGNSUnitary (family : RepresentativeShellFamily) :
     TraceHilbertSpace ≃ₗᵢ[ℂ] TracialHilbertSpace family :=
@@ -101,6 +107,8 @@ theorem traceGNSUnitary_comp_traceRepresentation (family : RepresentativeShellFa
         (traceGNSUnitary family : TraceHilbertSpace →L[ℂ] TracialHilbertSpace family) :=
   (Classical.choose_spec (exists_linearIsometryEquiv_traceHilbertSpace family)).2 b
 
+set_option maxHeartbeats 1000000 in
+set_option synthInstance.maxHeartbeats 100000 in
 /-- The same target now acts on the original CAR trace GNS space. -/
 noncomputable def traceModelRepresentation (family : RepresentativeShellFamily) :
     Representation (ShellFamilyTarget family) TraceHilbertSpace :=
@@ -114,19 +122,21 @@ theorem traceModelRepresentation_apply (family : RepresentativeShellFamily)
       (tracialRepresentation family a (traceGNSUnitary family x)) := rfl
 
 set_option maxHeartbeats 1000000 in
+set_option synthInstance.maxHeartbeats 100000 in
 @[simp]
 theorem traceModelRepresentation_shellFamilySourceHom (family : RepresentativeShellFamily) (b : Limit) :
     traceModelRepresentation family (shellFamilySourceHom family b) = traceRepresentation b := by
   ext x
   apply (traceGNSUnitary family).injective
-  rw [traceModelRepresentation_apply, LinearIsometryEquiv.apply_symm_apply]
-  have hcoe (y : TraceHilbertSpace) :
-      (traceGNSUnitary family : TraceHilbertSpace →L[ℂ] TracialHilbertSpace family) y =
-        traceGNSUnitary family y := rfl
-  have h := congrArg (fun T : TraceHilbertSpace →L[ℂ] TracialHilbertSpace family ↦ T x)
-    (traceGNSUnitary_comp_traceRepresentation family b)
-  simpa only [ContinuousLinearMap.comp_apply, hcoe] using h.symm
+  calc
+    _ = tracialRepresentation family (shellFamilySourceHom family b)
+        (traceGNSUnitary family x) :=
+      (traceGNSUnitary family).apply_symm_apply _
+    _ = traceGNSUnitary family (traceRepresentation b x) :=
+      (congrArg (fun T : TraceHilbertSpace →L[ℂ] TracialHilbertSpace family ↦ T x)
+        (traceGNSUnitary_comp_traceRepresentation family b)).symm
 
+set_option synthInstance.maxHeartbeats 100000 in
 theorem traceModelRepresentation_injective (family : RepresentativeShellFamily) :
     Function.Injective (traceModelRepresentation family) :=
   (traceGNSUnitary family).symm.conjStarAlgEquiv.injective.comp
@@ -138,6 +148,8 @@ theorem isometry_traceModelRepresentation (family : RepresentativeShellFamily) :
     (NonUnitalStarAlgHom.norm_map (traceModelRepresentation family)
       (traceModelRepresentation_injective family))
 
+set_option maxHeartbeats 1000000 in
+set_option synthInstance.maxHeartbeats 100000 in
 @[simp]
 theorem inner_traceVector_traceModelRepresentation (family : RepresentativeShellFamily)
     (a : ShellFamilyTarget family) :
@@ -157,6 +169,7 @@ theorem denseRange_traceModelRepresentation_orbit (family : RepresentativeShellF
     rintro _ ⟨b, rfl⟩
     exact ⟨shellFamilySourceHom family b, rfl⟩)
 
+set_option maxHeartbeats 1000000 in
 /-- The strong-sum limit is an actual unitary on the CAR trace Hilbert
 space, with both unitary identities inherited through the representation. -/
 theorem traceModelRepresentation_shellFamilyGenerator_mem_unitary
@@ -166,6 +179,7 @@ theorem traceModelRepresentation_shellFamilyGenerator_mem_unitary
       unitary (TraceHilbertSpace →L[ℂ] TraceHilbertSpace) :=
   Unitary.map_mem (traceModelRepresentation family) (shellFamilyGenerator_mem_unitary family i)
 
+set_option maxHeartbeats 1000000 in
 @[simp]
 theorem traceModelRepresentation_shellFamilyGenerator_root
     (family : RepresentativeShellFamily) :

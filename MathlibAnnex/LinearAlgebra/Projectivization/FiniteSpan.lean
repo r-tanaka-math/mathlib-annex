@@ -33,12 +33,11 @@ original generators. This includes the empty generating set. -/
 theorem exists_finite_subset_of_mem_span {S : Set (ℙ K V)} {p : ℙ K V}
     (hp : p ∈ span S) :
     ∃ T : Set (ℙ K V), T.Finite ∧ T ⊆ S ∧ p ∈ span T := by
-  change spanCarrier S p at hp
-  induction hp with
-  | of p hp =>
+  induction hp using span_induction with
+  | of_mem p hp =>
       exact ⟨{p}, finite_singleton p, singleton_subset_iff.mpr hp,
         subset_span {p} (by simp)⟩
-  | mem_add v w hv hw hvw hvS hwS ihv ihw =>
+  | add v w hv hw hvw hvS hwS ihv ihw =>
       obtain ⟨T, hTf, hTS, hvT⟩ := ihv
       obtain ⟨U, hUf, hUS, hwU⟩ := ihw
       exact ⟨T ∪ U, hTf.union hUf, union_subset hTS hUS,

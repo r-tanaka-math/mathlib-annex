@@ -136,7 +136,9 @@ theorem isCompactOperator_map_of_singleton [Nontrivial A]
           pi (x : Unitization ℂ A).snd := by
       change pi.unitization (x : Unitization ℂ A) = _
       induction (x : Unitization ℂ A) using Unitization.ind with
-      | inl_add_inr c y => simp [unitization, Algebra.algebraMap_eq_smul_one]
+      | inl_add_inr c y =>
+        simp [unitization, Unitization.starLift, Unitization.lift,
+          NonUnitalAlgHom.toAlgHom, Algebra.algebraMap_eq_smul_one]
     have hpiComm :
         pi (x : Unitization ℂ A).snd *
             InnerProductSpace.rankOne ℂ eta eta =

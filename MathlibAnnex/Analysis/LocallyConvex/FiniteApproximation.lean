@@ -40,15 +40,21 @@ def weakStarMap (T : X →L[𝕜] Z) :
     WeakDual 𝕜 (StrongDual 𝕜 X) →L[𝕜]
       WeakDual 𝕜 (StrongDual 𝕜 Z) where
   toLinearMap :=
-    ((ContinuousLinearMap.compL 𝕜 (StrongDual 𝕜 Z) (StrongDual 𝕜 X) 𝕜).flip
-      (dualMap T)).toLinearMap
-  cont := WeakDual.continuous_of_continuous_eval fun g ↦
-    WeakDual.eval_continuous (dualMap T g)
+    let L : StrongDual 𝕜 (StrongDual 𝕜 X) →ₗ[𝕜] StrongDual 𝕜 (StrongDual 𝕜 Z) :=
+      (dualMap (dualMap T)).toLinearMap
+    (StrongDual.toWeakDual (𝕜 := 𝕜) (E := StrongDual 𝕜 X)).arrowCongr
+      StrongDual.toWeakDual L
+  cont := by
+    apply WeakDual.continuous_of_continuous_eval
+    intro g
+    change Continuous (fun omega : WeakDual 𝕜 (StrongDual 𝕜 X) => omega (dualMap T g))
+    exact WeakDual.eval_continuous (dualMap T g)
 
 @[simp]
 theorem weakStarMap_apply (T : X →L[𝕜] Z)
     (omega : WeakDual 𝕜 (StrongDual 𝕜 X)) (g : StrongDual 𝕜 Z) :
-    weakStarMap T omega g = omega (g.comp T) := rfl
+    weakStarMap T omega g = omega (g.comp T) := by
+  simp [weakStarMap, LinearEquiv.arrowCongr_apply, dualMap]
 
 /-- The canonical copy of a set in the weak-star bidual. -/
 def canonicalImage (D : Set X) : Set (WeakDual 𝕜 (StrongDual 𝕜 X)) :=
@@ -81,7 +87,7 @@ theorem image_mem_closure {D : Set X} (hD : Convex ℝ D)
     apply WeakDual.toStrongDual.injective
     apply ContinuousLinearMap.ext
     intro g
-    rfl
+    simp [jZ, NormedSpace.inclusionInDoubleDualWeak, LinearEquiv.arrowCongr_apply]
   have hpush0 := mem_closure_image (weakStarMap T).continuous.continuousAt homega
   have hpush : weakStarMap T (StrongDual.toWeakDual omega) ∈ closure (jZ '' sZ) :=
     closure_mono hmaps.image_subset hpush0
@@ -90,7 +96,7 @@ theorem image_mem_closure {D : Set X} (hD : Convex ℝ D)
     apply WeakDual.toStrongDual.injective
     apply ContinuousLinearMap.ext
     intro g
-    exact hT g
+    simpa [jZ, NormedSpace.inclusionInDoubleDualWeak, LinearEquiv.arrowCongr_apply] using hT g
   have hzweak : toWeakSpace 𝕜 Z z ∈ closure sZ := by
     rw [(NormedSpace.isEmbedding_inclusionInDoubleDualWeak 𝕜 Z).closure_eq_preimage_closure_image sZ]
     simpa [hpush_eq] using hpush

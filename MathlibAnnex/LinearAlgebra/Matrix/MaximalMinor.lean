@@ -142,7 +142,7 @@ theorem maximalMinors_smul
   letI : Nonempty (Fin n) := ⟨⟨0, hn⟩⟩
   unfold maximalMinor
   rw [maximalSubmatrix_zero]
-  exact _root_.Matrix.det_zero (inferInstance : Nonempty (Fin n))
+  exact _root_.Matrix.det_zero
 
 @[simp] theorem maximalMinors_zero_of_pos
     {n : ℕ} {ι : Type u} {R : Type v} [LinearOrder ι] [CommRing R]

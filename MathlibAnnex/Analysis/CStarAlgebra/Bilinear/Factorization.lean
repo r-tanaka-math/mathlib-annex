@@ -1,4 +1,5 @@
 import Mathlib.Analysis.CStarAlgebra.GelfandNaimarkSegal
+import Mathlib.Analysis.CStarAlgebra.PositiveLinearMap
 import Mathlib.Analysis.Normed.Group.HomCompletion
 import Mathlib.Analysis.Normed.Module.Completion
 import MathlibAnnex.Analysis.CStarAlgebra.Bilinear.Domination

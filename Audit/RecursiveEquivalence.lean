@@ -1,0 +1,10 @@
+import BanachGeometry.AlmostIsometric.HilbertFreeSpaceDataViaCoordinates
+import BanachGeometry
+#print axioms BanachGeometry.HilbertSums.Nonlinear.inverseHilbertMap_surjective
+#print axioms BanachGeometry.HilbertSums.Nonlinear.comparisonBudget_bound
+#print axioms BanachGeometry.HilbertSums.Nonlinear.hilbertEquiv_bounds
+#print axioms BanachGeometry.HilbertFreeSpace.freeBanach_no_c0
+#print axioms BanachGeometry.HilbertFreeSpace.hilbertDefect_localOrthogonality
+#print axioms BanachGeometry.HilbertSums.exists_quantitativeHilbertData_via_coordinates
+#print axioms BanachGeometry.LipschitzFreeLocalization.sum_norm_starProjection_sq_le
+#print axioms BanachGeometry.LipschitzFreeLocalization.abs_inner_le_projection_norms

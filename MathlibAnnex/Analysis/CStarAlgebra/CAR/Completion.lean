@@ -591,7 +591,7 @@ theorem step_rootProjection_mul (n : ℕ) :
     noncomm_ring [hp.isIdempotentElem.eq, hsand]
     rw [← mul_assoc q q p, hq.isIdempotentElem.eq]
     simp
-  exact sub_eq_zero.mp ((CStarRing.star_mul_self_eq_zero_iff _).mp hz)
+  exact sub_eq_zero.mp (star_mul_self_eq_zero.mp hz)
 
 /-- The common root flag in the completed CAR algebra. -/
 noncomputable def rootFlag (n : ℕ) : Limit :=

@@ -1,0 +1,30 @@
+import BanachGeometry.WeakSequences.C0DualIsometry
+import BanachGeometry
+
+/- Local execution status is recorded in the external qualification receipts.
+Exact observed axioms are recorded in the external kernel audit receipts. -/
+open BanachGeometry
+#print axioms BP.exists_finite_norming
+#print axioms BP.eventually_norm_sub_ge_of_mem_finiteDimensional
+#print axioms BP.exists_annihilating_functional
+#print axioms BP.triangularData
+#print axioms BP.mul_abs_le_norm_sum_smul
+#print axioms BP.containsLinearCopy_of_not_tendsto_norm_image_scalarBasis
+#print axioms basisDecay_of_not_containsLinearCopy
+#print axioms C0Dual.linearIsometryEquiv
+#print axioms L1NoC0.no_c0_of_coordinate_no_c0
+#print axioms WeightedGraph.no_c0L2
+#print axioms WeightedGraph.finite_no_c0L2
+#print axioms QuantitativeHilbertSequence.excludesFiniteSumCopy_metricFamily
+#print axioms exists_almostIsometric_nonisomorphic_pair_of_exists_quantitativeHilbertData_via_coordinates
+#print axioms GeneralGraphBounds.exists_quantitative_equiv
+#print axioms AlmostIsometricGraphPairs.exists_almostIsometric_nonisomorphic_pair_of_arbitrarily_accurate_graph_pairs
+#print axioms LipschitzDistance.finiteOptimalDistance_eq_finiteDistance
+#print axioms AlmostIsometricFamily.fixed_pair_geometry
+#print axioms HilbertSums.exists_quantitativeHilbertData
+#print axioms AlmostIsometricPair.exists_almostIsometric_nonisomorphic_pair
+#print axioms AlmostIsometricPair.finiteOptimalDistance_eq_one
+#print axioms AlmostIsometricPair.optimal_distortion_one_not_attained
+#print axioms AlmostIsometricPair.complemented_in_xSpace
+#print axioms AlmostIsometricPair.not_complemented_in_ySpace
+#print axioms AlmostIsometricPair.exists_separated_insertion_images

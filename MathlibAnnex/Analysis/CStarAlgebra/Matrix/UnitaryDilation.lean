@@ -40,6 +40,8 @@ local instance : ContinuousFunctionalCalculus ℝ (TwoByTwo A) IsSelfAdjoint :=
 local instance : NonnegSpectrumClass ℝ (TwoByTwo A) :=
   CStarAlgebra.instNonnegSpectrumClass
 
+set_option backward.isDefEq.respectTransparency false in
+set_option backward.whnf.reducibleClassField false in
 /-- Diagonal inclusion uses the genuine C*-matrix norm. -/
 def diagonalHom : A × A →⋆ₐ[ℂ] TwoByTwo A where
   toFun p := CStarMatrix.ofMatrix (fun i j => if i = j then if i = 0 then p.1 else p.2 else 0)

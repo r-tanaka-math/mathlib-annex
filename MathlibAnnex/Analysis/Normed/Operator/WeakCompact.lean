@@ -35,8 +35,7 @@ biduals. -/
 def bidualMap (T : X →L[𝕜] Y) :
     StrongDual 𝕜 (StrongDual 𝕜 X) →L[𝕜]
       StrongDual 𝕜 (StrongDual 𝕜 Y) :=
-  (ContinuousLinearMap.compL 𝕜 (StrongDual 𝕜 Y)
-    (StrongDual 𝕜 X) 𝕜).flip (dualMap T)
+  dualMap (dualMap T)
 
 @[simp]
 theorem bidualMap_apply (T : X →L[𝕜] Y)
@@ -119,13 +118,11 @@ private theorem mapsBidualBall_of_isWeaklyCompact {T : X →L[𝕜] Y}
     closure_minimal (Set.image_mono subset_closure) hclosed
   rcases hsub hpush with ⟨y, _, hy⟩
   refine ⟨(toWeakSpace 𝕜 Y).symm y, ?_⟩
-  apply WeakDual.toStrongDual.injective
   apply ContinuousLinearMap.ext
   intro g
   have hy' := congrArg (fun q : WeakDual 𝕜 (StrongDual 𝕜 Y) ↦ q g) hy
-  change omega (g.comp T) = g ((toWeakSpace 𝕜 Y).symm y)
-  change g ((toWeakSpace 𝕜 Y).symm y) = omega (g.comp T) at hy'
-  exact hy'.symm
+  simpa [jY, omegaW, NormedSpace.inclusionInDoubleDualWeak,
+    LinearEquiv.arrowCongr_apply] using hy'.symm
 
 private theorem isBounded_weakBallImage (T : X →L[𝕜] Y) :
     IsBounded ((toWeakSpace 𝕜 Y) ⁻¹' weakBallImage T) := by
@@ -174,9 +171,10 @@ private theorem isWeaklyCompact_of_mapsBidualBall {T : X →L[𝕜] Y}
     rcases hT (WeakDual.toStrongDual omega) homega' with ⟨y, hy⟩
     refine ⟨toWeakSpace 𝕜 Y y, ?_⟩
     apply WeakDual.toStrongDual.injective
-    change NormedSpace.inclusionInDoubleDual 𝕜 Y y =
-      bidualMap T (WeakDual.toStrongDual omega)
-    exact hy.symm
+    apply ContinuousLinearMap.ext
+    intro g
+    simpa [jY, NormedSpace.inclusionInDoubleDualWeak, LinearEquiv.arrowCongr_apply] using
+      (congrArg (fun q : StrongDual 𝕜 (StrongDual 𝕜 Y) => q g) hy).symm
   have hclosure : closure (jY '' S) ⊆ Set.range jY := by
     exact (closure_minimal hcanon hKcompact.isClosed).trans hKrange
   exact NormedSpace.isCompact_closure_of_isBounded 𝕜 Y S

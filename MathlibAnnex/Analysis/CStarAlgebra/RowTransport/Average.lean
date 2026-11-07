@@ -34,7 +34,7 @@ theorem norm_rowMap_le_of_rowSquare_norm_le {n : ℕ} (x : Fin n → A)
     {h : A} (hh : 0 ≤ h) (hh1 : h ≤ 1)
     (hq : ‖rowSquare A x‖ ≤ 1) : ‖rowMap A x h‖ ≤ 1 := by
   obtain ⟨hpos, hle⟩ := rowMap_le_rowSquare A x hh hh1
-  exact (CStarAlgebra.norm_le_norm_of_nonneg_of_le hpos hle).trans hq
+  exact (CStarAlgebra.norm_le_norm_of_le_of_nonneg hle hpos).trans hq
 
 /-- Each entry of a normalized row is contractive; this does not assert
 that the sum of their squared norms is contractive. -/
@@ -45,8 +45,8 @@ theorem norm_rowEntry_le_of_rowSquare_norm_le {n : ℕ} (x : Fin n → A)
     exact Finset.single_le_sum
       (fun j _ => mul_star_self_nonneg (x j)) (Finset.mem_univ i)
   have hnorm : ‖x i * star (x i)‖ ≤ 1 :=
-    (CStarAlgebra.norm_le_norm_of_nonneg_of_le
-      (mul_star_self_nonneg (x i)) hle).trans hq
+    (CStarAlgebra.norm_le_norm_of_le_of_nonneg
+      hle (mul_star_self_nonneg (x i))).trans hq
   rw [CStarRing.norm_self_mul_star] at hnorm
   nlinarith [norm_nonneg (x i)]
 

@@ -19,7 +19,32 @@ namespace MathlibAnnex.CStarAlgebra.CAR
 
 open MathlibAnnex.Analysis.CStarAlgebra
 
-universe v
+universe u v w
+
+/-- Compose two captures and the existing finite-dimensionality theorem before
+specializing the concrete CAR algebra or ambient Hilbert carrier. -/
+private theorem not_isIrreducible_of_two_capture_models
+    {A : Type u} [CStarAlgebra A] [PartialOrder A] [StarOrderedRing A] [Nontrivial A]
+    {F : Type w} [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+    (ambient : Representation A F)
+    (hmodelH : Representation.IsUniqueIrreducibleModelAmongNonUnital.{u, w, v} ambient)
+    (hmodelA : Representation.IsUniqueIrreducibleModelAmongNonUnital.{u, w, u} ambient)
+    (hinfinite : ¬ FiniteDimensional ℂ A)
+    {H : Type v} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+    [CompleteSpace H] [TopologicalSpace.SeparableSpace H]
+    (rho : NonUnitalRepresentation (A := A) (H := H)) : ¬ rho.IsIrreducible := by
+  intro hrho
+  let pi : Representation A H := rho.toUnital hrho
+  have hpi : Representation.IsIrreducible pi :=
+    NonUnitalRepresentation.isIrreducible_toUnital rho hrho
+  have hambient_pi : ambient.UnitaryEquivalent pi := hmodelH.2.2 H rho hrho
+  have hsingleton : Representation.IsSingletonIrreducibleModelAmongNonUnital.{u, v, u} pi := by
+    refine ⟨hpi, ?_⟩
+    intro K _ _ _ sigma hsigma
+    exact Representation.unitaryEquivalent_trans
+      (Representation.unitaryEquivalent_symm hambient_pi) (hmodelA.2.2 K sigma hsigma)
+  exact hinfinite (Representation.finiteDimensional_algebra_of_singleton_amongNonUnital
+    pi hsingleton)
 
 /-- The main target admits no nonzero irreducible ordinary representation on
 a separable complete complex Hilbert space.  The input representation is not
@@ -29,30 +54,10 @@ theorem not_isIrreducible_of_separable
     [CompleteSpace H] [TopologicalSpace.SeparableSpace H]
     (rho : NonUnitalRepresentation (A := AtomicCounterexampleAlgebra) (H := H)) :
     ¬ rho.IsIrreducible := by
-  intro hrho
-  let pi : Representation AtomicCounterexampleAlgebra H := rho.toUnital hrho
-  have hpi : Representation.IsIrreducible pi :=
-    NonUnitalRepresentation.isIrreducible_toUnital rho hrho
-  have hambient_pi : atomicCounterexampleRepresentation.UnitaryEquivalent pi := by
-    obtain ⟨U, hU⟩ := (atomicCounterexampleEndpoint.{v}).captures_nonunital H rho hrho
-    refine ⟨U, ?_⟩
-    intro a x
-    simpa [atomicCounterexampleRepresentation, pi] using hU a x
-  have hsingleton :
-      Representation.IsSingletonIrreducibleModelAmongNonUnital.{0, v, 0} pi := by
-    refine ⟨hpi, ?_⟩
-    intro K _ _ _ sigma hsigma
-    have hambient_sigma :
-        atomicCounterexampleRepresentation.UnitaryEquivalent (sigma.toUnital hsigma) := by
-      obtain ⟨U, hU⟩ := (atomicCounterexampleEndpoint.{0}).captures_nonunital K sigma hsigma
-      refine ⟨U, ?_⟩
-      intro a x
-      change U (atomicCounterexampleRepresentation a x) = sigma a (U x)
-      simpa [atomicCounterexampleRepresentation] using hU a x
-    exact Representation.unitaryEquivalent_trans
-      (Representation.unitaryEquivalent_symm hambient_pi) hambient_sigma
-  exact (atomicCounterexampleEndpoint.{v}).not_finiteDimensional_target
-    (Representation.finiteDimensional_algebra_of_singleton_amongNonUnital
-      pi hsingleton)
+  exact not_isIrreducible_of_two_capture_models
+    (shellFamilyInclusion homogeneityShellFamily)
+    (isUniqueIrreducibleModelAmongNonUnital_shellFamilyInclusion.{v} homogeneityShellFamily)
+    (isUniqueIrreducibleModelAmongNonUnital_shellFamilyInclusion.{0} homogeneityShellFamily)
+    (not_finiteDimensional_shellFamilyTarget homogeneityShellFamily) rho
 
 end MathlibAnnex.CStarAlgebra.CAR

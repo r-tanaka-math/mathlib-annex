@@ -165,6 +165,32 @@ theorem eq_top_of_image_conjugateAdjointSandwich_eq_top
     change b ∈ (T : Set (K →L[ℂ] K))
     simpa only [heq] using ha
 
+/-- Package the faithful GNS image and its normal-part homeomorphism
+while the target algebra is still abstract. -/
+private theorem exists_normalPart_image_for_full_range
+    {B : Type v} [NonUnitalCStarAlgebra B] [PartialOrder B] [StarOrderedRing B]
+    (S : NonUnitalStarSubalgebra ℂ (H →L[ℂ] H))
+    [IsClosed (S : Set (H →L[ℂ] H))]
+    (hS : NonUnitalCStarRepresentation.IsIrreducible
+      (NonUnitalStarSubalgebraClass.subtype S))
+    (e : ClosureSpace.Homeomorph (NormedSpace.geometricStructureClosure ℂ S)
+      (NormedSpace.geometricStructureClosure ℂ B)) :
+    ∃ (G : Type v) (_ : NormedAddCommGroup G) (_ : InnerProductSpace ℂ G)
+      (_ : CompleteSpace G) (rho : NonUnitalCStarRepresentation B G),
+      Function.Injective rho ∧ rho.IsIrreducible ∧
+        Nonempty (ClosureSpace.Homeomorph
+          ((NormedSpace.geometricStructureClosure ℂ S).subspace (normalPart S))
+          ((NormedSpace.geometricStructureClosure ℂ (NonUnitalStarAlgHom.range rho)).subspace
+            (normalPart (NonUnitalStarAlgHom.range rho)))) := by
+  obtain ⟨phi, hfaith, r, _hpre, _hinv, himage⟩ :=
+    exists_faithful_normalPart_transport S hS e
+  refine ⟨phi.GNS, inferInstance, inferInstance, inferInstance,
+    phi.gnsRepresentation, hfaith, phi.isIrreducible_gnsRepresentation, ?_⟩
+  exact ⟨normalPartHomeomorphOfImage
+    (H := H) (K := phi.GNS) (S := S)
+    (T := NonUnitalStarAlgHom.range phi.gnsRepresentation) (e.trans r.symm) himage⟩
+
+
 section NormalPart
 
 variable [Nontrivial H] [Nontrivial K]
@@ -210,6 +236,65 @@ theorem eq_top_of_normalPart_homeomorph
     · exact eq_top_of_image_conjugateAdjointSandwich_eq_top T U V hEq
 
 include hT in
+/-- Return full range to the original target through one faithful image,
+without unfolding a concrete GNS carrier in the rigidity argument. -/
+private theorem eq_top_of_faithful_normalPart_image
+    {G : Type v} [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
+    (rho : NonUnitalCStarRepresentation T G) (hrho : rho.IsIrreducible)
+    (hfaith : Function.Injective rho)
+    (f : ClosureSpace.Homeomorph
+      ((NormedSpace.geometricStructureClosure ℂ
+        (⊤ : NonUnitalStarSubalgebra ℂ (H →L[ℂ] H))).subspace
+          (normalPart (⊤ : NonUnitalStarSubalgebra ℂ (H →L[ℂ] H))))
+      ((NormedSpace.geometricStructureClosure ℂ (NonUnitalStarAlgHom.range rho)).subspace
+        (normalPart (NonUnitalStarAlgHom.range rho)))) : T = ⊤ := by
+  have hR : NonUnitalCStarRepresentation.IsIrreducible (NonUnitalStarSubalgebraClass.subtype
+      (NonUnitalStarAlgHom.range rho)) :=
+    (NonUnitalCStarRepresentation.isIrreducible_imageRepresentation_iff
+      rho).2 hrho
+  letI : Nontrivial G :=
+    NonUnitalCStarRepresentation.nontrivial_of_isNonzero
+      rho hrho.1
+  have hRtop : (NonUnitalStarAlgHom.range rho) = ⊤ :=
+    eq_top_of_normalPart_homeomorph (NonUnitalStarAlgHom.range rho) hR f
+  have hker : NonUnitalCStarRepresentation.kernelIdeal rho =
+      NonUnitalCStarRepresentation.kernelIdeal
+        (NonUnitalStarSubalgebraClass.subtype T) := by
+    ext a
+    constructor
+    · intro ha
+      have hz : rho a = 0 :=
+        (NonUnitalCStarRepresentation.mem_kernelIdeal rho a).1 ha
+      have ha0 : a = 0 := hfaith (by simpa only [map_zero] using hz)
+      subst a
+      exact (NonUnitalCStarRepresentation.mem_kernelIdeal
+        (NonUnitalStarSubalgebraClass.subtype T) 0).2 (map_zero _)
+    · intro ha
+      have hz : (a : K →L[ℂ] K) = 0 :=
+        (NonUnitalCStarRepresentation.mem_kernelIdeal
+          (NonUnitalStarSubalgebraClass.subtype T) a).1 ha
+      have ha0 : a = 0 := Subtype.ext hz
+      subst a
+      exact (NonUnitalCStarRepresentation.mem_kernelIdeal
+        rho 0).2 (map_zero _)
+  have hcompact : ContinuousLinearMap.compactOperatorStarSubalgebra ℂ G ≤
+      (NonUnitalStarAlgHom.range rho) := by rw [hRtop]; exact le_top
+  have hU :=
+    NonUnitalCStarRepresentation.unitaryEquivalent_of_kernelIdeal_eq_of_compact_le_range
+      rho (NonUnitalStarSubalgebraClass.subtype T)
+      hT hker hcompact
+  have hsub : (NonUnitalStarAlgHom.range (NonUnitalStarSubalgebraClass.subtype T)) = T := by
+    apply le_antisymm
+    · intro a ha
+      obtain ⟨b, rfl⟩ := (NonUnitalStarAlgHom.mem_range
+        (NonUnitalStarSubalgebraClass.subtype T)).1 ha
+      exact b.property
+    · intro a ha
+      exact (NonUnitalStarAlgHom.mem_range
+        (NonUnitalStarSubalgebraClass.subtype T)).2 ⟨⟨a, ha⟩, rfl⟩
+  exact hsub.symm.trans (hU.range_eq_top_of_range_eq_top hRtop)
+
+include hT in
 /-- The full GSS version uses the SAME faithful target image furnished by
 `exists_faithful_normalPart_transport`.  The final unitary returns literal
 full range to the original target action; no second faithful representation
@@ -226,54 +311,12 @@ theorem eq_top_of_geometricStructure_homeomorph
     exact isClosed_univ
   have hS : NonUnitalCStarRepresentation.IsIrreducible (NonUnitalStarSubalgebraClass.subtype S) :=
     isIrreducible_subtype_top (H := H)
-  obtain ⟨phi, hfaith, r, _hpre, _hinv, himage⟩ :=
-    exists_faithful_normalPart_transport S hS e
-  have hR : NonUnitalCStarRepresentation.IsIrreducible (NonUnitalStarSubalgebraClass.subtype
-      (NonUnitalStarAlgHom.range phi.gnsRepresentation)) :=
-    (NonUnitalCStarRepresentation.isIrreducible_imageRepresentation_iff
-      phi.gnsRepresentation).2 phi.isIrreducible_gnsRepresentation
-  letI : Nontrivial phi.GNS :=
-    NonUnitalCStarRepresentation.nontrivial_of_isNonzero
-      phi.gnsRepresentation phi.isIrreducible_gnsRepresentation.1
-  let f := normalPartHomeomorphOfImage (e.trans r.symm) himage
-  have hRtop : (NonUnitalStarAlgHom.range phi.gnsRepresentation) = ⊤ :=
-    eq_top_of_normalPart_homeomorph (NonUnitalStarAlgHom.range phi.gnsRepresentation) hR f
-  have hker : NonUnitalCStarRepresentation.kernelIdeal phi.gnsRepresentation =
-      NonUnitalCStarRepresentation.kernelIdeal
-        (NonUnitalStarSubalgebraClass.subtype T) := by
-    ext a
-    constructor
-    · intro ha
-      have hz : phi.gnsRepresentation a = 0 :=
-        (NonUnitalCStarRepresentation.mem_kernelIdeal phi.gnsRepresentation a).1 ha
-      have ha0 : a = 0 := hfaith (by simpa only [map_zero] using hz)
-      subst a
-      exact (NonUnitalCStarRepresentation.mem_kernelIdeal
-        (NonUnitalStarSubalgebraClass.subtype T) 0).2 (map_zero _)
-    · intro ha
-      have hz : (a : K →L[ℂ] K) = 0 :=
-        (NonUnitalCStarRepresentation.mem_kernelIdeal
-          (NonUnitalStarSubalgebraClass.subtype T) a).1 ha
-      have ha0 : a = 0 := Subtype.ext hz
-      subst a
-      exact (NonUnitalCStarRepresentation.mem_kernelIdeal
-        phi.gnsRepresentation 0).2 (map_zero _)
-  have hcompact : ContinuousLinearMap.compactOperatorStarSubalgebra ℂ phi.GNS ≤
-      (NonUnitalStarAlgHom.range phi.gnsRepresentation) := by rw [hRtop]; exact le_top
-  have hU :=
-    NonUnitalCStarRepresentation.unitaryEquivalent_of_kernelIdeal_eq_of_compact_le_range
-      phi.gnsRepresentation (NonUnitalStarSubalgebraClass.subtype T)
-      hT hker hcompact
-  have hsub : (NonUnitalStarAlgHom.range (NonUnitalStarSubalgebraClass.subtype T)) = T := by
-    apply le_antisymm
-    · intro a ha
-      obtain ⟨b, rfl⟩ := (NonUnitalStarAlgHom.mem_range
-        (NonUnitalStarSubalgebraClass.subtype T)).1 ha
-      exact b.property
-    · intro a ha
-      exact (NonUnitalStarAlgHom.mem_range
-        (NonUnitalStarSubalgebraClass.subtype T)).2 ⟨⟨a, ha⟩, rfl⟩
-  exact hsub.symm.trans (hU.range_eq_top_of_range_eq_top hRtop)
+  obtain ⟨G, nG, iG, cG, rho, hfaith, hrho, ⟨f⟩⟩ :=
+    exists_normalPart_image_for_full_range (H := H) (B := T) S hS e
+  letI := nG
+  letI := iG
+  letI := cG
+  exact eq_top_of_faithful_normalPart_image T hT rho hrho hfaith f
 
 include hT in
 /-- Arbitrary Hilbert bases of the two concrete actions have equivalent index

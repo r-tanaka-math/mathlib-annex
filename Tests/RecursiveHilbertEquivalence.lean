@@ -1,0 +1,23 @@
+import BanachGeometry.AlmostIsometric.HilbertFreeSpaceDataViaCoordinates
+import BanachGeometry
+open BanachGeometry BanachGeometry.HilbertSums
+#check Clock.tau_abs_sub_le
+#check Clock.active_transition_budget
+#check Nonlinear.scalarEnumeration
+#check Nonlinear.hilbertBundle
+#check Nonlinear.inverseHilbertMap_recursiveHilbertMap
+#check Nonlinear.inverseHilbertMap_surjective
+#check Nonlinear.tsum_weightedGammaEnergy_le
+#check Nonlinear.pointDirection_difference_bound
+#check Nonlinear.comparisonBudget_bound
+#check Nonlinear.hilbertEquiv_bounds
+#check Nonlinear.pair_local_direction_supports
+#check Nonlinear.hilbertDefect_apply
+#check HilbertFreeSpace.freeBanach_no_c0
+#check HilbertFreeSpace.defect_linearize_completelyContinuous
+#check HilbertFreeSpace.hilbertDefect_localOrthogonality
+example : HasQuantitativeHilbertModels := exists_quantitativeHilbertData_via_coordinates
+#check LipschitzFreeLocalization.IncrementLocality.comp
+#check LipschitzFreeLocalization.sum_norm_starProjection_sq_le
+#check LipschitzFreeLocalization.card_le_one_div_sq_of_large_projections
+#check LipschitzFreeLocalization.abs_inner_le_projection_norms

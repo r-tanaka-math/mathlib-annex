@@ -111,12 +111,10 @@ theorem representedGenerator_comp_sourceShell
           ((representativeShellData family i).link n) := by
     apply Subtype.ext
     exact hLsource i n
-  change rho (MathlibAnnex.CStarAlgebra.AtomicConstruction.generator selectedAtomicRepresentation L i) *
-      rho (MathlibAnnex.CStarAlgebra.AtomicConstruction.sourceHom selectedAtomicRepresentation L
-        (transportedFlag family i n - transportedFlag family i (n + 1))) =
-      rho (MathlibAnnex.CStarAlgebra.AtomicConstruction.sourceHom selectedAtomicRepresentation L
-        ((representativeShellData family i).link n))
-  rw [← map_mul, htarget]
+  rw [Unitary.coe_linearIsometryEquiv_apply, representedGeneratorUnitary_coe]
+  simpa only [restrictedRepresentation, StarAlgHom.comp_apply, map_mul,
+    ContinuousLinearMap.mul_def] using
+    congrArg rho htarget
 
 /-- In every target Hilbert universe, the represented generator is rebuilt as
 the strong sum of the represented completed-CAR shell links plus a precisely

@@ -10,6 +10,8 @@ public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Isometr
 public import Mathlib.Analysis.InnerProductSpace.Spectrum
 public import Mathlib.Topology.DiscreteSubset
 
+import Mathlib.Analysis.Normed.Operator.Compact.FredholmAlternative
+
 /-! # Compact self-adjoint spectral lemmas
 The selected and prescribed isolation statements share the same
 orthogonal-complement argument. Eigenspace membership is converted explicitly

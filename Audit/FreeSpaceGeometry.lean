@@ -1,0 +1,10 @@
+import BanachGeometry.AlmostIsometric.HilbertFreeSpaceDataViaCoordinates
+/- Exact observed axioms are recorded in the external kernel audit receipts. -/
+import BanachGeometry
+#print axioms BanachGeometry.LipschitzFreeProperties.existsUnique_linearization
+#print axioms BanachGeometry.LipschitzFreeProperties.exists_compact_approximation_with_iSup_norm
+#print axioms BanachGeometry.LipschitzFreeProperties.hilbert_free_no_c0
+#print axioms BanachGeometry.HilbertSums.Nonlinear.recursive_radicand_eq_norm_blockTail_sq
+#print axioms BanachGeometry.LipschitzFreeLocalization.abs_inner_le_projection_norms
+#print axioms BanachGeometry.HilbertSums.exists_quantitativeHilbertData
+#print axioms BanachGeometry.HilbertSums.exists_quantitativeHilbertData_via_coordinates

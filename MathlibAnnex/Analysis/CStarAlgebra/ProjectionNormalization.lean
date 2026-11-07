@@ -705,7 +705,10 @@ theorem map_normalized_conjugate_eq_on_projection
   have hmap : pi (cfc positiveClip d) = cfc positiveClip (pi d) :=
     StarAlgHomClass.map_cfc pi positiveClip d
       (hf := continuous_positiveClip.continuousOn)
-      (hφ := by fun_prop)
+      (hφ := by
+        letI : ContinuousLinearMapClass (B →⋆ₐ[ℂ] (H →L[ℂ] H)) ℂ B (H →L[ℂ] H) :=
+          NonUnitalStarAlgHom.instContinuousLinearMapClassComplex
+        exact map_continuous pi)
       (ha := IsSelfAdjoint.of_nonneg hd)
       (hφa := IsSelfAdjoint.of_nonneg hdpi)
   rw [normalized_conjugate_eq_clip a c ha, hmap]

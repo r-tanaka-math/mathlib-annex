@@ -79,8 +79,8 @@ theorem norm_squareBudget_parts_le (x : ι → A) :
   have hQ : 0 ≤ Q := squareBudget_nonneg _ fun i ↦ selfAdjointImag_sa (x i)
   have hPQ : P ≤ P + Q := by simpa using add_le_add_left hQ P
   have hQP : Q ≤ P + Q := by simpa using add_le_add_right hP Q
-  have hNP := CStarAlgebra.norm_le_norm_of_nonneg_of_le hP hPQ
-  have hNQ := CStarAlgebra.norm_le_norm_of_nonneg_of_le hQ hQP
+  have hNP := CStarAlgebra.norm_le_norm_of_le_of_nonneg hPQ hP
+  have hNQ := CStarAlgebra.norm_le_norm_of_le_of_nonneg hQP hQ
   have he : ‖P + Q‖ = (1 / 2 : ℝ) * ‖starMulSum x + mulStarSum x‖ := by
     change ‖squareBudget (fun i ↦ selfAdjointReal (x i)) +
       squareBudget (fun i ↦ selfAdjointImag (x i))‖ = _

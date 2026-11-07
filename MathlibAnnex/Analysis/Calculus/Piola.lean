@@ -168,13 +168,14 @@ theorem det_twoRowReplacement_swap {n : ℕ}
       twoRowReplacement A i k q j ∘ Equiv.swap i k =
         twoRowReplacement A i k j q := by
     funext r
+    change twoRowReplacement A i k q j (Equiv.swap i k r) = twoRowReplacement A i k j q r
     by_cases hri : r = i
     · subst r
-      simp [twoRowReplacement, Function.comp_apply, hik]
+      simp [twoRowReplacement, hik]
     · by_cases hrk : r = k
       · subst r
-        simp [twoRowReplacement, Function.comp_apply, hik]
-      · rw [Function.comp_apply, Equiv.swap_apply_of_ne_of_ne hri hrk]
+        simp [twoRowReplacement, hik]
+      · rw [Equiv.swap_apply_of_ne_of_ne hri hrk]
         simp [twoRowReplacement, hri, hrk]
   change (Matrix.detRowAlternating
       (R := ℝ) (n := Fin n)) (twoRowReplacement A i k j q) =

@@ -121,9 +121,12 @@ theorem iInf_ker_le_ker_iff_exists_sum_smul (f : ι → V →ₗ[𝕜] 𝕜)
       have hx := LinearMap.congr_fun hg (⟨F x, ⟨x, rfl⟩⟩ : F.range)
       change g (F x) = (F.ker.liftQ h hF)
         (F.quotKerEquivRange.symm ⟨F x, ⟨x, rfl⟩⟩) at hx
-      simp only [quotKerEquivRange_symm_apply_image] at hx
-      change g (F x) = h x at hx
-      exact hx
+      calc
+        g (F x) = (F.ker.liftQ h hF)
+            (F.quotKerEquivRange.symm ⟨F x, ⟨x, rfl⟩⟩) := hx
+        _ = (F.ker.liftQ h hF) (F.ker.mkQ x) :=
+          congrArg (F.ker.liftQ h hF) (F.quotKerEquivRange_symm_apply_image x ⟨x, rfl⟩)
+        _ = h x := rfl
     refine ⟨fun i => g (Pi.single i 1), ?_⟩
     ext x
     have hdecomp : F x = ∑ i, (f i x) • Pi.single i (1 : 𝕜) := by

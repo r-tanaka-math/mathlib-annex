@@ -104,8 +104,10 @@ theorem IsMaximalAbelian.mem_of_isSelfAdjoint_of_commute
     · exact Or.inr (star_mem hy)
   let E : StarSubalgebra ℂ A := StarAlgebra.adjoin ℂ S
   have hE : IsMulCommutative E :=
-    StarAlgebra.isMulCommutative_adjoin ℂ hpair
-      (fun y hy z hz => hpair y hy (star z) (hstarS z hz))
+    StarAlgebra.isMulCommutative_adjoin ℂ
+      (fun y hy => ⟨hpair (star y) (hstarS y hy) y hy⟩)
+      (fun y hy z hz _ => hpair y hy z hz)
+      (fun y hy z hz _ => hpair y hy (star z) (hstarS z hz))
   have hDE : D ≤ E := by
     intro d hd
     exact StarAlgebra.subset_adjoin ℂ S (show (d : A) ∈ S from Or.inr hd)

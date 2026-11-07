@@ -1,0 +1,5 @@
+# Lip source attribution
+
+The [per-file provenance](ATTRIBUTION/PROVENANCE.json) identifies 42 reduced ports and six proof-route adaptations from openai/math revision 4eaee87548250b2682affda7d05d947c05554bae. It gives upstream and final paths, hashes, declarations, change descriptions and license locators. Paths in Lean file headers are relative to the package root. The original [repository license](../../LICENSES/OPENAI_MATH_APACHE_2_0.txt) and [Lean license](../../LICENSES/OPENAI_MATH_LEAN_APACHE_2_0.txt) are included. The separate manuscript revision is 1581d4cbdd69a0faf34b2089614fe2a814316a6a.
+
+The [production inventory](ATTRIBUTION/PRODUCTION_ORIGINS.json) covers 166 modules. BanachGeometry.Basic inherits the supplied FixedPairWork.Common.Contract starter via a recorded rename and field revision. Its SeparableRealBanach interface shares fields with upstream Model.lean. Records establish the starter-to-final history. Earlier authorship remains undetermined. The release decision must cover the contributed source.

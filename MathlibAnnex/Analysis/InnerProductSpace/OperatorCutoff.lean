@@ -153,8 +153,8 @@ theorem cutoffPositivePart_decomposition (T : H →L[ℂ] K) (δ : ℝ) :
   have hconst : IsSelfAdjoint (((δ ^ 2 : ℝ) : ℂ) • (ContinuousLinearMap.id ℂ H)) := by
     simp [IsSelfAdjoint, star_smul, star_eq_adjoint, adjoint_id]
   have hD : IsSelfAdjoint D := (isPositive_adjoint_comp_self T).isSelfAdjoint.sub hconst
-  refine ⟨(nonneg_iff_isPositive _).1 (CFC.posPart_nonneg D),
-    (nonneg_iff_isPositive _).1 (CFC.negPart_nonneg D),
+  refine ⟨(nonneg_iff_isPositive).1 (CFC.posPart_nonneg D),
+    (nonneg_iff_isPositive).1 (CFC.negPart_nonneg D),
     (CFC.posPart_sub_negPart D hD).symm, ?_⟩
   exact CFC.negPart_mul_posPart D
 
@@ -172,9 +172,9 @@ theorem cutoffPositivePart_order_bounds (T : H →L[ℂ] K) (δ : ℝ) :
   have hQ : Q = R - D⁻ + ((δ ^ 2 : ℝ) : ℂ) • (ContinuousLinearMap.id ℂ H) :=
     (sub_eq_iff_eq_add).1 hdec
   have hRN : R * D⁻ = 0 := CFC.posPart_mul_negPart D
-  have hN0 : 0 ≤ D⁻ := (nonneg_iff_isPositive (D⁻)).2 hN
+  have hN0 : 0 ≤ D⁻ := (nonneg_iff_isPositive).2 hN
   have hcube : 0 ≤ R * R * R := by
-    apply (nonneg_iff_isPositive _).2
+    apply (nonneg_iff_isPositive).2
     have hR' : R.IsPositive := hR
     have hc := hR'.adjoint_conj R
     change (R.adjoint.comp (R.comp R)).IsPositive at hc
