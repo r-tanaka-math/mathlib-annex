@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.6.1 — Naimark and von Neumann algebras
+
+Adds 19 production modules and 11 test modules. The Naimark entry now imports the CAR trace type II₁ and Hilbert basis consequences. Owner-final qualification covered 958 targets and all seven Project entries with the v0.6.0 toolchain and dependency lock.
+
 ## v0.6.0 — Lipschitz Homeomorphic Banach Spaces
 
 Adds the Lip Project, its 166 production modules and its validation sources. The package uses Lean 4.35.0 and Mathlib at revision 56a005855ea17e0b0958f73ec801ae140b0a1679. Owner-final qualification covered seven Project entries and 928 targets.

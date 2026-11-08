@@ -1,5 +1,5 @@
 {
-  "candidate_package_version": "0.5.0",
+  "candidate_package_version": "0.6.1",
   "compiled_axiom_policy": {
     "allowlist": [
       "Classical.choice",
@@ -11,35 +11,12 @@
   },
   "current_qualification": {
     "attempt": 1,
-    "census_modules": 918,
-    "checks": {
-      "build": "PASS",
-      "cleanliness": "PASS",
-      "compiled_axiom_audit": "PASS",
-      "complete_source_coverage": "PASS",
-      "downstream_import": "PASS",
-      "gss_project_entry_import": "PASS",
-      "gss_public_census": "PASS",
-      "identity": "PASS",
-      "lip_project_entry_import": "PASS",
-      "lip_public_census": "PASS",
-      "naimark_entry_import": "PASS",
-      "project_entry_import": "PASS",
-      "project_entry_parser": "PASS",
-      "pure_state_homogeneity_entry_import": "PASS",
-      "rosenberg_entry_import": "PASS",
-      "sphere_rigidity_entry_import": "PASS",
-      "validation_consumer_import": "PASS"
-    },
-    "commit": "a533e6221d89d93147862cefec1de684de02b296",
-    "declaration_count": 18448,
-    "forbidden_axiom_count": 0,
-    "job_id": 127970114430,
-    "module_count": 928,
-    "receipt_file_sha256": "5cdb28090aa7be92e541ba1ac0db51062830dfa3b1b5dc96caaf18f664b7375c",
-    "run_id": "42240755323",
-    "terminal_gate": "PASS_FINALIZED",
-    "tree": "24f3c06d0872d1de99d1a67cc8c3e0c941608781"
+    "commit": "ef2cc76a246881b64cba030870944cad3172817d",
+    "job_id": 128630358596,
+    "receipt_sha256": "e28c56b9c8791279de0767e547eb3fc99fbdffcb99a0857e3eb88683767b20a2",
+    "run_id": 42447808184,
+    "state": "OWNER_FINAL_PASS",
+    "tree": "85e94ffe211808309453bbfbb4ce035be68fe130"
   },
   "dependency_lock": {
     "bytes": 3163,
@@ -79,12 +56,12 @@
       "examples/ImportMankiewicz.lean"
     ]
   },
-  "formalization_source_state": "HOSTED_OWNER_FINAL_PASS",
+  "formalization_source_state": "PRIVATE_ADMITTED_SOURCE",
   "lean_toolchain": "leanprover/lean4:v4.35.0",
   "mathlib_revision": "56a005855ea17e0b0958f73ec801ae140b0a1679",
-  "package_version": "0.5.0",
+  "package_version": "0.6.1",
   "project_slug": "mankiewicz",
-  "publication_state": "PUBLIC_RELEASE_REQUIRES_SEPARATE_OWNER_ACT",
+  "publication_state": "PUBLICATION_CANDIDATE",
   "record_type": "MATHLIBANNEX_PROJECT_SOURCE_MANIFEST",
   "resolved_closure_digest": "07f824f36e7ae0237e0285793ed5d640f122c1b175357a61d12a8b190ef01c05",
   "resolved_import_edges": {
@@ -135,6 +112,6 @@
     }
   ],
   "schema_revision": 3,
-  "source_admission": "PRIVATE_SOURCE_ACCEPTED_BY_OWNER_FINAL_SUCCESSOR",
+  "source_admission": "REGULAR_PRIVATE_SOURCE_ADMISSION",
   "source_module_count": 5
 }

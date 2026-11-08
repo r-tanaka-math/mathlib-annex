@@ -1,71 +1,48 @@
 {
   "current_qualification": {
-    "attempt": 1,
-    "census_modules": 918,
-    "checks": {
-      "build": "PASS",
-      "cleanliness": "PASS",
-      "compiled_axiom_audit": "PASS",
-      "complete_source_coverage": "PASS",
-      "downstream_import": "PASS",
-      "gss_project_entry_import": "PASS",
-      "gss_public_census": "PASS",
-      "identity": "PASS",
-      "lip_project_entry_import": "PASS",
-      "lip_public_census": "PASS",
-      "naimark_entry_import": "PASS",
-      "project_entry_import": "PASS",
-      "project_entry_parser": "PASS",
-      "pure_state_homogeneity_entry_import": "PASS",
-      "rosenberg_entry_import": "PASS",
-      "sphere_rigidity_entry_import": "PASS",
-      "validation_consumer_import": "PASS"
-    },
-    "commit": "a533e6221d89d93147862cefec1de684de02b296",
-    "declaration_count": 18448,
-    "forbidden_axiom_count": 0,
-    "job_id": 127970114430,
-    "module_count": 928,
-    "receipt_file_sha256": "5cdb28090aa7be92e541ba1ac0db51062830dfa3b1b5dc96caaf18f664b7375c",
-    "run_id": "42240755323",
-    "terminal_gate": "PASS_FINALIZED",
-    "tree": "24f3c06d0872d1de99d1a67cc8c3e0c941608781"
+    "publication_state": "PUBLICATION_CANDIDATE",
+    "qualified_commit": "ef2cc76a246881b64cba030870944cad3172817d",
+    "qualified_tree": "85e94ffe211808309453bbfbb4ce035be68fe130",
+    "run_id": 42447808184,
+    "source_admission": "REGULAR_PRIVATE_SOURCE_ADMISSION",
+    "state": "OWNER_FINAL_PASS",
+    "version": "0.6.1"
   },
   "projects": [
     {
-      "bytes": 185381,
+      "bytes": 184549,
       "path": "docs/projects/geometric-structure-spaces.json",
-      "sha256": "1383d3a00b7aa401f324fa69d2024733e5225098c8d16e8c4fa119c229323706"
+      "sha256": "8aab1f50817003fe21e67c019a0bd0e96969f41bb01f6a847f78eae73037745d"
     },
     {
-      "bytes": 67535,
+      "bytes": 66737,
       "path": "docs/projects/lipschitz-homeomorphic-banach-spaces.json",
-      "sha256": "97f707df4667edbefa1b10ddc65ff6413748db550a4d1f90aee0bd6f14678817"
+      "sha256": "7f206ed42f906c295165490abbe5c3739d7197a063f8810179634fdaeef65a38"
     },
     {
-      "bytes": 5430,
+      "bytes": 4598,
       "path": "docs/projects/mankiewicz.json",
-      "sha256": "ae5f8f7f18ca8543a01f81ac4a50a70c03dea9f28f9397f7d389581e9fc32f24"
+      "sha256": "ca4bad4e9e0d5ba1c13060eef3f78786a1bb9aa1b8a3d734d84c94db8cde0a44"
     },
     {
-      "bytes": 161202,
+      "bytes": 172659,
       "path": "docs/projects/naimark.json",
-      "sha256": "5101d97e4c084dbf3132906c390c3447e96d0e85f2f3bdb14c2f13afe7032f5a"
+      "sha256": "d553e0ca9b58340057f208c9cfc31e1e857a4886416cc79cc3b82df00c6dd528"
     },
     {
-      "bytes": 109786,
+      "bytes": 108954,
       "path": "docs/projects/pure-state-homogeneity.json",
-      "sha256": "4a78760aa88cbad6c9755c64803854e5c9c963af2029ed7c6e06058aaff78f16"
+      "sha256": "233672e0d607dbfd066d95ae9c4eb08fc4ffebacbf9fbea2741cea0d81b257ff"
     },
     {
-      "bytes": 36051,
+      "bytes": 35219,
       "path": "docs/projects/rosenberg.json",
-      "sha256": "ec46268f652716e42e099a0938ecce258cefa80459a90d200d0a6a9e6c9b19cc"
+      "sha256": "bb658d6aa3fac95f72a1b6e584eb11e508d00185ae0dec315045a0d387afcccf"
     },
     {
-      "bytes": 23690,
+      "bytes": 22858,
       "path": "docs/projects/sphere-rigidity.json",
-      "sha256": "420b904ca201f043a70a288dc39534233b5b510ebc7a37b829e7f593d101402d"
+      "sha256": "3e9102e6d578d90db58f797438d486cae59618db02009eb03f42674d96c4bd62"
     }
   ],
   "record_type": "MATHLIBANNEX_PROJECT_SOURCE_MANIFESTS"

@@ -1,5 +1,5 @@
 {
-  "candidate_package_version": "0.5.0",
+  "candidate_package_version": "0.6.1",
   "compiled_axiom_policy": {
     "allowlist": [
       "Classical.choice",
@@ -11,35 +11,12 @@
   },
   "current_qualification": {
     "attempt": 1,
-    "census_modules": 918,
-    "checks": {
-      "build": "PASS",
-      "cleanliness": "PASS",
-      "compiled_axiom_audit": "PASS",
-      "complete_source_coverage": "PASS",
-      "downstream_import": "PASS",
-      "gss_project_entry_import": "PASS",
-      "gss_public_census": "PASS",
-      "identity": "PASS",
-      "lip_project_entry_import": "PASS",
-      "lip_public_census": "PASS",
-      "naimark_entry_import": "PASS",
-      "project_entry_import": "PASS",
-      "project_entry_parser": "PASS",
-      "pure_state_homogeneity_entry_import": "PASS",
-      "rosenberg_entry_import": "PASS",
-      "sphere_rigidity_entry_import": "PASS",
-      "validation_consumer_import": "PASS"
-    },
-    "commit": "a533e6221d89d93147862cefec1de684de02b296",
-    "declaration_count": 18448,
-    "forbidden_axiom_count": 0,
-    "job_id": 127970114430,
-    "module_count": 928,
-    "receipt_file_sha256": "5cdb28090aa7be92e541ba1ac0db51062830dfa3b1b5dc96caaf18f664b7375c",
-    "run_id": "42240755323",
-    "terminal_gate": "PASS_FINALIZED",
-    "tree": "24f3c06d0872d1de99d1a67cc8c3e0c941608781"
+    "commit": "ef2cc76a246881b64cba030870944cad3172817d",
+    "job_id": 128630358596,
+    "receipt_sha256": "e28c56b9c8791279de0767e547eb3fc99fbdffcb99a0857e3eb88683767b20a2",
+    "run_id": 42447808184,
+    "state": "OWNER_FINAL_PASS",
+    "tree": "85e94ffe211808309453bbfbb4ce035be68fe130"
   },
   "digest_encoding": {
     "algorithm": "SHA-256",
@@ -53,14 +30,16 @@
     "MathlibAnnex.Analysis.CStarAlgebra.NonUnital.CompactModel",
     "MathlibAnnex.Analysis.CStarAlgebra.Representation.OrdinarySingleton",
     "MathlibAnnex.Analysis.CStarAlgebra.CAR.SeparableFaithful",
-    "MathlibAnnex.Analysis.CStarAlgebra.CAR.ContinuumHypothesis"
+    "MathlibAnnex.Analysis.CStarAlgebra.CAR.ContinuumHypothesis",
+    "MathlibAnnex.Analysis.CStarAlgebra.CAR.TraceTypeII1",
+    "MathlibAnnex.Analysis.CStarAlgebra.CAR.HilbertBasisConsequences"
   ],
-  "direct_root_digest": "9f588aa89e0630c8ffffab3bf340ff00763913e31b63c3a73ec5e06cdbbd91a8",
+  "direct_root_digest": "b7347f6f24223d3c12a82bf5970414061274d90d032c73ac4f5b416f7e726e48",
   "entry_module": {
-    "bytes": 513,
+    "bytes": 643,
     "module": "MathlibAnnex.Projects.Naimark",
     "path": "MathlibAnnex/Projects/Naimark.lean",
-    "sha256": "c46c345b3f7ad2d17c632f500e4501cad2c49c07b3eb01bf76a4618bb6363b7c"
+    "sha256": "df2b09e6cc303432c675842d0618c4b38e0075efc52d1847ecdffa3e2289eb86"
   },
   "excluded_module_roles": {
     "AGGREGATE_ONLY": [
@@ -83,18 +62,29 @@
     ],
     "TEST": [
       "NaimarkIntegrationUse",
-      "examples/SeparableFaithfulSmoke.lean",
-      "examples/DensityCHSmoke.lean"
+      "Tests.A.Bicommutant",
+      "Tests.A.Generated",
+      "Tests.A.OperatorTopology",
+      "Tests.B.FiniteExamples",
+      "Tests.B.MonotoneNormal",
+      "Tests.B.TracialFactorConsumer",
+      "Tests.C.HilbertBasisConsequences",
+      "Tests.C.Hyperfinite",
+      "Tests.C.TraceClosure",
+      "Tests.C.TraceFiniteStages",
+      "Tests.C.TraceTypeII1",
+      "examples/DensityCHSmoke.lean",
+      "examples/SeparableFaithfulSmoke.lean"
     ]
   },
-  "formalization_source_state": "HOSTED_OWNER_FINAL_PASS",
+  "formalization_source_state": "PRIVATE_ADMITTED_SOURCE",
   "lean_toolchain": "leanprover/lean4:v4.35.0",
   "mathlib_revision": "56a005855ea17e0b0958f73ec801ae140b0a1679",
-  "package_version": "0.5.0",
+  "package_version": "0.6.1",
   "project_slug": "naimark",
-  "publication_state": "PUBLIC_RELEASE_REQUIRES_SEPARATE_OWNER_ACT",
+  "publication_state": "PUBLICATION_CANDIDATE",
   "record_type": "MATHLIBANNEX_PROJECT_SOURCE_MANIFEST",
-  "resolved_closure_digest": "a5ad4b2811bd18bb7ff692ce050c05e895e552f96a95d09618883e509b3972e7",
+  "resolved_closure_digest": "d6309483b8268db4c99ead5325d950c290e40e45d8b714f7dfa41071d516f438",
   "resolved_import_edges": {
     "MathlibAnnex.Algebra.Shell": [],
     "MathlibAnnex.Analysis.CStarAlgebra.ApproximateIntertwining": [],
@@ -315,6 +305,10 @@
       "MathlibAnnex.Analysis.CStarAlgebra.CAR.Homogeneity",
       "MathlibAnnex.Analysis.CStarAlgebra.CAR.StateTransport"
     ],
+    "MathlibAnnex.Analysis.CStarAlgebra.CAR.HilbertBasisConsequences": [
+      "MathlibAnnex.Analysis.CStarAlgebra.CAR.Cardinality",
+      "MathlibAnnex.Analysis.InnerProductSpace.HilbertBasisDensity"
+    ],
     "MathlibAnnex.Analysis.CStarAlgebra.CAR.Homogeneity": [
       "MathlibAnnex.Analysis.CStarAlgebra.ApproximateIntertwining",
       "MathlibAnnex.Analysis.CStarAlgebra.CAR.FiniteAverage",
@@ -393,6 +387,10 @@
       "MathlibAnnex.Analysis.CStarAlgebra.CAR.TracialRepresentation",
       "MathlibAnnex.Analysis.CStarAlgebra.CAR.TracialTransport"
     ],
+    "MathlibAnnex.Analysis.CStarAlgebra.CAR.TraceFiniteStages": [
+      "MathlibAnnex.Analysis.CStarAlgebra.CAR.TraceGNSModel",
+      "MathlibAnnex.Analysis.CStarAlgebra.CAR.Simplicity"
+    ],
     "MathlibAnnex.Analysis.CStarAlgebra.CAR.TraceFlag": [
       "MathlibAnnex.Analysis.CStarAlgebra.CAR.Trace",
       "MathlibAnnex.Analysis.CStarAlgebra.CAR.AtomicSource",
@@ -402,14 +400,40 @@
       "MathlibAnnex.Analysis.CStarAlgebra.CAR.TracialRepresentation",
       "MathlibAnnex.Analysis.CStarAlgebra.CAR.TracialTransport"
     ],
+    "MathlibAnnex.Analysis.CStarAlgebra.CAR.TraceHyperfinite": [
+      "MathlibAnnex.Analysis.CStarAlgebra.CAR.TraceVonNeumann",
+      "MathlibAnnex.Analysis.VonNeumannAlgebra.Hyperfinite",
+      "MathlibAnnex.Analysis.VonNeumannAlgebra.Bicommutant"
+    ],
     "MathlibAnnex.Analysis.CStarAlgebra.CAR.TraceState": [
       "MathlibAnnex.Analysis.CStarAlgebra.CAR.TraceExtensionTracial",
       "MathlibAnnex.Analysis.CStarAlgebra.CAR.TraceUnique",
       "MathlibAnnex.Analysis.CStarAlgebra.GNS.TracialFaithfulness"
     ],
+    "MathlibAnnex.Analysis.CStarAlgebra.CAR.TraceTypeII1": [
+      "MathlibAnnex.Analysis.CStarAlgebra.CAR.TraceWeakClosure",
+      "MathlibAnnex.Analysis.CStarAlgebra.CAR.TraceHyperfinite",
+      "MathlibAnnex.Analysis.CStarAlgebra.CAR.TraceUnique",
+      "MathlibAnnex.Analysis.VonNeumannAlgebra.NormalFunctional",
+      "MathlibAnnex.Analysis.VonNeumannAlgebra.Factor",
+      "MathlibAnnex.Analysis.VonNeumannAlgebra.Finite",
+      "MathlibAnnex.Analysis.VonNeumannAlgebra.TypeII1"
+    ],
     "MathlibAnnex.Analysis.CStarAlgebra.CAR.TraceUnique": [
       "MathlibAnnex.Analysis.CStarAlgebra.CAR.Trace",
       "MathlibAnnex.Analysis.CStarAlgebra.CAR.FiniteAverage"
+    ],
+    "MathlibAnnex.Analysis.CStarAlgebra.CAR.TraceVonNeumann": [
+      "MathlibAnnex.Analysis.VonNeumannAlgebra.Generated",
+      "MathlibAnnex.Analysis.CStarAlgebra.CAR.TraceFiniteStages",
+      "MathlibAnnex.Analysis.CStarAlgebra.State.Basic"
+    ],
+    "MathlibAnnex.Analysis.CStarAlgebra.CAR.TraceWeakClosure": [
+      "MathlibAnnex.Analysis.CStarAlgebra.CAR.TraceVonNeumann",
+      "MathlibAnnex.Analysis.CStarAlgebra.CAR.SeparableFaithful",
+      "MathlibAnnex.Analysis.CStarAlgebra.AtomicConstruction.GeneratedExt",
+      "MathlibAnnex.Analysis.VonNeumannAlgebra.TracialState",
+      "MathlibAnnex.Analysis.VonNeumannAlgebra.Bicommutant"
     ],
     "MathlibAnnex.Analysis.CStarAlgebra.CAR.TracialCyclic": [
       "MathlibAnnex.Analysis.CStarAlgebra.CAR.AtomicEndpoint",
@@ -1227,6 +1251,20 @@
       "MathlibAnnex.Analysis.InnerProductSpace.DenseTransport",
       "MathlibAnnex.Analysis.InnerProductSpace.UnitaryExtension"
     ],
+    "MathlibAnnex.Analysis.InnerProductSpace.HilbertBasisCardinalNets": [
+      "MathlibAnnex.Analysis.InnerProductSpace.HilbertBasisCardinality",
+      "MathlibAnnex.Analysis.Normed.Operator.CardinalCompact"
+    ],
+    "MathlibAnnex.Analysis.InnerProductSpace.HilbertBasisCardinality": [],
+    "MathlibAnnex.Analysis.InnerProductSpace.HilbertBasisDensity": [
+      "MathlibAnnex.Analysis.InnerProductSpace.HilbertBasisCardinalNets",
+      "MathlibAnnex.Analysis.InnerProductSpace.HilbertBasisRangeCardinality",
+      "MathlibAnnex.Topology.DensityCharacter"
+    ],
+    "MathlibAnnex.Analysis.InnerProductSpace.HilbertBasisRangeCardinality": [
+      "MathlibAnnex.Analysis.InnerProductSpace.HilbertBasisCardinality",
+      "MathlibAnnex.Analysis.Normed.Operator.ClosureRange"
+    ],
     "MathlibAnnex.Analysis.InnerProductSpace.HilbertSum": [],
     "MathlibAnnex.Analysis.InnerProductSpace.HilbertSumCoordinates": [
       "MathlibAnnex.Analysis.InnerProductSpace.HilbertSum",
@@ -1272,9 +1310,15 @@
     ],
     "MathlibAnnex.Analysis.Normed.Module.BidualRealification": [],
     "MathlibAnnex.Analysis.Normed.Module.Goldstine": [],
+    "MathlibAnnex.Analysis.Normed.Operator.CardinalCompact": [
+      "MathlibAnnex.Topology.MetricSpace.CardinalTotallyBounded",
+      "MathlibAnnex.Analysis.Normed.Operator.CompactIdeal"
+    ],
     "MathlibAnnex.Analysis.Normed.Operator.Cardinality": [
       "MathlibAnnex.Topology.MetricSpace.SeparableCardinality"
     ],
+    "MathlibAnnex.Analysis.Normed.Operator.ClosureRange": [],
+    "MathlibAnnex.Analysis.Normed.Operator.CompactIdeal": [],
     "MathlibAnnex.Analysis.Normed.Operator.WeakCompact": [
       "MathlibAnnex.Analysis.LocallyConvex.FiniteApproximation",
       "MathlibAnnex.Analysis.Normed.Module.Goldstine"
@@ -1292,10 +1336,49 @@
       "MathlibAnnex.Analysis.Normed.TensorProduct.Projective"
     ],
     "MathlibAnnex.Analysis.Normed.TensorProduct.Projective": [],
+    "MathlibAnnex.Analysis.VonNeumannAlgebra.Bicommutant": [
+      "MathlibAnnex.Analysis.VonNeumannAlgebra.FiniteAmplification",
+      "MathlibAnnex.Analysis.VonNeumannAlgebra.Generated"
+    ],
+    "MathlibAnnex.Analysis.VonNeumannAlgebra.Commutant": [
+      "MathlibAnnex.Analysis.VonNeumannAlgebra.OperatorTopology"
+    ],
+    "MathlibAnnex.Analysis.VonNeumannAlgebra.Factor": [
+      "MathlibAnnex.Analysis.VonNeumannAlgebra.TracialState"
+    ],
+    "MathlibAnnex.Analysis.VonNeumannAlgebra.Finite": [],
+    "MathlibAnnex.Analysis.VonNeumannAlgebra.FiniteAmplification": [
+      "MathlibAnnex.Analysis.CStarAlgebra.FiniteInterpolation"
+    ],
+    "MathlibAnnex.Analysis.VonNeumannAlgebra.Generated": [
+      "MathlibAnnex.Analysis.VonNeumannAlgebra.Commutant"
+    ],
+    "MathlibAnnex.Analysis.VonNeumannAlgebra.Hyperfinite": [],
+    "MathlibAnnex.Analysis.VonNeumannAlgebra.MonotoneConvergence": [
+      "MathlibAnnex.Analysis.InnerProductSpace.StrongOperator"
+    ],
+    "MathlibAnnex.Analysis.VonNeumannAlgebra.NormalFunctional": [
+      "MathlibAnnex.Analysis.CStarAlgebra.Representation.VectorFunctional",
+      "MathlibAnnex.Analysis.VonNeumannAlgebra.Generated",
+      "MathlibAnnex.Analysis.VonNeumannAlgebra.MonotoneConvergence"
+    ],
+    "MathlibAnnex.Analysis.VonNeumannAlgebra.OperatorTopology": [
+      "MathlibAnnex.Analysis.InnerProductSpace.StrongOperator"
+    ],
+    "MathlibAnnex.Analysis.VonNeumannAlgebra.TracialState": [
+      "MathlibAnnex.Analysis.CStarAlgebra.GNS.TracialFaithfulness",
+      "MathlibAnnex.Analysis.CStarAlgebra.State.Basic",
+      "MathlibAnnex.Analysis.CStarAlgebra.TensorAveraging.VectorDomination"
+    ],
+    "MathlibAnnex.Analysis.VonNeumannAlgebra.TypeII1": [
+      "MathlibAnnex.Analysis.VonNeumannAlgebra.Factor",
+      "MathlibAnnex.Analysis.VonNeumannAlgebra.Finite"
+    ],
     "MathlibAnnex.Topology.CompactCardinality": [],
     "MathlibAnnex.Topology.CountableBaire": [],
     "MathlibAnnex.Topology.DensityCharacter": [],
     "MathlibAnnex.Topology.InfinitePath": [],
+    "MathlibAnnex.Topology.MetricSpace.CardinalTotallyBounded": [],
     "MathlibAnnex.Topology.MetricSpace.DenseCardinality": [],
     "MathlibAnnex.Topology.MetricSpace.DenseCauchy": [],
     "MathlibAnnex.Topology.MetricSpace.SeparableCardinality": []
@@ -1668,6 +1751,12 @@
       "sha256": "e98afa88762521ef131265451c034db5e367e66b605c0b80c6aeab3fe4223e79"
     },
     {
+      "bytes": 4557,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.CAR.HilbertBasisConsequences",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/CAR/HilbertBasisConsequences.lean",
+      "sha256": "937ad327fa8c8c914a8b03807d18b96b0a6d1150d46581048add660e0fa33787"
+    },
+    {
       "bytes": 4982,
       "module": "MathlibAnnex.Analysis.CStarAlgebra.CAR.Homogeneity",
       "path": "MathlibAnnex/Analysis/CStarAlgebra/CAR/Homogeneity.lean",
@@ -1764,6 +1853,12 @@
       "sha256": "13c8acf84a9de05643659a49d5dd4631022e31203d390dc9f3135de6f8d7ec3b"
     },
     {
+      "bytes": 5968,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.CAR.TraceFiniteStages",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/CAR/TraceFiniteStages.lean",
+      "sha256": "dfe075395b3a27156f4f19b2dc4e08dd4d990cd53d2dea6e3f53b1aba5676bc1"
+    },
+    {
       "bytes": 3556,
       "module": "MathlibAnnex.Analysis.CStarAlgebra.CAR.TraceFlag",
       "path": "MathlibAnnex/Analysis/CStarAlgebra/CAR/TraceFlag.lean",
@@ -1776,16 +1871,40 @@
       "sha256": "90a8a9f2d07d8a07f8640b466273044ce0a1327543ca11a33b3a913de03b9a3f"
     },
     {
+      "bytes": 3250,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.CAR.TraceHyperfinite",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/CAR/TraceHyperfinite.lean",
+      "sha256": "8d5a0ae58023aa63f8a6307fc07a27f7b39230104df3e47781634e82d135e36b"
+    },
+    {
       "bytes": 3713,
       "module": "MathlibAnnex.Analysis.CStarAlgebra.CAR.TraceState",
       "path": "MathlibAnnex/Analysis/CStarAlgebra/CAR/TraceState.lean",
       "sha256": "8ecb153dd670388c34d4a0ab4c752ee1eb64e28dd4dacd9422c5138acf1fa540"
     },
     {
+      "bytes": 3680,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.CAR.TraceTypeII1",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/CAR/TraceTypeII1.lean",
+      "sha256": "5fe9359f04c096c5592dc7882b23293ad4609a1d928279fc99193cabfd64a46f"
+    },
+    {
       "bytes": 4206,
       "module": "MathlibAnnex.Analysis.CStarAlgebra.CAR.TraceUnique",
       "path": "MathlibAnnex/Analysis/CStarAlgebra/CAR/TraceUnique.lean",
       "sha256": "10674c694dea95e8eb078d49f5cc70686f83d2b87eede56578e0236519222678"
+    },
+    {
+      "bytes": 3438,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.CAR.TraceVonNeumann",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/CAR/TraceVonNeumann.lean",
+      "sha256": "c8d15183830f6d6fcd192026d8951c545a2d59f059968c2d2171108a28d76da4"
+    },
+    {
+      "bytes": 9668,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.CAR.TraceWeakClosure",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/CAR/TraceWeakClosure.lean",
+      "sha256": "0e18947e4018b0d82638b3c1754f51cfd12a0aeeca4d678be110c0b9d1ed163a"
     },
     {
       "bytes": 11175,
@@ -3072,6 +3191,30 @@
       "sha256": "691e99635fc798156de8db810e9d361aaa6e2940e59d36e83527d68baf36462d"
     },
     {
+      "bytes": 9488,
+      "module": "MathlibAnnex.Analysis.InnerProductSpace.HilbertBasisCardinalNets",
+      "path": "MathlibAnnex/Analysis/InnerProductSpace/HilbertBasisCardinalNets.lean",
+      "sha256": "e47a85ba39e24032d6e602afb0a99215421ddd7aad8c8b688b2babf011f12c18"
+    },
+    {
+      "bytes": 12949,
+      "module": "MathlibAnnex.Analysis.InnerProductSpace.HilbertBasisCardinality",
+      "path": "MathlibAnnex/Analysis/InnerProductSpace/HilbertBasisCardinality.lean",
+      "sha256": "4937ae30d41a19427adcd3944e497e01204e029d2cc2a1bdd41a533abc2f7a93"
+    },
+    {
+      "bytes": 1867,
+      "module": "MathlibAnnex.Analysis.InnerProductSpace.HilbertBasisDensity",
+      "path": "MathlibAnnex/Analysis/InnerProductSpace/HilbertBasisDensity.lean",
+      "sha256": "92daa79f7b345001b210363b247432bfd84fed7a448017d7b020f9f8eff43525"
+    },
+    {
+      "bytes": 15125,
+      "module": "MathlibAnnex.Analysis.InnerProductSpace.HilbertBasisRangeCardinality",
+      "path": "MathlibAnnex/Analysis/InnerProductSpace/HilbertBasisRangeCardinality.lean",
+      "sha256": "d6a8eb60c89ef9f57de4176ffed291dac5fa2366ce74958bc4632a3dcaa1d947"
+    },
+    {
       "bytes": 4186,
       "module": "MathlibAnnex.Analysis.InnerProductSpace.HilbertSum",
       "path": "MathlibAnnex/Analysis/InnerProductSpace/HilbertSum.lean",
@@ -3192,10 +3335,28 @@
       "sha256": "e20eebdf0dd683c4ae47d5cdbf774466dbc51f970d11fb41169e6461d1a7ae89"
     },
     {
+      "bytes": 17711,
+      "module": "MathlibAnnex.Analysis.Normed.Operator.CardinalCompact",
+      "path": "MathlibAnnex/Analysis/Normed/Operator/CardinalCompact.lean",
+      "sha256": "c63ef7f30ce93a53457b3ec6cd6cb4914f5a1b95faa15b1f1212f12b55004c35"
+    },
+    {
       "bytes": 1373,
       "module": "MathlibAnnex.Analysis.Normed.Operator.Cardinality",
       "path": "MathlibAnnex/Analysis/Normed/Operator/Cardinality.lean",
       "sha256": "2715ff5f34d433d4fc84242075b04107eb79fd1674b6157a2850f9930893820c"
+    },
+    {
+      "bytes": 1730,
+      "module": "MathlibAnnex.Analysis.Normed.Operator.ClosureRange",
+      "path": "MathlibAnnex/Analysis/Normed/Operator/ClosureRange.lean",
+      "sha256": "11c1c18ec1075e752ff7378e579c5d78aa00c15bdfb0fddd60ac72e246184d4e"
+    },
+    {
+      "bytes": 3486,
+      "module": "MathlibAnnex.Analysis.Normed.Operator.CompactIdeal",
+      "path": "MathlibAnnex/Analysis/Normed/Operator/CompactIdeal.lean",
+      "sha256": "f6e8acb470ba6ea67e879fcdf6a1bdff43a6dec0f48f7fa3e47c4bb60dcacf1e"
     },
     {
       "bytes": 13336,
@@ -3234,6 +3395,78 @@
       "sha256": "0c0a8de054428b7f9a63f332748c99f0459cd3b34b5e24973715f86ca85b96af"
     },
     {
+      "bytes": 4766,
+      "module": "MathlibAnnex.Analysis.VonNeumannAlgebra.Bicommutant",
+      "path": "MathlibAnnex/Analysis/VonNeumannAlgebra/Bicommutant.lean",
+      "sha256": "54c001034b8a9b0b25b960e4787def69c32222487a3003e738098b7c315e5db9"
+    },
+    {
+      "bytes": 2236,
+      "module": "MathlibAnnex.Analysis.VonNeumannAlgebra.Commutant",
+      "path": "MathlibAnnex/Analysis/VonNeumannAlgebra/Commutant.lean",
+      "sha256": "c4256f3a0d4118df2abe69fe977f281d08990609b600fb20bfcc7daef0d62a31"
+    },
+    {
+      "bytes": 6738,
+      "module": "MathlibAnnex.Analysis.VonNeumannAlgebra.Factor",
+      "path": "MathlibAnnex/Analysis/VonNeumannAlgebra/Factor.lean",
+      "sha256": "7fe22fd133d8e8949f41a992f417be7a2d0932a6b1f52f46b212b9d92bd9a4b2"
+    },
+    {
+      "bytes": 4081,
+      "module": "MathlibAnnex.Analysis.VonNeumannAlgebra.Finite",
+      "path": "MathlibAnnex/Analysis/VonNeumannAlgebra/Finite.lean",
+      "sha256": "801c17f06c237269bafe0e81a254bbb895489346fe8b341e856b3f662daa69dc"
+    },
+    {
+      "bytes": 9548,
+      "module": "MathlibAnnex.Analysis.VonNeumannAlgebra.FiniteAmplification",
+      "path": "MathlibAnnex/Analysis/VonNeumannAlgebra/FiniteAmplification.lean",
+      "sha256": "705fd65d36686830cf3625fab2974bb2b2546ee879b6fda77ad49c503884804b"
+    },
+    {
+      "bytes": 5738,
+      "module": "MathlibAnnex.Analysis.VonNeumannAlgebra.Generated",
+      "path": "MathlibAnnex/Analysis/VonNeumannAlgebra/Generated.lean",
+      "sha256": "d611c126e0056dc9ed614e2fba637e081aec7dff526228cf20f240debdc214eb"
+    },
+    {
+      "bytes": 3329,
+      "module": "MathlibAnnex.Analysis.VonNeumannAlgebra.Hyperfinite",
+      "path": "MathlibAnnex/Analysis/VonNeumannAlgebra/Hyperfinite.lean",
+      "sha256": "2500b220722c4cfd18d543dd1e8ba5b78a4c0eadce140a3d7bdea198b80e9719"
+    },
+    {
+      "bytes": 9589,
+      "module": "MathlibAnnex.Analysis.VonNeumannAlgebra.MonotoneConvergence",
+      "path": "MathlibAnnex/Analysis/VonNeumannAlgebra/MonotoneConvergence.lean",
+      "sha256": "405ff2debcc2c0974816b1f8f899ad3a22a30ccfc8534f34b0bcacc2a14a368e"
+    },
+    {
+      "bytes": 7850,
+      "module": "MathlibAnnex.Analysis.VonNeumannAlgebra.NormalFunctional",
+      "path": "MathlibAnnex/Analysis/VonNeumannAlgebra/NormalFunctional.lean",
+      "sha256": "24a48287720986f51016d1e348b5b6c32ef981f9294302712ab4a1c0f9126a8e"
+    },
+    {
+      "bytes": 3499,
+      "module": "MathlibAnnex.Analysis.VonNeumannAlgebra.OperatorTopology",
+      "path": "MathlibAnnex/Analysis/VonNeumannAlgebra/OperatorTopology.lean",
+      "sha256": "7a6388497d720461e297eb0ab8f4ae09fd237d4b1e9fc83a6c30db242d3bd93b"
+    },
+    {
+      "bytes": 5270,
+      "module": "MathlibAnnex.Analysis.VonNeumannAlgebra.TracialState",
+      "path": "MathlibAnnex/Analysis/VonNeumannAlgebra/TracialState.lean",
+      "sha256": "6fb0113d5a4c59e333b2fc806de001644bdca48f16e2ffdc3883a49872c120c3"
+    },
+    {
+      "bytes": 1703,
+      "module": "MathlibAnnex.Analysis.VonNeumannAlgebra.TypeII1",
+      "path": "MathlibAnnex/Analysis/VonNeumannAlgebra/TypeII1.lean",
+      "sha256": "ffe224d4fdbe50a656d9cb1c65d0aa531aa4f3e1f08f94aa87b38d5eb2384162"
+    },
+    {
       "bytes": 9195,
       "module": "MathlibAnnex.Topology.CompactCardinality",
       "path": "MathlibAnnex/Topology/CompactCardinality.lean",
@@ -3258,6 +3491,12 @@
       "sha256": "a60324009e1b4a354f77a724d0c7d07f321e77d453ae0704ea88fdce502aa04a"
     },
     {
+      "bytes": 15625,
+      "module": "MathlibAnnex.Topology.MetricSpace.CardinalTotallyBounded",
+      "path": "MathlibAnnex/Topology/MetricSpace/CardinalTotallyBounded.lean",
+      "sha256": "45ea5ce210d50341742553091c6c47551149084b38cd875b7a70f4824443b1dd"
+    },
+    {
       "bytes": 4379,
       "module": "MathlibAnnex.Topology.MetricSpace.DenseCardinality",
       "path": "MathlibAnnex/Topology/MetricSpace/DenseCardinality.lean",
@@ -3277,6 +3516,6 @@
     }
   ],
   "schema_revision": 2,
-  "source_admission": "PRIVATE_SOURCE_ACCEPTED_BY_OWNER_FINAL_SUCCESSOR",
-  "source_module_count": 329
+  "source_admission": "REGULAR_PRIVATE_SOURCE_ADMISSION",
+  "source_module_count": 355
 }

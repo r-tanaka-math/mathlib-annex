@@ -4,5 +4,7 @@ import MathlibAnnex.Analysis.CStarAlgebra.NonUnital.CompactModel
 import MathlibAnnex.Analysis.CStarAlgebra.Representation.OrdinarySingleton
 import MathlibAnnex.Analysis.CStarAlgebra.CAR.SeparableFaithful
 import MathlibAnnex.Analysis.CStarAlgebra.CAR.ContinuumHypothesis
+import MathlibAnnex.Analysis.CStarAlgebra.CAR.TraceTypeII1
+import MathlibAnnex.Analysis.CStarAlgebra.CAR.HilbertBasisConsequences
 
 /-! Naimark: imports-only candidate navigation. No source admission or publication. -/

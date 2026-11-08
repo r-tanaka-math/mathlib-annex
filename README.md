@@ -1,11 +1,11 @@
-# MathlibAnnex v0.6.0
+# MathlibAnnex v0.6.1
 
-MathlibAnnex is a Lean library of reusable mathematical declarations. It builds with Lean 4.35.0 and the Mathlib revision in the package lock. To use the almost-isometric Banach-space result, import its Project entry.
+MathlibAnnex collects reusable Lean declarations in functional analysis and operator algebras. This version extends the Naimark Project with von Neumann algebra foundations and the trace representation of the CAR algebra.
 
 ```lean
-import MathlibAnnex.Projects.LipschitzHomeomorphicBanachSpaces
+import MathlibAnnex.Projects.Naimark
 ```
 
-The seven [Project manifests](docs/projects/MATHLIBANNEX_PROJECT_SOURCE_MANIFESTS.json) identify each entry, its direct imports and its source closure. The Lip entry reaches 159 of 166 production modules. The library also retains seven independently compiled modules outside that entry. Audit and consumer modules exercise the library separately.
+The Naimark entry includes the trace representation’s finite factor, its infinite dimensionality, its finite matrix stages, and Hilbert basis cardinality results. Here the type II₁ predicate describes a nonzero infinite-dimensional factor with finite unit. The entry and its imports cover 356 modules.
 
-Owner-final qualification passed 17 checks across 928 targets. The declaration census covered 18,448 declarations. See [Verification](VERIFICATION.md), [third-party notices](THIRD_PARTY_NOTICES.md) and the [v0.5.0 release history](docs/releases/v0.5.0.md).
+The [seven Project manifests](docs/projects/MATHLIBANNEX_PROJECT_SOURCE_MANIFESTS.json) list the entry points and transitive source dependencies. The library also contains 48 production modules outside all seven entries. See [build and verification](VERIFICATION.md), [changes](CHANGELOG.md) and [source notices](THIRD_PARTY_NOTICES.md).
