@@ -1,5 +1,5 @@
 {
-  "candidate_package_version": "0.6.1",
+  "candidate_package_version": "0.6.2",
   "compiled_axiom_policy": {
     "allowlist": [
       "Classical.choice",
@@ -11,12 +11,12 @@
   },
   "current_qualification": {
     "attempt": 1,
-    "commit": "ef2cc76a246881b64cba030870944cad3172817d",
-    "job_id": 128630358596,
-    "receipt_sha256": "e28c56b9c8791279de0767e547eb3fc99fbdffcb99a0857e3eb88683767b20a2",
-    "run_id": 42447808184,
+    "commit": "e81ace1cc133d9e765000d063610c4dc234ec545",
+    "job": 130233208577,
+    "receipt_sha256": "f63ae2faa6e07b7e22d8dc79194c7f691863e6f22db3253436a892ec683ca8eb",
+    "run": 42932125221,
     "state": "OWNER_FINAL_PASS",
-    "tree": "85e94ffe211808309453bbfbb4ce035be68fe130"
+    "tree": "8becc4e38642b72353a93786ee071872ee291bca"
   },
   "dependency_lock": {
     "bytes": 3163,
@@ -42,15 +42,17 @@
     "MathlibAnnex.Analysis.Normed.GeometricStructure.L1RealSpectrum",
     "MathlibAnnex.Analysis.Normed.GeometricStructure.SmoothSpectrum",
     "MathlibAnnex.Topology.ClosureSpace.TopCatEquivalence",
-    "MathlibAnnex.Topology.ClosureSpace.TransformIso"
+    "MathlibAnnex.Topology.ClosureSpace.TransformIso",
+    "MathlibAnnex.Analysis.CStarAlgebra.GeometricStructure.InternalTypeI",
+    "MathlibAnnex.Analysis.CStarAlgebra.GeometricStructure.TypeIFactorModel"
   ],
-  "direct_root_digest": "b45b795e1d129350efc2609db805b5133c09934198693f1e6a8795767dc55c8d",
+  "direct_root_digest": "95c93ac00052ec15df9405b4d1dfaeb986c93c65dbe5448f8fb6027fe7337256",
   "display_name": "Geometric Structure Spaces",
   "entry_module": {
-    "bytes": 1087,
+    "bytes": 1240,
     "module": "MathlibAnnex.Projects.GeometricStructureSpaces",
     "path": "MathlibAnnex/Projects/GeometricStructureSpaces.lean",
-    "sha256": "0df6577385ecf8d61460a596b7a3c4f66be25bc7e11cbeb0187d771e5f4bc3c4"
+    "sha256": "1a4312d644667cea7d2d0e3e4236bf365362ec34c347641d747b820fbca33e14"
   },
   "entry_scope": "IMPORT_NAVIGATION_FACADE_NO_DECLARATIONS",
   "excluded_module_roles": {
@@ -66,20 +68,51 @@
       "examples/ImportGeometricStructureSpaces.lean"
     ]
   },
-  "formalization_source_state": "PRIVATE_ADMITTED_SOURCE",
+  "formalization_source_state": "ADMITTED_SOURCE",
   "lean_toolchain": "leanprover/lean4:v4.35.0",
   "mathlib_revision": "56a005855ea17e0b0958f73ec801ae140b0a1679",
-  "package_version": "0.6.1",
+  "package_version": "0.6.2",
   "project_slug": "geometric-structure-spaces",
-  "publication_state": "PUBLICATION_CANDIDATE",
+  "publication_state": "PUBLICATION_AUTHORIZED",
+  "qualified_internal_version": "0.7.0",
   "record_type": "MATHLIBANNEX_PROJECT_SOURCE_MANIFEST",
-  "resolved_closure_digest": "7b9e87864259a6d6ba9b0d91a1603cf1b822108a26a3b9cc9c8ceccf8ad815c6",
+  "resolved_closure_digest": "b733f65788b537ee861efb500b59de937cd16f60462345f8efd0e9b010efed99",
   "resolved_import_edges": {
+    "MathlibAnnex.Algebra.Star.PartialIsometry": [],
+    "MathlibAnnex.Algebra.Star.ProjectionEquivalence": [
+      "MathlibAnnex.Algebra.Star.PartialIsometry"
+    ],
+    "MathlibAnnex.Analysis.CStarAlgebra.Bilinear.Domination": [],
     "MathlibAnnex.Analysis.CStarAlgebra.Bilinear.SequenceExtension": [
       "MathlibAnnex.Analysis.Normed.Sequence.GeneralizedLimit"
     ],
     "MathlibAnnex.Analysis.CStarAlgebra.Bilinear.SequenceNormAttainment": [
       "MathlibAnnex.Analysis.CStarAlgebra.Bilinear.SequenceExtension"
+    ],
+    "MathlibAnnex.Analysis.CStarAlgebra.CAR.Completion": [
+      "MathlibAnnex.Analysis.CStarAlgebra.CAR.PureRoot"
+    ],
+    "MathlibAnnex.Analysis.CStarAlgebra.CAR.FiniteStages": [],
+    "MathlibAnnex.Analysis.CStarAlgebra.CAR.GNS": [
+      "MathlibAnnex.Analysis.CStarAlgebra.CAR.RootCorner",
+      "MathlibAnnex.Analysis.CStarAlgebra.GNSCyclic"
+    ],
+    "MathlibAnnex.Analysis.CStarAlgebra.CAR.NoCompacts": [
+      "MathlibAnnex.Analysis.CStarAlgebra.CompactPreimage",
+      "MathlibAnnex.Analysis.CStarAlgebra.Representation.Adapters",
+      "MathlibAnnex.Analysis.CStarAlgebra.CAR.Simplicity",
+      "MathlibAnnex.Analysis.CStarAlgebra.PureStateGNS.PureIrreducible"
+    ],
+    "MathlibAnnex.Analysis.CStarAlgebra.CAR.PureRoot": [
+      "MathlibAnnex.Analysis.CStarAlgebra.CAR.GNS",
+      "MathlibAnnex.Analysis.CStarAlgebra.PureStateHomogeneity.KishimotoOzawaSakai"
+    ],
+    "MathlibAnnex.Analysis.CStarAlgebra.CAR.RootCorner": [
+      "MathlibAnnex.Analysis.CStarAlgebra.CAR.FiniteStages"
+    ],
+    "MathlibAnnex.Analysis.CStarAlgebra.CAR.Simplicity": [
+      "MathlibAnnex.Analysis.CStarAlgebra.CAR.Completion",
+      "MathlibAnnex.Analysis.CStarAlgebra.GNSCyclic"
     ],
     "MathlibAnnex.Analysis.CStarAlgebra.CompactModel": [],
     "MathlibAnnex.Analysis.CStarAlgebra.CompactModelEquiv": [
@@ -139,6 +172,11 @@
       "MathlibAnnex.Analysis.CStarAlgebra.DirectSum.Equiv",
       "MathlibAnnex.Analysis.CStarAlgebra.DirectSum.CompactOperators",
       "MathlibAnnex.Analysis.CStarAlgebra.CompactModelEquiv"
+    ],
+    "MathlibAnnex.Analysis.CStarAlgebra.Enveloping.NormalExtension": [
+      "MathlibAnnex.Analysis.CStarAlgebra.TensorAveraging.CStarBidualTopology",
+      "MathlibAnnex.Analysis.CStarAlgebra.TensorAveraging.UniversalStarNet",
+      "MathlibAnnex.Analysis.VonNeumannAlgebra.Bicommutant"
     ],
     "MathlibAnnex.Analysis.CStarAlgebra.ExactInterpolation": [
       "MathlibAnnex.Analysis.CStarAlgebra.Kadison"
@@ -314,11 +352,16 @@
       "MathlibAnnex.Analysis.CStarAlgebra.Cyclic",
       "MathlibAnnex.Analysis.CStarAlgebra.Representation.AtomicCommutant"
     ],
+    "MathlibAnnex.Analysis.CStarAlgebra.FiniteRow": [],
     "MathlibAnnex.Analysis.CStarAlgebra.GNS.Adapters": [
       "MathlibAnnex.Analysis.CStarAlgebra.GNS.Cyclic",
       "MathlibAnnex.Analysis.CStarAlgebra.GNSCyclic"
     ],
     "MathlibAnnex.Analysis.CStarAlgebra.GNS.Cyclic": [],
+    "MathlibAnnex.Analysis.CStarAlgebra.GNS.TracialFaithfulness": [
+      "MathlibAnnex.Analysis.CStarAlgebra.GNSCyclic",
+      "MathlibAnnex.Analysis.CStarAlgebra.Representation.VectorFunctional"
+    ],
     "MathlibAnnex.Analysis.CStarAlgebra.GNSCyclic": [],
     "MathlibAnnex.Analysis.CStarAlgebra.GeometricStructure.AbsoluteState": [
       "MathlibAnnex.Analysis.CStarAlgebra.FacialStructure.NonUnitalStateGNS",
@@ -463,6 +506,11 @@
       "MathlibAnnex.Analysis.CStarAlgebra.Quotient.ImageRepresentation",
       "MathlibAnnex.Analysis.CStarAlgebra.Quotient.ImageWeakDual",
       "MathlibAnnex.Topology.ClosureSpace.SubspaceMaps"
+    ],
+    "MathlibAnnex.Analysis.CStarAlgebra.GeometricStructure.InternalTypeI": [
+      "MathlibAnnex.Analysis.CStarAlgebra.TypeI.GCRCharacterization",
+      "MathlibAnnex.Analysis.CStarAlgebra.TypeI.GCRConverse",
+      "MathlibAnnex.Analysis.CStarAlgebra.GeometricStructure.GCRCharacterization"
     ],
     "MathlibAnnex.Analysis.CStarAlgebra.GeometricStructure.MatrixCoefficient": [
       "MathlibAnnex.Analysis.InnerProductSpace.MatrixCoefficient.Adjoint",
@@ -642,9 +690,30 @@
       "MathlibAnnex.Topology.ClosureSpace.HullKernelPreimage",
       "MathlibAnnex.Topology.ClosureSpace.Induced"
     ],
+    "MathlibAnnex.Analysis.CStarAlgebra.GeometricStructure.TypeIFactorModel": [
+      "MathlibAnnex.Analysis.VonNeumannAlgebra.TypeI.Factor",
+      "MathlibAnnex.Analysis.CStarAlgebra.GeometricStructure.TypeIFactorRigidity"
+    ],
     "MathlibAnnex.Analysis.CStarAlgebra.GeometricStructure.TypeIFactorRigidity": [
       "MathlibAnnex.Analysis.CStarAlgebra.GeometricStructure.BoundedOperatorRigidity",
       "MathlibAnnex.Analysis.CStarAlgebra.GeometricStructure.RepresentationTransport"
+    ],
+    "MathlibAnnex.Analysis.CStarAlgebra.Hereditary.Basic": [],
+    "MathlibAnnex.Analysis.CStarAlgebra.Hereditary.CornerEquivalence": [
+      "MathlibAnnex.Analysis.CStarAlgebra.Hereditary.Generated"
+    ],
+    "MathlibAnnex.Analysis.CStarAlgebra.Hereditary.Generated": [
+      "MathlibAnnex.Analysis.CStarAlgebra.Hereditary.Basic"
+    ],
+    "MathlibAnnex.Analysis.CStarAlgebra.Hereditary.MatrixAction": [],
+    "MathlibAnnex.Analysis.CStarAlgebra.Hereditary.MatrixActionQuotient": [
+      "MathlibAnnex.Analysis.CStarAlgebra.Hereditary.MatrixAction"
+    ],
+    "MathlibAnnex.Analysis.CStarAlgebra.Hereditary.MatrixCorners": [
+      "MathlibAnnex.Analysis.CStarAlgebra.Hereditary.CornerEquivalence"
+    ],
+    "MathlibAnnex.Analysis.CStarAlgebra.Hereditary.Plateau": [
+      "MathlibAnnex.Analysis.CStarAlgebra.Hereditary.CornerEquivalence"
     ],
     "MathlibAnnex.Analysis.CStarAlgebra.Ideal.ClosedStarIdeal": [],
     "MathlibAnnex.Analysis.CStarAlgebra.Ideal.GeneratedBy": [
@@ -844,6 +913,11 @@
     "MathlibAnnex.Analysis.CStarAlgebra.Representation.Cyclic": [
       "MathlibAnnex.Analysis.CStarAlgebra.Representation.Basic"
     ],
+    "MathlibAnnex.Analysis.CStarAlgebra.Representation.CyclicRestriction": [
+      "MathlibAnnex.Analysis.CStarAlgebra.Cyclic",
+      "MathlibAnnex.Analysis.CStarAlgebra.Representation.Cyclic",
+      "MathlibAnnex.Analysis.CStarAlgebra.Representation.VectorFunctional"
+    ],
     "MathlibAnnex.Analysis.CStarAlgebra.Representation.DiscreteCCRCompact": [
       "MathlibAnnex.Analysis.CStarAlgebra.Representation.ReducedAtomic",
       "MathlibAnnex.Analysis.CStarAlgebra.Representation.CompactC0Model",
@@ -881,6 +955,9 @@
     ],
     "MathlibAnnex.Analysis.CStarAlgebra.Representation.FunctionalCoefficientIdeal": [
       "MathlibAnnex.Analysis.CStarAlgebra.Representation.FunctionalCoefficient"
+    ],
+    "MathlibAnnex.Analysis.CStarAlgebra.Representation.MatrixTwo": [
+      "MathlibAnnex.Analysis.CStarAlgebra.FiniteInterpolation"
     ],
     "MathlibAnnex.Analysis.CStarAlgebra.Representation.NonUnital": [
       "MathlibAnnex.Analysis.CStarAlgebra.Representation.Basic"
@@ -968,6 +1045,10 @@
       "MathlibAnnex.Analysis.CStarAlgebra.Representation.Adapters",
       "MathlibAnnex.Analysis.CStarAlgebra.Representation.VectorFunctional"
     ],
+    "MathlibAnnex.Analysis.CStarAlgebra.State.Extension": [
+      "MathlibAnnex.Analysis.CStarAlgebra.PureState",
+      "MathlibAnnex.Analysis.CStarAlgebra.State.Basic"
+    ],
     "MathlibAnnex.Analysis.CStarAlgebra.State.Ideal": [
       "MathlibAnnex.Analysis.CStarAlgebra.PureState",
       "MathlibAnnex.Analysis.CStarAlgebra.State.Irreducible"
@@ -991,9 +1072,194 @@
       "MathlibAnnex.Analysis.CStarAlgebra.State.Purity",
       "MathlibAnnex.Analysis.Convex.Milman"
     ],
+    "MathlibAnnex.Analysis.CStarAlgebra.TensorAveraging.BidualCStarLaws": [
+      "MathlibAnnex.Analysis.CStarAlgebra.TensorAveraging.RepresentedBidualSeparation"
+    ],
+    "MathlibAnnex.Analysis.CStarAlgebra.TensorAveraging.CStarBidualModel": [
+      "MathlibAnnex.Analysis.CStarAlgebra.TensorAveraging.BidualCStarLaws"
+    ],
+    "MathlibAnnex.Analysis.CStarAlgebra.TensorAveraging.CStarBidualTopology": [
+      "MathlibAnnex.Analysis.CStarAlgebra.TensorAveraging.CStarBidualModel",
+      "MathlibAnnex.Analysis.CStarAlgebra.TensorAveraging.RepresentedBidualBall"
+    ],
+    "MathlibAnnex.Analysis.CStarAlgebra.TensorAveraging.ContractiveStarSampling": [
+      "MathlibAnnex.Analysis.CStarAlgebra.TwoSidedInterpolation",
+      "MathlibAnnex.Analysis.CStarAlgebra.TensorAveraging.VectorDomination"
+    ],
+    "MathlibAnnex.Analysis.CStarAlgebra.TensorAveraging.FiniteRankBridge": [
+      "MathlibAnnex.Analysis.CStarAlgebra.TensorAveraging.FiniteRow",
+      "MathlibAnnex.Analysis.LocallyConvex.FiniteApproximation"
+    ],
+    "MathlibAnnex.Analysis.CStarAlgebra.TensorAveraging.FiniteRow": [
+      "MathlibAnnex.Analysis.CStarAlgebra.FiniteRow",
+      "MathlibAnnex.Analysis.Normed.TensorProduct.Algebra"
+    ],
+    "MathlibAnnex.Analysis.CStarAlgebra.TensorAveraging.MeanSampling": [
+      "MathlibAnnex.Analysis.CStarAlgebra.TensorAveraging.FiniteRow"
+    ],
+    "MathlibAnnex.Analysis.CStarAlgebra.TensorAveraging.MeanVectorMoment": [
+      "MathlibAnnex.Analysis.CStarAlgebra.TensorAveraging.OmegaFromMean"
+    ],
+    "MathlibAnnex.Analysis.CStarAlgebra.TensorAveraging.OmegaFromMean": [
+      "MathlibAnnex.Analysis.CStarAlgebra.TensorAveraging.MeanSampling",
+      "MathlibAnnex.Analysis.CStarAlgebra.TensorAveraging.FiniteRankBridge"
+    ],
+    "MathlibAnnex.Analysis.CStarAlgebra.TensorAveraging.RepresentedBidual": [
+      "MathlibAnnex.Analysis.InnerProductSpace.BidualRecovery",
+      "MathlibAnnex.Analysis.CStarAlgebra.TensorAveraging.VectorForms"
+    ],
+    "MathlibAnnex.Analysis.CStarAlgebra.TensorAveraging.RepresentedBidualBall": [
+      "MathlibAnnex.Analysis.CStarAlgebra.TensorAveraging.RepresentedBidualStar",
+      "MathlibAnnex.Analysis.CStarAlgebra.TensorAveraging.ContractiveStarSampling"
+    ],
+    "MathlibAnnex.Analysis.CStarAlgebra.TensorAveraging.RepresentedBidualProduct": [
+      "MathlibAnnex.Analysis.CStarAlgebra.TensorAveraging.RepresentedBidual",
+      "MathlibAnnex.Analysis.Normed.TensorProduct.Algebra"
+    ],
+    "MathlibAnnex.Analysis.CStarAlgebra.TensorAveraging.RepresentedBidualSeparation": [
+      "MathlibAnnex.Analysis.CStarAlgebra.Representation.FunctionalCoefficient",
+      "MathlibAnnex.Analysis.CStarAlgebra.TensorAveraging.RepresentedBidualStar"
+    ],
+    "MathlibAnnex.Analysis.CStarAlgebra.TensorAveraging.RepresentedBidualStar": [
+      "MathlibAnnex.Analysis.CStarAlgebra.TensorAveraging.RepresentedBidualProduct"
+    ],
+    "MathlibAnnex.Analysis.CStarAlgebra.TensorAveraging.UniversalStarApproximation": [
+      "MathlibAnnex.Analysis.CStarAlgebra.TensorAveraging.RepresentedBidualStar",
+      "MathlibAnnex.Analysis.Normed.Module.BidualRealification",
+      "MathlibAnnex.Analysis.LocallyConvex.FiniteBallApproximation"
+    ],
+    "MathlibAnnex.Analysis.CStarAlgebra.TensorAveraging.UniversalStarNet": [
+      "MathlibAnnex.Analysis.CStarAlgebra.TensorAveraging.UniversalStarApproximation",
+      "MathlibAnnex.Analysis.LocallyConvex.FiniteBallNet"
+    ],
+    "MathlibAnnex.Analysis.CStarAlgebra.TensorAveraging.VectorDomination": [
+      "MathlibAnnex.Analysis.CStarAlgebra.TensorAveraging.MeanVectorMoment",
+      "MathlibAnnex.Analysis.CStarAlgebra.Bilinear.Domination",
+      "MathlibAnnex.Analysis.InnerProductSpace.StrongOperator"
+    ],
+    "MathlibAnnex.Analysis.CStarAlgebra.TensorAveraging.VectorForms": [
+      "MathlibAnnex.Analysis.Normed.Bilinear.Bidual"
+    ],
+    "MathlibAnnex.Analysis.CStarAlgebra.TwoSidedInterpolation": [
+      "MathlibAnnex.Analysis.CStarAlgebra.Representation.MatrixTwo",
+      "MathlibAnnex.Analysis.CStarAlgebra.ExactInterpolation"
+    ],
+    "MathlibAnnex.Analysis.CStarAlgebra.TypeI.AbelianElement": [
+      "MathlibAnnex.Analysis.CStarAlgebra.TypeI.Basic",
+      "MathlibAnnex.Analysis.CStarAlgebra.FacialStructure.ComplexExactInterpolation",
+      "MathlibAnnex.Analysis.CStarAlgebra.Quotient.Image",
+      "MathlibAnnex.Analysis.CStarAlgebra.Quotient.SurjectiveRepresentation",
+      "MathlibAnnex.Analysis.InnerProductSpace.CompactOperatorIdeal"
+    ],
+    "MathlibAnnex.Analysis.CStarAlgebra.TypeI.Basic": [
+      "MathlibAnnex.Analysis.CStarAlgebra.Hereditary.Generated",
+      "MathlibAnnex.Analysis.CStarAlgebra.TypeI.ClosedIdealQuotient",
+      "MathlibAnnex.Analysis.CStarAlgebra.Spectrum.Basic",
+      "MathlibAnnex.Analysis.InnerProductSpace.CompactOperatorAlgebra"
+    ],
+    "MathlibAnnex.Analysis.CStarAlgebra.TypeI.CARConstruction": [
+      "MathlibAnnex.Analysis.CStarAlgebra.TypeI.HereditaryStageAction",
+      "MathlibAnnex.Analysis.CStarAlgebra.Hereditary.MatrixActionQuotient",
+      "MathlibAnnex.Analysis.CStarAlgebra.TypeI.CARQuotientCompletion",
+      "MathlibAnnex.Analysis.CStarAlgebra.TypeI.ClosedIdealQuotient"
+    ],
+    "MathlibAnnex.Analysis.CStarAlgebra.TypeI.CARObstruction": [
+      "MathlibAnnex.Analysis.CStarAlgebra.TypeI.GCRPermanence",
+      "MathlibAnnex.Analysis.CStarAlgebra.TypeI.GCRCharacterization",
+      "MathlibAnnex.Analysis.CStarAlgebra.TypeI.NonUnitalGCRSubalgebra",
+      "MathlibAnnex.Analysis.CStarAlgebra.CAR.NoCompacts"
+    ],
+    "MathlibAnnex.Analysis.CStarAlgebra.TypeI.CARQuotientCompletion": [
+      "MathlibAnnex.Analysis.CStarAlgebra.CAR.Completion",
+      "MathlibAnnex.Analysis.CStarAlgebra.Quotient.Image"
+    ],
+    "MathlibAnnex.Analysis.CStarAlgebra.TypeI.CARSubquotient": [
+      "MathlibAnnex.Analysis.CStarAlgebra.TypeI.Basic"
+    ],
+    "MathlibAnnex.Analysis.CStarAlgebra.TypeI.ClosedIdealQuotient": [
+      "MathlibAnnex.Analysis.CStarAlgebra.Ideal.PrimitiveSeparation",
+      "MathlibAnnex.Analysis.CStarAlgebra.Representation.Atomic",
+      "MathlibAnnex.Analysis.CStarAlgebra.Quotient.KernelAlgebra"
+    ],
+    "MathlibAnnex.Analysis.CStarAlgebra.TypeI.CompactIdealMaximality": [
+      "MathlibAnnex.Analysis.CStarAlgebra.CompactPreimage",
+      "MathlibAnnex.Analysis.CStarAlgebra.Spectrum.Kernel",
+      "MathlibAnnex.Analysis.InnerProductSpace.CompactOperatorAlgebra",
+      "MathlibAnnex.Analysis.CStarAlgebra.TypeI.PureStateExtension"
+    ],
+    "MathlibAnnex.Analysis.CStarAlgebra.TypeI.GCRCharacterization": [
+      "MathlibAnnex.Analysis.CStarAlgebra.TypeI.AbelianElement",
+      "MathlibAnnex.Analysis.CStarAlgebra.TypeI.GCRPermanence",
+      "MathlibAnnex.Analysis.CStarAlgebra.Quotient.ImageRepresentation",
+      "MathlibAnnex.Analysis.CStarAlgebra.Representation.CompactIntersection"
+    ],
+    "MathlibAnnex.Analysis.CStarAlgebra.TypeI.GCRConverse": [
+      "MathlibAnnex.Analysis.CStarAlgebra.TypeI.CARConstruction",
+      "MathlibAnnex.Analysis.CStarAlgebra.TypeI.CARObstruction"
+    ],
+    "MathlibAnnex.Analysis.CStarAlgebra.TypeI.GCRPermanence": [
+      "MathlibAnnex.Analysis.CStarAlgebra.TypeI.Basic",
+      "MathlibAnnex.Analysis.CStarAlgebra.Representation.CompactRange",
+      "MathlibAnnex.Analysis.CStarAlgebra.Representation.CompactOperators",
+      "MathlibAnnex.Analysis.CStarAlgebra.Representation.CompactIntersection",
+      "MathlibAnnex.Analysis.CStarAlgebra.Representation.FiniteDimensionalCompact",
+      "MathlibAnnex.Analysis.CStarAlgebra.Representation.NonUnital",
+      "MathlibAnnex.Analysis.CStarAlgebra.Quotient.SurjectiveRepresentation",
+      "MathlibAnnex.Analysis.CStarAlgebra.Quotient.Image",
+      "MathlibAnnex.Analysis.CStarAlgebra.Quotient.ImageRepresentation"
+    ],
+    "MathlibAnnex.Analysis.CStarAlgebra.TypeI.GCRSubalgebra": [
+      "MathlibAnnex.Analysis.CStarAlgebra.TypeI.CompactIdealMaximality",
+      "MathlibAnnex.Analysis.CStarAlgebra.TypeI.GCRPermanence",
+      "MathlibAnnex.Analysis.CStarAlgebra.TypeI.QuotientPureState",
+      "MathlibAnnex.Analysis.CStarAlgebra.PureStateGNS.IrreduciblePure",
+      "MathlibAnnex.Analysis.CStarAlgebra.PureStateGNS.VectorState"
+    ],
+    "MathlibAnnex.Analysis.CStarAlgebra.TypeI.HereditaryCornerLink": [
+      "MathlibAnnex.Analysis.CStarAlgebra.Hereditary.CornerEquivalence",
+      "MathlibAnnex.Analysis.CStarAlgebra.Hereditary.Plateau",
+      "MathlibAnnex.Analysis.CStarAlgebra.TypeI.SquareZero"
+    ],
+    "MathlibAnnex.Analysis.CStarAlgebra.TypeI.HereditaryMatrixSystem": [
+      "MathlibAnnex.Analysis.CStarAlgebra.Hereditary.MatrixCorners",
+      "MathlibAnnex.Analysis.CStarAlgebra.Hereditary.Plateau",
+      "MathlibAnnex.Analysis.CStarAlgebra.TypeI.HereditaryCornerLink",
+      "MathlibAnnex.Analysis.CStarAlgebra.CAR.FiniteStages"
+    ],
+    "MathlibAnnex.Analysis.CStarAlgebra.TypeI.HereditaryStageAction": [
+      "MathlibAnnex.Analysis.CStarAlgebra.Hereditary.MatrixAction",
+      "MathlibAnnex.Analysis.CStarAlgebra.TypeI.HereditaryMatrixSystem"
+    ],
+    "MathlibAnnex.Analysis.CStarAlgebra.TypeI.NonUnitalGCRSubalgebra": [
+      "MathlibAnnex.Analysis.CStarAlgebra.TypeI.GCRSubalgebra"
+    ],
+    "MathlibAnnex.Analysis.CStarAlgebra.TypeI.PureStateExtension": [
+      "MathlibAnnex.Analysis.CStarAlgebra.State.Extension",
+      "MathlibAnnex.Analysis.CStarAlgebra.Representation.CyclicRestriction"
+    ],
+    "MathlibAnnex.Analysis.CStarAlgebra.TypeI.QuotientPureState": [
+      "MathlibAnnex.Analysis.CStarAlgebra.PureStateGNS.IrreduciblePure",
+      "MathlibAnnex.Analysis.CStarAlgebra.Quotient.Image",
+      "MathlibAnnex.Analysis.CStarAlgebra.Quotient.SurjectiveRepresentation",
+      "MathlibAnnex.Analysis.CStarAlgebra.State.Ideal",
+      "MathlibAnnex.Analysis.CStarAlgebra.TypeI.PureStateExtension",
+      "MathlibAnnex.Analysis.CStarAlgebra.TypeI.UnitalQuotient"
+    ],
+    "MathlibAnnex.Analysis.CStarAlgebra.TypeI.SquareZero": [
+      "MathlibAnnex.Analysis.CStarAlgebra.TypeI.CARSubquotient",
+      "MathlibAnnex.Analysis.CStarAlgebra.FacialStructure.SimultaneousClipping",
+      "MathlibAnnex.Analysis.CStarAlgebra.Ideal.PrimitiveSeparation",
+      "MathlibAnnex.Analysis.CStarAlgebra.Spectrum.Kernel"
+    ],
+    "MathlibAnnex.Analysis.CStarAlgebra.TypeI.UnitalQuotient": [
+      "MathlibAnnex.Analysis.CStarAlgebra.TypeI.ClosedIdealQuotient"
+    ],
     "MathlibAnnex.Analysis.Complex.RingEquiv": [],
     "MathlibAnnex.Analysis.Complex.UnitPhase": [],
     "MathlibAnnex.Analysis.Convex.Milman": [],
+    "MathlibAnnex.Analysis.InnerProductSpace.BidualRecovery": [
+      "MathlibAnnex.Analysis.Normed.Operator.WeakCompact"
+    ],
     "MathlibAnnex.Analysis.InnerProductSpace.CardinalCompactAdjoint": [
       "MathlibAnnex.Analysis.Normed.Operator.CardinalCompact"
     ],
@@ -1128,6 +1394,17 @@
     "MathlibAnnex.Analysis.InnerProductSpace.TwoVectorUnitary": [],
     "MathlibAnnex.Analysis.InnerProductSpace.UnitaryCompletion": [
       "MathlibAnnex.Analysis.InnerProductSpace.ProjectionShell"
+    ],
+    "MathlibAnnex.Analysis.LocallyConvex.FiniteApproximation": [],
+    "MathlibAnnex.Analysis.LocallyConvex.FiniteBallApproximation": [
+      "MathlibAnnex.Analysis.LocallyConvex.FiniteApproximation",
+      "MathlibAnnex.Analysis.Normed.Module.Goldstine"
+    ],
+    "MathlibAnnex.Analysis.LocallyConvex.FiniteBallNet": [
+      "MathlibAnnex.Analysis.LocallyConvex.FiniteBallApproximation"
+    ],
+    "MathlibAnnex.Analysis.Normed.Bilinear.Bidual": [
+      "MathlibAnnex.Analysis.Normed.Operator.WeakCompact"
     ],
     "MathlibAnnex.Analysis.Normed.GeometricStructure.AbsoluteSupport": [
       "MathlibAnnex.Analysis.Normed.GeometricStructure.JamesWitness"
@@ -1278,6 +1555,7 @@
     "MathlibAnnex.Analysis.Normed.Lp.L1DualExtreme": [
       "MathlibAnnex.Analysis.Normed.Lp.L1Dual"
     ],
+    "MathlibAnnex.Analysis.Normed.Module.BidualRealification": [],
     "MathlibAnnex.Analysis.Normed.Module.BiorthogonalSequence": [],
     "MathlibAnnex.Analysis.Normed.Module.DualKernel": [],
     "MathlibAnnex.Analysis.Normed.Module.DualKernelGeometry": [
@@ -1288,6 +1566,7 @@
       "MathlibAnnex.Analysis.Normed.Module.L1Pair",
       "MathlibAnnex.LinearAlgebra.Dual.FiniteKernel"
     ],
+    "MathlibAnnex.Analysis.Normed.Module.Goldstine": [],
     "MathlibAnnex.Analysis.Normed.Module.L1Pair": [],
     "MathlibAnnex.Analysis.Normed.Module.QuotientDual": [],
     "MathlibAnnex.Analysis.Normed.Module.SemilinearRegularity": [
@@ -1301,11 +1580,95 @@
     "MathlibAnnex.Analysis.Normed.Operator.ClosureRange": [],
     "MathlibAnnex.Analysis.Normed.Operator.CompactIdeal": [],
     "MathlibAnnex.Analysis.Normed.Operator.SemilinearSandwich": [],
+    "MathlibAnnex.Analysis.Normed.Operator.WeakCompact": [
+      "MathlibAnnex.Analysis.LocallyConvex.FiniteApproximation",
+      "MathlibAnnex.Analysis.Normed.Module.Goldstine"
+    ],
     "MathlibAnnex.Analysis.Normed.Sequence.FunctionalAttainment": [
       "MathlibAnnex.Analysis.Normed.Sequence.GeneralizedLimit",
       "MathlibAnnex.Analysis.CStarAlgebra.Bilinear.SequenceNormAttainment"
     ],
     "MathlibAnnex.Analysis.Normed.Sequence.GeneralizedLimit": [],
+    "MathlibAnnex.Analysis.Normed.TensorProduct.Algebra": [
+      "MathlibAnnex.Analysis.Normed.TensorProduct.Projective"
+    ],
+    "MathlibAnnex.Analysis.Normed.TensorProduct.Projective": [],
+    "MathlibAnnex.Analysis.VonNeumannAlgebra.Bicommutant": [
+      "MathlibAnnex.Analysis.VonNeumannAlgebra.FiniteAmplification",
+      "MathlibAnnex.Analysis.VonNeumannAlgebra.Generated"
+    ],
+    "MathlibAnnex.Analysis.VonNeumannAlgebra.Commutant": [
+      "MathlibAnnex.Analysis.VonNeumannAlgebra.OperatorTopology"
+    ],
+    "MathlibAnnex.Analysis.VonNeumannAlgebra.Factor": [
+      "MathlibAnnex.Analysis.VonNeumannAlgebra.TracialState"
+    ],
+    "MathlibAnnex.Analysis.VonNeumannAlgebra.FiniteAmplification": [
+      "MathlibAnnex.Analysis.CStarAlgebra.FiniteInterpolation"
+    ],
+    "MathlibAnnex.Analysis.VonNeumannAlgebra.Generated": [
+      "MathlibAnnex.Analysis.VonNeumannAlgebra.Commutant"
+    ],
+    "MathlibAnnex.Analysis.VonNeumannAlgebra.OperatorTopology": [
+      "MathlibAnnex.Analysis.InnerProductSpace.StrongOperator"
+    ],
+    "MathlibAnnex.Analysis.VonNeumannAlgebra.PolarDecomposition": [
+      "MathlibAnnex.Analysis.VonNeumannAlgebra.Projection.Support",
+      "MathlibAnnex.Algebra.Star.ProjectionEquivalence"
+    ],
+    "MathlibAnnex.Analysis.VonNeumannAlgebra.Projection.Basic": [
+      "MathlibAnnex.Analysis.VonNeumannAlgebra.Generated"
+    ],
+    "MathlibAnnex.Analysis.VonNeumannAlgebra.Projection.CentralSupport": [
+      "MathlibAnnex.Analysis.VonNeumannAlgebra.Projection.Basic",
+      "MathlibAnnex.Algebra.Star.ProjectionEquivalence"
+    ],
+    "MathlibAnnex.Analysis.VonNeumannAlgebra.Projection.Comparison": [
+      "MathlibAnnex.Analysis.VonNeumannAlgebra.Projection.CentralSupport",
+      "MathlibAnnex.Analysis.VonNeumannAlgebra.PolarDecomposition"
+    ],
+    "MathlibAnnex.Analysis.VonNeumannAlgebra.Projection.Corner": [
+      "MathlibAnnex.Analysis.VonNeumannAlgebra.Projection.Basic",
+      "MathlibAnnex.Algebra.Star.ProjectionEquivalence"
+    ],
+    "MathlibAnnex.Analysis.VonNeumannAlgebra.Projection.Support": [
+      "MathlibAnnex.Analysis.VonNeumannAlgebra.Projection.Basic",
+      "MathlibAnnex.Algebra.Star.PartialIsometry"
+    ],
+    "MathlibAnnex.Analysis.VonNeumannAlgebra.TracialState": [
+      "MathlibAnnex.Analysis.CStarAlgebra.GNS.TracialFaithfulness",
+      "MathlibAnnex.Analysis.CStarAlgebra.State.Basic",
+      "MathlibAnnex.Analysis.CStarAlgebra.TensorAveraging.VectorDomination"
+    ],
+    "MathlibAnnex.Analysis.VonNeumannAlgebra.TypeI.Basic": [
+      "MathlibAnnex.Analysis.VonNeumannAlgebra.Projection.Corner",
+      "MathlibAnnex.Algebra.Star.ProjectionEquivalence"
+    ],
+    "MathlibAnnex.Analysis.VonNeumannAlgebra.TypeI.CentralPart": [
+      "MathlibAnnex.Analysis.VonNeumannAlgebra.TypeI.Basic",
+      "MathlibAnnex.Analysis.VonNeumannAlgebra.Projection.CentralSupport",
+      "MathlibAnnex.Analysis.VonNeumannAlgebra.PolarDecomposition"
+    ],
+    "MathlibAnnex.Analysis.VonNeumannAlgebra.TypeI.Factor": [
+      "MathlibAnnex.Analysis.VonNeumannAlgebra.TypeI.CentralPart",
+      "MathlibAnnex.Analysis.VonNeumannAlgebra.Projection.Comparison",
+      "MathlibAnnex.Analysis.VonNeumannAlgebra.TypeI.MinimalCorner",
+      "MathlibAnnex.Analysis.VonNeumannAlgebra.TypeI.Representation",
+      "MathlibAnnex.Analysis.VonNeumannAlgebra.Factor",
+      "MathlibAnnex.Analysis.CStarAlgebra.Ideal.MinimalCompactCorner"
+    ],
+    "MathlibAnnex.Analysis.VonNeumannAlgebra.TypeI.MinimalCorner": [
+      "MathlibAnnex.Analysis.VonNeumannAlgebra.Projection.Basic",
+      "MathlibAnnex.Analysis.CStarAlgebra.Ideal.MinimalCompactCorner",
+      "MathlibAnnex.Analysis.CStarAlgebra.Representation.CyclicRestriction",
+      "MathlibAnnex.Analysis.CStarAlgebra.Schur"
+    ],
+    "MathlibAnnex.Analysis.VonNeumannAlgebra.TypeI.Representation": [
+      "MathlibAnnex.Analysis.VonNeumannAlgebra.TypeI.MinimalCorner",
+      "MathlibAnnex.Analysis.VonNeumannAlgebra.Projection.CentralSupport",
+      "MathlibAnnex.Analysis.CStarAlgebra.TensorAveraging.RepresentedBidualBall",
+      "MathlibAnnex.Analysis.CStarAlgebra.Enveloping.NormalExtension"
+    ],
     "MathlibAnnex.Data.Set.Prod.CoordinateEquiv": [
       "MathlibAnnex.Data.Set.Prod.CoordinateRelation"
     ],
@@ -1429,6 +1792,24 @@
   },
   "resolved_mathlibannex_import_closure": [
     {
+      "bytes": 11094,
+      "module": "MathlibAnnex.Algebra.Star.PartialIsometry",
+      "path": "MathlibAnnex/Algebra/Star/PartialIsometry.lean",
+      "sha256": "1c3e201fdf14ae40c7e307eca08d17706f5cb87e32645ba4f84d7f8aa97d1c9a"
+    },
+    {
+      "bytes": 15920,
+      "module": "MathlibAnnex.Algebra.Star.ProjectionEquivalence",
+      "path": "MathlibAnnex/Algebra/Star/ProjectionEquivalence.lean",
+      "sha256": "12685e0792514803e11159c8baf91b247d8734b0b52d358bf56f0fe7745b44c8"
+    },
+    {
+      "bytes": 5287,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.Bilinear.Domination",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/Bilinear/Domination.lean",
+      "sha256": "6b1ca20698e4f912ae12c01365d707c3328aaf286342acd5d00b3767786324b9"
+    },
+    {
       "bytes": 6646,
       "module": "MathlibAnnex.Analysis.CStarAlgebra.Bilinear.SequenceExtension",
       "path": "MathlibAnnex/Analysis/CStarAlgebra/Bilinear/SequenceExtension.lean",
@@ -1439,6 +1820,48 @@
       "module": "MathlibAnnex.Analysis.CStarAlgebra.Bilinear.SequenceNormAttainment",
       "path": "MathlibAnnex/Analysis/CStarAlgebra/Bilinear/SequenceNormAttainment.lean",
       "sha256": "75dda2d918bfaa5946fc92b6c75fcf1ec760208c09c1d1370ff85a09671148cb"
+    },
+    {
+      "bytes": 30034,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.CAR.Completion",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/CAR/Completion.lean",
+      "sha256": "2ff57bd0018f72215c92678ea0657b5bdf077334a46b2283003b17c7da754290"
+    },
+    {
+      "bytes": 4950,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.CAR.FiniteStages",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/CAR/FiniteStages.lean",
+      "sha256": "3d9d738ea2aea8544b5263cf6d45d08a3c5f64b8bce873b93260ddbed48f29cc"
+    },
+    {
+      "bytes": 1624,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.CAR.GNS",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/CAR/GNS.lean",
+      "sha256": "c3935680aebfbf682c0b5c6235a8d6cd60815b3470259c0b6f531220fefe0eae"
+    },
+    {
+      "bytes": 3681,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.CAR.NoCompacts",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/CAR/NoCompacts.lean",
+      "sha256": "255878ce2e6808b06e43359a4a77965c663cae492f2e92678e4154e5e4c08e4f"
+    },
+    {
+      "bytes": 4266,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.CAR.PureRoot",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/CAR/PureRoot.lean",
+      "sha256": "74fafbabd39b02d5b79b2c0c0e8bb79a656d77f88112c701bf79ef8161bb3e78"
+    },
+    {
+      "bytes": 5370,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.CAR.RootCorner",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/CAR/RootCorner.lean",
+      "sha256": "7a18c82a863bd2e08cbf8a9b3e170eab56d936a104cc25f15bef190b20d4fedb"
+    },
+    {
+      "bytes": 11045,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.CAR.Simplicity",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/CAR/Simplicity.lean",
+      "sha256": "08f74b78ddbf3b71b7de3ef07f869ae1b6400da227f27f3d76da5fbc94b2169e"
     },
     {
       "bytes": 3652,
@@ -1541,6 +1964,12 @@
       "module": "MathlibAnnex.Analysis.CStarAlgebra.DirectSum.OrthogonalIdealCompactModel",
       "path": "MathlibAnnex/Analysis/CStarAlgebra/DirectSum/OrthogonalIdealCompactModel.lean",
       "sha256": "abe996857a6d1a106e2930227e710a238f6751be70e917c2916c71c280992163"
+    },
+    {
+      "bytes": 9815,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.Enveloping.NormalExtension",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/Enveloping/NormalExtension.lean",
+      "sha256": "2a889e8f57c53b7390877b5aed4565b9d15c04331355dde32b87db54f8024f95"
     },
     {
       "bytes": 48080,
@@ -1807,6 +2236,12 @@
       "sha256": "6374d950a9b7cbcb8845a10ceca8aed7f01a7609c53114acac16852ed9b7845a"
     },
     {
+      "bytes": 1648,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.FiniteRow",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/FiniteRow.lean",
+      "sha256": "4d7f777ace118174cf72e22316fc6194fc1aa03dd1d3c4e99268c612702503b8"
+    },
+    {
       "bytes": 712,
       "module": "MathlibAnnex.Analysis.CStarAlgebra.GNS.Adapters",
       "path": "MathlibAnnex/Analysis/CStarAlgebra/GNS/Adapters.lean",
@@ -1817,6 +2252,12 @@
       "module": "MathlibAnnex.Analysis.CStarAlgebra.GNS.Cyclic",
       "path": "MathlibAnnex/Analysis/CStarAlgebra/GNS/Cyclic.lean",
       "sha256": "b78b127b1388e9e5ff3de45785c6ff046c04778e3b54aba1d4d7d6ddab85276b"
+    },
+    {
+      "bytes": 3195,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.GNS.TracialFaithfulness",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/GNS/TracialFaithfulness.lean",
+      "sha256": "750e9f66aee6c14eb9870f65badd486013f32320de2c5771fb26842d83677f31"
     },
     {
       "bytes": 3774,
@@ -1985,6 +2426,12 @@
       "module": "MathlibAnnex.Analysis.CStarAlgebra.GeometricStructure.ImageSubspace",
       "path": "MathlibAnnex/Analysis/CStarAlgebra/GeometricStructure/ImageSubspace.lean",
       "sha256": "9c3a311326b0139909454fe8d62c1d8d497ae7975dbdcd02ec407bda025b1324"
+    },
+    {
+      "bytes": 3054,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.GeometricStructure.InternalTypeI",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/GeometricStructure/InternalTypeI.lean",
+      "sha256": "33f96a6edbb7f5c3ad36cd65c80a55540fa6e8ae0ac74a3bb594317d8df28a9d"
     },
     {
       "bytes": 6769,
@@ -2245,10 +2692,58 @@
       "sha256": "a5fcd2b855b3262a1f3abc2ddb3ecb8ca8aaf8b0d507307f0e1c75ca09c11a94"
     },
     {
+      "bytes": 2208,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.GeometricStructure.TypeIFactorModel",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/GeometricStructure/TypeIFactorModel.lean",
+      "sha256": "05c8c199e296987447a02c759151bbd7bbdc3eb926ba909b9dcc4acb42cc4b23"
+    },
+    {
       "bytes": 10673,
       "module": "MathlibAnnex.Analysis.CStarAlgebra.GeometricStructure.TypeIFactorRigidity",
       "path": "MathlibAnnex/Analysis/CStarAlgebra/GeometricStructure/TypeIFactorRigidity.lean",
       "sha256": "39a8526897c8b671e992b1e472271e17bee91f2056fea6fb745113a82a2dbed9"
+    },
+    {
+      "bytes": 3463,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.Hereditary.Basic",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/Hereditary/Basic.lean",
+      "sha256": "ac2ec646e215374700f3c5656f8baebabc7867004063122c1c1fa144e2a662f1"
+    },
+    {
+      "bytes": 11217,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.Hereditary.CornerEquivalence",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/Hereditary/CornerEquivalence.lean",
+      "sha256": "1348a334190c30b9b111812101924dba2e43cf4bf7fc2115bcc31c34c995364a"
+    },
+    {
+      "bytes": 12717,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.Hereditary.Generated",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/Hereditary/Generated.lean",
+      "sha256": "c1a95ce59662ca6275d67d497f8810c6bc96bdc0c1d62f386bfd35f6175b590f"
+    },
+    {
+      "bytes": 4757,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.Hereditary.MatrixAction",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/Hereditary/MatrixAction.lean",
+      "sha256": "7b209debb88ca25ea9da977b8a1bb8832d71766ad81adb38836f9820679606ef"
+    },
+    {
+      "bytes": 10792,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.Hereditary.MatrixActionQuotient",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/Hereditary/MatrixActionQuotient.lean",
+      "sha256": "20f363e34be379b39701a86d9a2f75e8440f252e301453d7d8e8d479b1159e57"
+    },
+    {
+      "bytes": 8505,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.Hereditary.MatrixCorners",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/Hereditary/MatrixCorners.lean",
+      "sha256": "e1bd4b207604c618eb6e9c803643dc464c0082c0ead7e794638f03bd16acefca"
+    },
+    {
+      "bytes": 6883,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.Hereditary.Plateau",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/Hereditary/Plateau.lean",
+      "sha256": "984b48de8675e057363d1e59cb9895b217fe3ff3d2a6b4b538ab8cf0f152da60"
     },
     {
       "bytes": 1781,
@@ -2557,6 +3052,12 @@
       "sha256": "90d7050b9e9e5ed04b8fb636ed75b8fcc79ee5b0fb9665a453a9fa1c3dccd4cb"
     },
     {
+      "bytes": 3641,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.Representation.CyclicRestriction",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/Representation/CyclicRestriction.lean",
+      "sha256": "5453f3e4b6dcf453ae27b6923e9239f33813738a153527b2912d71398bedab31"
+    },
+    {
       "bytes": 15917,
       "module": "MathlibAnnex.Analysis.CStarAlgebra.Representation.DiscreteCCRCompact",
       "path": "MathlibAnnex/Analysis/CStarAlgebra/Representation/DiscreteCCRCompact.lean",
@@ -2603,6 +3104,12 @@
       "module": "MathlibAnnex.Analysis.CStarAlgebra.Representation.FunctionalCoefficientIdeal",
       "path": "MathlibAnnex/Analysis/CStarAlgebra/Representation/FunctionalCoefficientIdeal.lean",
       "sha256": "5b60426eeb30e88c2cbca8d3139a547d89a5256e6c00eeafa51db70b2064b202"
+    },
+    {
+      "bytes": 10248,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.Representation.MatrixTwo",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/Representation/MatrixTwo.lean",
+      "sha256": "464fe21212747fd2bbd5ae19dc009e579578ade0378dd69069119083f7696229"
     },
     {
       "bytes": 6105,
@@ -2719,6 +3226,12 @@
       "sha256": "494185e21da77c3a4b882fba7aeac7bbaa981e680469d66e74c801fc584391a9"
     },
     {
+      "bytes": 11317,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.State.Extension",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/State/Extension.lean",
+      "sha256": "e87160cb5331aadba28f4fe599179671b019a2056bc0ff45052cfb9696a642e1"
+    },
+    {
       "bytes": 4080,
       "module": "MathlibAnnex.Analysis.CStarAlgebra.State.Ideal",
       "path": "MathlibAnnex/Analysis/CStarAlgebra/State/Ideal.lean",
@@ -2755,6 +3268,240 @@
       "sha256": "ffa6cea1a5c2a824c945974827963c4a4a6a251bfc8738217419756edcce89ae"
     },
     {
+      "bytes": 5449,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.TensorAveraging.BidualCStarLaws",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/TensorAveraging/BidualCStarLaws.lean",
+      "sha256": "7c2042c978acec438cf235abc19826fc8d0a64c38f1cd0fca86cfef41464d581"
+    },
+    {
+      "bytes": 6465,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.TensorAveraging.CStarBidualModel",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/TensorAveraging/CStarBidualModel.lean",
+      "sha256": "3cb4f7479ac1bf12f91f025aa359400dd86dd25803bf9794e8fcc6e82ceda9e6"
+    },
+    {
+      "bytes": 5571,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.TensorAveraging.CStarBidualTopology",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/TensorAveraging/CStarBidualTopology.lean",
+      "sha256": "63b3c196716e5c829cfa1c3f658e5e02baadce0acf679312522fb451fce6b80d"
+    },
+    {
+      "bytes": 6841,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.TensorAveraging.ContractiveStarSampling",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/TensorAveraging/ContractiveStarSampling.lean",
+      "sha256": "e687a1b4f52f91c12e9f5a73783f1149f1ff503ce2083bc5f35a19c6ce0d2675"
+    },
+    {
+      "bytes": 14533,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.TensorAveraging.FiniteRankBridge",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/TensorAveraging/FiniteRankBridge.lean",
+      "sha256": "17f16f77ca91a03cbc011c1758d004511dfdca6eb948d6bf41de9e52584b384b"
+    },
+    {
+      "bytes": 7974,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.TensorAveraging.FiniteRow",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/TensorAveraging/FiniteRow.lean",
+      "sha256": "3058f6b20329cb6400dc585878f075b25df4d585c0ce845ede98173265e8b271"
+    },
+    {
+      "bytes": 4517,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.TensorAveraging.MeanSampling",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/TensorAveraging/MeanSampling.lean",
+      "sha256": "0b4c227d7a31a50e45de45ebcf4ac67d0b4a6d2a248e74f601238f3853309dae"
+    },
+    {
+      "bytes": 4293,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.TensorAveraging.MeanVectorMoment",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/TensorAveraging/MeanVectorMoment.lean",
+      "sha256": "11eb476c002df132973e2d9933aab7741444b830b2ee27c069d73ab46b47bece"
+    },
+    {
+      "bytes": 1946,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.TensorAveraging.OmegaFromMean",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/TensorAveraging/OmegaFromMean.lean",
+      "sha256": "02a1b82383a3d1237c88009c8011ee8062ad666e328da8cb54e103c75febb6b7"
+    },
+    {
+      "bytes": 9910,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.TensorAveraging.RepresentedBidual",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/TensorAveraging/RepresentedBidual.lean",
+      "sha256": "a621d8a71d0966aa23c81d92cca030ff5f51472d9fc5400c62f43f6b74b90ad6"
+    },
+    {
+      "bytes": 10079,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.TensorAveraging.RepresentedBidualBall",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/TensorAveraging/RepresentedBidualBall.lean",
+      "sha256": "181dcd4f3a22eb691c221c6a67e6c272199712c3d534c855fec24bfd5513ffac"
+    },
+    {
+      "bytes": 9996,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.TensorAveraging.RepresentedBidualProduct",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/TensorAveraging/RepresentedBidualProduct.lean",
+      "sha256": "8793e2e9e0f739f695a52dc9ad36b06d3877e18cdabad93b8ea1f79fe0ad16db"
+    },
+    {
+      "bytes": 6888,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.TensorAveraging.RepresentedBidualSeparation",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/TensorAveraging/RepresentedBidualSeparation.lean",
+      "sha256": "5f7b3a4ffcb6292f2c7a55cffc60721ec60825769c59e70d5523c96e1d7aa67e"
+    },
+    {
+      "bytes": 7002,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.TensorAveraging.RepresentedBidualStar",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/TensorAveraging/RepresentedBidualStar.lean",
+      "sha256": "b4350b106b4e654c44bb63542e6d66a540523e8fd6baafa866fa50fde2a44a92"
+    },
+    {
+      "bytes": 9127,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.TensorAveraging.UniversalStarApproximation",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/TensorAveraging/UniversalStarApproximation.lean",
+      "sha256": "f2b9cdb26c9900022952c119c49f13ab6fc1dfab371c297135435228782157fc"
+    },
+    {
+      "bytes": 5465,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.TensorAveraging.UniversalStarNet",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/TensorAveraging/UniversalStarNet.lean",
+      "sha256": "90676a5a223f6f909a73ecb85a8b3728f66b0c5f6dbb7028f688273645ce9ceb"
+    },
+    {
+      "bytes": 12088,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.TensorAveraging.VectorDomination",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/TensorAveraging/VectorDomination.lean",
+      "sha256": "564abcd22163675ecb69bfdd92f2d4777878069e29d80bdca716149e0a47d437"
+    },
+    {
+      "bytes": 7253,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.TensorAveraging.VectorForms",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/TensorAveraging/VectorForms.lean",
+      "sha256": "2dfba559575018cb729cc5e6e259ee862f77ec6d388be54247db4b6723b8fb45"
+    },
+    {
+      "bytes": 5602,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.TwoSidedInterpolation",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/TwoSidedInterpolation.lean",
+      "sha256": "c079f562227203ff085b0e57e2668009454edeba7f4a404bc4813db459d7c9ed"
+    },
+    {
+      "bytes": 9893,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.TypeI.AbelianElement",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/TypeI/AbelianElement.lean",
+      "sha256": "3768a95d5462343e668d9c9bdb7eda01f49769a313f0a2bee1858c8eb39b3b11"
+    },
+    {
+      "bytes": 5426,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.TypeI.Basic",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/TypeI/Basic.lean",
+      "sha256": "478d54c12f74ffc9e5d52bfe5fe11e62760d05b101abad0c89c92717f045aff3"
+    },
+    {
+      "bytes": 8212,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.TypeI.CARConstruction",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/TypeI/CARConstruction.lean",
+      "sha256": "95ad085fa34a612f79b619dceef000382b3778fd478318397a1864c02c522721"
+    },
+    {
+      "bytes": 5268,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.TypeI.CARObstruction",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/TypeI/CARObstruction.lean",
+      "sha256": "28ee5f29eaccfddaa33b721d04b958f8c80bbc4d8c01e90c5d6206f73ca5c34b"
+    },
+    {
+      "bytes": 10015,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.TypeI.CARQuotientCompletion",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/TypeI/CARQuotientCompletion.lean",
+      "sha256": "e8ed73b6e5331bd502fa6623ee592f8e0f503f7a6c3730e258784ba4c541efeb"
+    },
+    {
+      "bytes": 4698,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.TypeI.CARSubquotient",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/TypeI/CARSubquotient.lean",
+      "sha256": "77bea9e35c9db158e7277e0ea3804c6e0c95f8ae30f32e7e5e07da9dd3ca6203"
+    },
+    {
+      "bytes": 12824,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.TypeI.ClosedIdealQuotient",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/TypeI/ClosedIdealQuotient.lean",
+      "sha256": "a1e6bb2a82ed218a42cc3a3a88cade14ba339898c53cc50c7aee2d83a62d0e32"
+    },
+    {
+      "bytes": 15536,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.TypeI.CompactIdealMaximality",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/TypeI/CompactIdealMaximality.lean",
+      "sha256": "224076b64a79054877d1fd0eb39bb55c75b57fa7a8302ecdc8c7ff04037fc276"
+    },
+    {
+      "bytes": 4617,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.TypeI.GCRCharacterization",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/TypeI/GCRCharacterization.lean",
+      "sha256": "90b19b449d1ad0f8f38b98d5a01cd479a1b97c1a3279be700ce32465c3a59040"
+    },
+    {
+      "bytes": 2543,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.TypeI.GCRConverse",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/TypeI/GCRConverse.lean",
+      "sha256": "e290d540134c1db2634ee98522e7cead4412b9de01f4a09b97e690f74d5772d1"
+    },
+    {
+      "bytes": 14505,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.TypeI.GCRPermanence",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/TypeI/GCRPermanence.lean",
+      "sha256": "912e23d1a3e597882af2f61ecd654a03c38b9bb1e63772f395207f78c898b607"
+    },
+    {
+      "bytes": 15841,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.TypeI.GCRSubalgebra",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/TypeI/GCRSubalgebra.lean",
+      "sha256": "ef31b11473bdf00455b8806c36bd87a8aee84a8cd45abfc18f4e25db6ceceef7"
+    },
+    {
+      "bytes": 13426,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.TypeI.HereditaryCornerLink",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/TypeI/HereditaryCornerLink.lean",
+      "sha256": "ad2e9815ad08890275d8ae4e0510aa39ef6885d761496cf8b70b6241bf3d39be"
+    },
+    {
+      "bytes": 10269,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.TypeI.HereditaryMatrixSystem",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/TypeI/HereditaryMatrixSystem.lean",
+      "sha256": "340908da23d98fea0e40de3774fd114a06f2a0c3394ae4926f768092bb7fcabe"
+    },
+    {
+      "bytes": 6899,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.TypeI.HereditaryStageAction",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/TypeI/HereditaryStageAction.lean",
+      "sha256": "37ae1376eaa2c0650f82589ceb61765c3ee6c8b57b2cf3a591180901b4d705ce"
+    },
+    {
+      "bytes": 2034,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.TypeI.NonUnitalGCRSubalgebra",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/TypeI/NonUnitalGCRSubalgebra.lean",
+      "sha256": "3f4e8a6a2e01124e916289ea525f4285a7b9b382dd222fccfed0a34960a63f42"
+    },
+    {
+      "bytes": 11920,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.TypeI.PureStateExtension",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/TypeI/PureStateExtension.lean",
+      "sha256": "40f2f7fa89337a39549caf41515ad9dc4e34c76b20e4e8bc7aab52335a716fc4"
+    },
+    {
+      "bytes": 12525,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.TypeI.QuotientPureState",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/TypeI/QuotientPureState.lean",
+      "sha256": "3a8f1aea053deb4dad2881211a867038f1e38610642e3fb3b3721e061e9adb6e"
+    },
+    {
+      "bytes": 12813,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.TypeI.SquareZero",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/TypeI/SquareZero.lean",
+      "sha256": "78047db88c4a41eaa9c3a1a8d6e055c093b64f7d0bfc9253b48c9d058390052c"
+    },
+    {
+      "bytes": 3763,
+      "module": "MathlibAnnex.Analysis.CStarAlgebra.TypeI.UnitalQuotient",
+      "path": "MathlibAnnex/Analysis/CStarAlgebra/TypeI/UnitalQuotient.lean",
+      "sha256": "0b535cfe1cc422b16c7645e6c2597e64273ebb27ff334affb6bb7df4f737965e"
+    },
+    {
       "bytes": 4747,
       "module": "MathlibAnnex.Analysis.Complex.RingEquiv",
       "path": "MathlibAnnex/Analysis/Complex/RingEquiv.lean",
@@ -2771,6 +3518,12 @@
       "module": "MathlibAnnex.Analysis.Convex.Milman",
       "path": "MathlibAnnex/Analysis/Convex/Milman.lean",
       "sha256": "8e6b67397f07ebe87451793d69d65af101cd059a215b10796e8de628b2e12458"
+    },
+    {
+      "bytes": 7395,
+      "module": "MathlibAnnex.Analysis.InnerProductSpace.BidualRecovery",
+      "path": "MathlibAnnex/Analysis/InnerProductSpace/BidualRecovery.lean",
+      "sha256": "91b6758f786695eb6c7e981a85fe31e20ddf842c5b82bccddf6c07bd361eec84"
     },
     {
       "bytes": 7833,
@@ -3061,6 +3814,30 @@
       "sha256": "af9cbffd1668cf1bbfac46d5daa90cfc52e8d4a10df577d0b8b605709855d137"
     },
     {
+      "bytes": 10672,
+      "module": "MathlibAnnex.Analysis.LocallyConvex.FiniteApproximation",
+      "path": "MathlibAnnex/Analysis/LocallyConvex/FiniteApproximation.lean",
+      "sha256": "de774d22472a03f8aa7652ae9eb7f1b6d203b24b3e39e13983a01413087bd496"
+    },
+    {
+      "bytes": 5676,
+      "module": "MathlibAnnex.Analysis.LocallyConvex.FiniteBallApproximation",
+      "path": "MathlibAnnex/Analysis/LocallyConvex/FiniteBallApproximation.lean",
+      "sha256": "72a4d5b1e3fb0313489a2b1566c7d2e92a5e1efae03a9dc746135d9a35c2c6a4"
+    },
+    {
+      "bytes": 3796,
+      "module": "MathlibAnnex.Analysis.LocallyConvex.FiniteBallNet",
+      "path": "MathlibAnnex/Analysis/LocallyConvex/FiniteBallNet.lean",
+      "sha256": "623de8b8ca0dd870d36089ffb25cfd87834836916a9c0f4076f285c06b846924"
+    },
+    {
+      "bytes": 18280,
+      "module": "MathlibAnnex.Analysis.Normed.Bilinear.Bidual",
+      "path": "MathlibAnnex/Analysis/Normed/Bilinear/Bidual.lean",
+      "sha256": "79ea07865759ebaa105a0e09d0f5a1421b713e873bd3fac84a4506915e015cb0"
+    },
+    {
       "bytes": 7209,
       "module": "MathlibAnnex.Analysis.Normed.GeometricStructure.AbsoluteSupport",
       "path": "MathlibAnnex/Analysis/Normed/GeometricStructure/AbsoluteSupport.lean",
@@ -3307,6 +4084,12 @@
       "sha256": "d807dac2b8d0f4216b078ca68677c868254ac6fe822b42afde7a0ead7683b6d7"
     },
     {
+      "bytes": 3969,
+      "module": "MathlibAnnex.Analysis.Normed.Module.BidualRealification",
+      "path": "MathlibAnnex/Analysis/Normed/Module/BidualRealification.lean",
+      "sha256": "6f80d5a680b3cdfb968ff6a70c35c9d971b7bbbefd65862ed1a7b36c8ba9af9e"
+    },
+    {
       "bytes": 10860,
       "module": "MathlibAnnex.Analysis.Normed.Module.BiorthogonalSequence",
       "path": "MathlibAnnex/Analysis/Normed/Module/BiorthogonalSequence.lean",
@@ -3329,6 +4112,12 @@
       "module": "MathlibAnnex.Analysis.Normed.Module.DualKernelPair",
       "path": "MathlibAnnex/Analysis/Normed/Module/DualKernelPair.lean",
       "sha256": "e8dc5daafd9f1365ccc36d19703c945f1baf0a1eb4f29f976a7acfc114198998"
+    },
+    {
+      "bytes": 7544,
+      "module": "MathlibAnnex.Analysis.Normed.Module.Goldstine",
+      "path": "MathlibAnnex/Analysis/Normed/Module/Goldstine.lean",
+      "sha256": "e20eebdf0dd683c4ae47d5cdbf774466dbc51f970d11fb41169e6461d1a7ae89"
     },
     {
       "bytes": 3595,
@@ -3373,6 +4162,12 @@
       "sha256": "47387cd4d0e91441f55c87fd5dde49dba3586173b11db903da093c78e10dd297"
     },
     {
+      "bytes": 13336,
+      "module": "MathlibAnnex.Analysis.Normed.Operator.WeakCompact",
+      "path": "MathlibAnnex/Analysis/Normed/Operator/WeakCompact.lean",
+      "sha256": "425d4c7512ed33a678c4d0014bcc4b5b7fa10efbf6eebf9b9d350d4fbb788037"
+    },
+    {
       "bytes": 6141,
       "module": "MathlibAnnex.Analysis.Normed.Sequence.FunctionalAttainment",
       "path": "MathlibAnnex/Analysis/Normed/Sequence/FunctionalAttainment.lean",
@@ -3383,6 +4178,126 @@
       "module": "MathlibAnnex.Analysis.Normed.Sequence.GeneralizedLimit",
       "path": "MathlibAnnex/Analysis/Normed/Sequence/GeneralizedLimit.lean",
       "sha256": "1aa3ed299988a8c46f5c6b4f87a7f5b0feb7a1db3ef7cd2e88ad35b76efdca7f"
+    },
+    {
+      "bytes": 7409,
+      "module": "MathlibAnnex.Analysis.Normed.TensorProduct.Algebra",
+      "path": "MathlibAnnex/Analysis/Normed/TensorProduct/Algebra.lean",
+      "sha256": "b3dac07695ac49cddd5b4cc35c0b87e7a7d14af153135ca35bff4f396d0021fa"
+    },
+    {
+      "bytes": 31985,
+      "module": "MathlibAnnex.Analysis.Normed.TensorProduct.Projective",
+      "path": "MathlibAnnex/Analysis/Normed/TensorProduct/Projective.lean",
+      "sha256": "0c0a8de054428b7f9a63f332748c99f0459cd3b34b5e24973715f86ca85b96af"
+    },
+    {
+      "bytes": 4766,
+      "module": "MathlibAnnex.Analysis.VonNeumannAlgebra.Bicommutant",
+      "path": "MathlibAnnex/Analysis/VonNeumannAlgebra/Bicommutant.lean",
+      "sha256": "54c001034b8a9b0b25b960e4787def69c32222487a3003e738098b7c315e5db9"
+    },
+    {
+      "bytes": 2236,
+      "module": "MathlibAnnex.Analysis.VonNeumannAlgebra.Commutant",
+      "path": "MathlibAnnex/Analysis/VonNeumannAlgebra/Commutant.lean",
+      "sha256": "c4256f3a0d4118df2abe69fe977f281d08990609b600fb20bfcc7daef0d62a31"
+    },
+    {
+      "bytes": 6738,
+      "module": "MathlibAnnex.Analysis.VonNeumannAlgebra.Factor",
+      "path": "MathlibAnnex/Analysis/VonNeumannAlgebra/Factor.lean",
+      "sha256": "7fe22fd133d8e8949f41a992f417be7a2d0932a6b1f52f46b212b9d92bd9a4b2"
+    },
+    {
+      "bytes": 9548,
+      "module": "MathlibAnnex.Analysis.VonNeumannAlgebra.FiniteAmplification",
+      "path": "MathlibAnnex/Analysis/VonNeumannAlgebra/FiniteAmplification.lean",
+      "sha256": "705fd65d36686830cf3625fab2974bb2b2546ee879b6fda77ad49c503884804b"
+    },
+    {
+      "bytes": 5738,
+      "module": "MathlibAnnex.Analysis.VonNeumannAlgebra.Generated",
+      "path": "MathlibAnnex/Analysis/VonNeumannAlgebra/Generated.lean",
+      "sha256": "d611c126e0056dc9ed614e2fba637e081aec7dff526228cf20f240debdc214eb"
+    },
+    {
+      "bytes": 3499,
+      "module": "MathlibAnnex.Analysis.VonNeumannAlgebra.OperatorTopology",
+      "path": "MathlibAnnex/Analysis/VonNeumannAlgebra/OperatorTopology.lean",
+      "sha256": "7a6388497d720461e297eb0ab8f4ae09fd237d4b1e9fc83a6c30db242d3bd93b"
+    },
+    {
+      "bytes": 9031,
+      "module": "MathlibAnnex.Analysis.VonNeumannAlgebra.PolarDecomposition",
+      "path": "MathlibAnnex/Analysis/VonNeumannAlgebra/PolarDecomposition.lean",
+      "sha256": "38c00e15ba344de69e1e59dfd01165000d35dcd85b8dba0a2746b2798bc54603"
+    },
+    {
+      "bytes": 10522,
+      "module": "MathlibAnnex.Analysis.VonNeumannAlgebra.Projection.Basic",
+      "path": "MathlibAnnex/Analysis/VonNeumannAlgebra/Projection/Basic.lean",
+      "sha256": "61311c3a2a386292e391bf46f69005aadd4d8fb7a6a1b746f1ff5b4557c8fc16"
+    },
+    {
+      "bytes": 14387,
+      "module": "MathlibAnnex.Analysis.VonNeumannAlgebra.Projection.CentralSupport",
+      "path": "MathlibAnnex/Analysis/VonNeumannAlgebra/Projection/CentralSupport.lean",
+      "sha256": "c56d66ba2dc663b8629cf277fb4f009964e22c451278a9e095da147dccab4686"
+    },
+    {
+      "bytes": 4775,
+      "module": "MathlibAnnex.Analysis.VonNeumannAlgebra.Projection.Comparison",
+      "path": "MathlibAnnex/Analysis/VonNeumannAlgebra/Projection/Comparison.lean",
+      "sha256": "89350cf495bfd758c720cb1fc202049d64d90fd7792a7e031fc4538020bde596"
+    },
+    {
+      "bytes": 15160,
+      "module": "MathlibAnnex.Analysis.VonNeumannAlgebra.Projection.Corner",
+      "path": "MathlibAnnex/Analysis/VonNeumannAlgebra/Projection/Corner.lean",
+      "sha256": "bfcc0fd7589ad3131cc11b13a4a0a574ab0f0c5c8aec06230233deccbfd53fc9"
+    },
+    {
+      "bytes": 10176,
+      "module": "MathlibAnnex.Analysis.VonNeumannAlgebra.Projection.Support",
+      "path": "MathlibAnnex/Analysis/VonNeumannAlgebra/Projection/Support.lean",
+      "sha256": "b3ccfe3b4b50e13abd60c61506f799e8723f047320066e4b0da41a42ecef8c53"
+    },
+    {
+      "bytes": 5270,
+      "module": "MathlibAnnex.Analysis.VonNeumannAlgebra.TracialState",
+      "path": "MathlibAnnex/Analysis/VonNeumannAlgebra/TracialState.lean",
+      "sha256": "6fb0113d5a4c59e333b2fc806de001644bdca48f16e2ffdc3883a49872c120c3"
+    },
+    {
+      "bytes": 9732,
+      "module": "MathlibAnnex.Analysis.VonNeumannAlgebra.TypeI.Basic",
+      "path": "MathlibAnnex/Analysis/VonNeumannAlgebra/TypeI/Basic.lean",
+      "sha256": "f6e654f1374998cb23319f5cd84d400e9549dbbf715da6bc915a03bd146da92a"
+    },
+    {
+      "bytes": 10214,
+      "module": "MathlibAnnex.Analysis.VonNeumannAlgebra.TypeI.CentralPart",
+      "path": "MathlibAnnex/Analysis/VonNeumannAlgebra/TypeI/CentralPart.lean",
+      "sha256": "3f2afa128068c3361c44fd48cd6c68b86eaa289102b4a985df4daf24d3d51877"
+    },
+    {
+      "bytes": 16181,
+      "module": "MathlibAnnex.Analysis.VonNeumannAlgebra.TypeI.Factor",
+      "path": "MathlibAnnex/Analysis/VonNeumannAlgebra/TypeI/Factor.lean",
+      "sha256": "cda721c9dc388cc48dafda2fc6305ca68cf790b945b3d1bf3c15ceedde98e3f3"
+    },
+    {
+      "bytes": 6533,
+      "module": "MathlibAnnex.Analysis.VonNeumannAlgebra.TypeI.MinimalCorner",
+      "path": "MathlibAnnex/Analysis/VonNeumannAlgebra/TypeI/MinimalCorner.lean",
+      "sha256": "13c1d468933697ead9a0fd96bf6a2c25e3dfbaef17be8c4deb5b4adf3813b44f"
+    },
+    {
+      "bytes": 9917,
+      "module": "MathlibAnnex.Analysis.VonNeumannAlgebra.TypeI.Representation",
+      "path": "MathlibAnnex/Analysis/VonNeumannAlgebra/TypeI/Representation.lean",
+      "sha256": "352b208591596053844a69e98098881625fbb467a7fd29f1020364003030421f"
     },
     {
       "bytes": 19033,
@@ -3627,5 +4542,6 @@
   ],
   "schema_revision": 3,
   "source_admission": "REGULAR_PRIVATE_SOURCE_ADMISSION",
-  "source_module_count": 366
+  "source_module_count": 458,
+  "source_permission": "docs/releases/v0.6.2-source-permission.md"
 }

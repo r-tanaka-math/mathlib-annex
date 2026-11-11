@@ -1,5 +1,18 @@
 # Changelog
 
+## v0.6.2 — Glimm–Sakai and von Neumann type decomposition
+
+Adds the Glimm–Sakai equivalences, projection and type decomposition results,
+and connections to geometric structure spaces. The package has nine Project
+entries. Owner-final qualification passed 21 checks over 1,138 targets and
+21,056 declarations, including 2,304 Glimm–Sakai task declarations.
+
+The qualified internal version was 0.7.0. Version-only and metadata-only
+successors preserve the qualified Lean bytes and locked build semantics.
+The exact new-contribution Apache-2.0 grant and regular private source admission
+are recorded separately from the publication-event record in the release assets.
+See [Verification](VERIFICATION.md) and the [exact source permission](docs/releases/v0.6.2-source-permission.md).
+
 ## v0.6.1 — Naimark and von Neumann algebras
 
 Adds 19 production modules and 11 test modules. The Naimark entry now imports the CAR trace type II₁ and Hilbert basis consequences. Owner-final qualification covered 958 targets and all seven Project entries with the v0.6.0 toolchain and dependency lock.

@@ -1,5 +1,5 @@
 name = "mathlibAnnex"
-version = "0.6.1"
+version = "0.6.2"
 defaultTargets = ["MathlibAnnex"]
 
 [[require]]
@@ -11,7 +11,7 @@ rev = "56a005855ea17e0b0958f73ec801ae140b0a1679"
 name = "MathlibAnnex"
 
 # Include each Project facade in the root library build.
-roots = ["MathlibAnnex", "MathlibAnnex.Projects.Mankiewicz", "MathlibAnnex.Projects.SphereRigidity", "MathlibAnnex.Projects.Naimark", "MathlibAnnex.Projects.PureStateHomogeneity", "MathlibAnnex.Projects.Rosenberg", "MathlibAnnex.Projects.GeometricStructureSpaces", "MathlibAnnex.Projects.LipschitzHomeomorphicBanachSpaces"]
+roots = ["MathlibAnnex", "MathlibAnnex.Projects.Mankiewicz", "MathlibAnnex.Projects.SphereRigidity", "MathlibAnnex.Projects.Naimark", "MathlibAnnex.Projects.PureStateHomogeneity", "MathlibAnnex.Projects.Rosenberg", "MathlibAnnex.Projects.GeometricStructureSpaces", "MathlibAnnex.Projects.LipschitzHomeomorphicBanachSpaces", "MathlibAnnex.Projects.GlimmSakai", "MathlibAnnex.Projects.VonNeumannTypeDecomposition"]
 
 # FIX2 library and explicit source-bound validation targets.
 [[lean_lib]]

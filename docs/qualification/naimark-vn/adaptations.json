@@ -1,0 +1,31 @@
+[
+  {
+    "git_blob_sha1": "339840f25ba39dda073d17c76df04fd6bc5ce17b",
+    "license": "Apache-2.0",
+    "local_change": "Separate subsingleton fiber before using the original nontrivial-fiber block API.",
+    "modifications": "Retain standard finite Hilbert sum, projection, finite block expansion. Replace irreducibility/Schur/scalar-block step by direct membership of every projection block in the original commutant and the hypothesis T∈(range π)''. Remove Nontrivial H and irreducibility assumptions.",
+    "origin_kind": "PROOF_ADAPTATION",
+    "target_declaration": "StarAlgHom.diagonal_apply_mem_cyclicSubspace_of_mem_bicommutant",
+    "target_file_sha256": "705fd65d36686830cf3625fab2974bb2b2546ee879b6fda77ad49c503884804b",
+    "target_path": "MathlibAnnex/Analysis/VonNeumannAlgebra/FiniteAmplification.lean",
+    "upstream_commit": "5cbbf304e651c6c50163a59ba7f9fcf6c22eca4e",
+    "upstream_declaration": "StarAlgHom.diagonal_apply_mem_cyclicSubspace_of_irreducible",
+    "upstream_file_sha256": "6374d950a9b7cbcb8845a10ceca8aed7f01a7609c53114acac16852ed9b7845a",
+    "upstream_path": "MathlibAnnex/Analysis/CStarAlgebra/FiniteInterpolation.lean",
+    "upstream_repository": "r-tanaka-math/mathlib-annex"
+  },
+  {
+    "git_blob_sha1": "339840f25ba39dda073d17c76df04fd6bc5ce17b",
+    "license": "Apache-2.0",
+    "modifications": "Use general bicommutant cyclic-membership theorem instead of irreducibility theorem; extract each coordinate using existing lp.norm_apply_le_norm.",
+    "origin_kind": "PROOF_ADAPTATION_AND_API_REUSE",
+    "target_declaration": "StarAlgHom.exists_forall_apply_sub_norm_lt_of_mem_bicommutant",
+    "target_file_sha256": "705fd65d36686830cf3625fab2974bb2b2546ee879b6fda77ad49c503884804b",
+    "target_path": "MathlibAnnex/Analysis/VonNeumannAlgebra/FiniteAmplification.lean",
+    "upstream_commit": "5cbbf304e651c6c50163a59ba7f9fcf6c22eca4e",
+    "upstream_declaration": "StarAlgHom.exists_atomic_apply_sub_norm_lt_of_irreducible",
+    "upstream_file_sha256": "6374d950a9b7cbcb8845a10ceca8aed7f01a7609c53114acac16852ed9b7845a",
+    "upstream_path": "MathlibAnnex/Analysis/CStarAlgebra/FiniteInterpolation.lean",
+    "upstream_repository": "r-tanaka-math/mathlib-annex"
+  }
+]

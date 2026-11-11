@@ -1,48 +1,60 @@
 {
   "current_qualification": {
-    "publication_state": "PUBLICATION_CANDIDATE",
-    "qualified_commit": "ef2cc76a246881b64cba030870944cad3172817d",
-    "qualified_tree": "85e94ffe211808309453bbfbb4ce035be68fe130",
-    "run_id": 42447808184,
+    "publication_state": "PUBLICATION_AUTHORIZED",
+    "qualified_commit": "e81ace1cc133d9e765000d063610c4dc234ec545",
+    "qualified_internal_version": "0.7.0",
+    "qualified_tree": "8becc4e38642b72353a93786ee071872ee291bca",
+    "run": 42932125221,
     "source_admission": "REGULAR_PRIVATE_SOURCE_ADMISSION",
+    "source_permission": "docs/releases/v0.6.2-source-permission.md",
     "state": "OWNER_FINAL_PASS",
-    "version": "0.6.1"
+    "version": "0.6.2"
   },
   "projects": [
     {
-      "bytes": 184549,
+      "bytes": 229431,
       "path": "docs/projects/geometric-structure-spaces.json",
-      "sha256": "8aab1f50817003fe21e67c019a0bd0e96969f41bb01f6a847f78eae73037745d"
+      "sha256": "8625ec9477a43d0474a1325b2cc4684e6ae5c0cfd7b3906a09c099373b711abe"
     },
     {
-      "bytes": 66737,
+      "bytes": 66833,
       "path": "docs/projects/lipschitz-homeomorphic-banach-spaces.json",
-      "sha256": "7f206ed42f906c295165490abbe5c3739d7197a063f8810179634fdaeef65a38"
+      "sha256": "6a5ffcb0bebb00f627ddc5cc5806a8db51a547595d793027d76816ca3a9aa045"
     },
     {
-      "bytes": 4598,
+      "bytes": 4694,
       "path": "docs/projects/mankiewicz.json",
-      "sha256": "ca4bad4e9e0d5ba1c13060eef3f78786a1bb9aa1b8a3d734d84c94db8cde0a44"
+      "sha256": "1967e8fecc5ed664e6f3c1ad4534aa8725c2502e6f5afd79389230d22c85b21a"
     },
     {
-      "bytes": 172659,
+      "bytes": 172755,
       "path": "docs/projects/naimark.json",
-      "sha256": "d553e0ca9b58340057f208c9cfc31e1e857a4886416cc79cc3b82df00c6dd528"
+      "sha256": "4c4688d0c69e22e1041357f0b4bf36cc0203deae9df9ce4505d50da5e2e6bb89"
     },
     {
-      "bytes": 108954,
+      "bytes": 109050,
       "path": "docs/projects/pure-state-homogeneity.json",
-      "sha256": "233672e0d607dbfd066d95ae9c4eb08fc4ffebacbf9fbea2741cea0d81b257ff"
+      "sha256": "b53b06060ce0f65fe0073ec03d851ab0d3574fc424f2a7766ecfb64eab92aa50"
     },
     {
-      "bytes": 35219,
+      "bytes": 35315,
       "path": "docs/projects/rosenberg.json",
-      "sha256": "bb658d6aa3fac95f72a1b6e584eb11e508d00185ae0dec315045a0d387afcccf"
+      "sha256": "a5bb548f6875e554f73a7cc76cbb31ed2b5a96da07b8c3371a52110825435cec"
     },
     {
-      "bytes": 22858,
+      "bytes": 22954,
       "path": "docs/projects/sphere-rigidity.json",
-      "sha256": "3e9102e6d578d90db58f797438d486cae59618db02009eb03f42674d96c4bd62"
+      "sha256": "17fb299e10a1094e4cf399511c778c34c1064757347b6a49c51baa8d6fbd9644"
+    },
+    {
+      "bytes": 202556,
+      "path": "docs/projects/glimm-sakai.json",
+      "sha256": "0be129ec799831f4ae1594f0203ec4bb02ba8be314e231d13a21c9c8230e3bf1"
+    },
+    {
+      "bytes": 65129,
+      "path": "docs/projects/von-neumann-type-decomposition.json",
+      "sha256": "fb4ddb4d20b208e3e154dbd3d625db3d1d6c882b34a3afa46b28df20809f9d7e"
     }
   ],
   "record_type": "MATHLIBANNEX_PROJECT_SOURCE_MANIFESTS"

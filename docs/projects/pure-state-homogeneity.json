@@ -1,5 +1,5 @@
 {
-  "candidate_package_version": "0.6.1",
+  "candidate_package_version": "0.6.2",
   "compiled_axiom_policy": {
     "allowlist": [
       "Classical.choice",
@@ -11,12 +11,12 @@
   },
   "current_qualification": {
     "attempt": 1,
-    "commit": "ef2cc76a246881b64cba030870944cad3172817d",
-    "job_id": 128630358596,
-    "receipt_sha256": "e28c56b9c8791279de0767e547eb3fc99fbdffcb99a0857e3eb88683767b20a2",
-    "run_id": 42447808184,
+    "commit": "e81ace1cc133d9e765000d063610c4dc234ec545",
+    "job": 130233208577,
+    "receipt_sha256": "f63ae2faa6e07b7e22d8dc79194c7f691863e6f22db3253436a892ec683ca8eb",
+    "run": 42932125221,
     "state": "OWNER_FINAL_PASS",
-    "tree": "85e94ffe211808309453bbfbb4ce035be68fe130"
+    "tree": "8becc4e38642b72353a93786ee071872ee291bca"
   },
   "digest_encoding": {
     "algorithm": "SHA-256",
@@ -53,12 +53,13 @@
       "NaimarkIntegrationUse"
     ]
   },
-  "formalization_source_state": "PRIVATE_ADMITTED_SOURCE",
+  "formalization_source_state": "ADMITTED_SOURCE",
   "lean_toolchain": "leanprover/lean4:v4.35.0",
   "mathlib_revision": "56a005855ea17e0b0958f73ec801ae140b0a1679",
-  "package_version": "0.6.1",
+  "package_version": "0.6.2",
   "project_slug": "pure-state-homogeneity",
-  "publication_state": "PUBLICATION_CANDIDATE",
+  "publication_state": "PUBLICATION_AUTHORIZED",
+  "qualified_internal_version": "0.7.0",
   "record_type": "MATHLIBANNEX_PROJECT_SOURCE_MANIFEST",
   "resolved_closure_digest": "81fbc0f46741fa36be6f2c889d4ac4d12971de2cddac66d7b89aaece69a6b51e",
   "resolved_import_edges": {
@@ -2200,5 +2201,6 @@
   ],
   "schema_revision": 2,
   "source_admission": "REGULAR_PRIVATE_SOURCE_ADMISSION",
-  "source_module_count": 225
+  "source_module_count": 225,
+  "source_permission": "docs/releases/v0.6.2-source-permission.md"
 }

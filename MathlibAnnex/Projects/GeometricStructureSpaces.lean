@@ -12,3 +12,5 @@ import MathlibAnnex.Analysis.Normed.GeometricStructure.L1RealSpectrum
 import MathlibAnnex.Analysis.Normed.GeometricStructure.SmoothSpectrum
 import MathlibAnnex.Topology.ClosureSpace.TopCatEquivalence
 import MathlibAnnex.Topology.ClosureSpace.TransformIso
+import MathlibAnnex.Analysis.CStarAlgebra.GeometricStructure.InternalTypeI
+import MathlibAnnex.Analysis.CStarAlgebra.GeometricStructure.TypeIFactorModel
